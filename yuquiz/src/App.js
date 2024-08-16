@@ -22,4 +22,5 @@ function App() {
   );
 }
 //브랜치에 올리기
+//병합 문제 해결
 export default App;
