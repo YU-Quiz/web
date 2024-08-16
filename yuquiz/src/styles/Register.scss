@@ -1,0 +1,16 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.root-container{       
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    width: t;
+    .title-container{
+        margin-bottom: 20px;
+        justify-content: center;
+    }
+}

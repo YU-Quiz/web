@@ -1,15 +1,10 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/4sYrEfEk5io
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import '../../styles/Register.scss';
 export default function Register() {
     return (
-      <div>
+      <div className='root-container'>
         <div>
-          <div>
-            <h3>YU Quiz 회원가입</h3>
+          <div className='title-container'>
+            YU Quiz 회원가입
           </div>
           <div>
             <div>
@@ -46,7 +41,6 @@ export default function Register() {
               <input
                 type="password"
                 id="password-confirm"
-                
                 placeholder="비밀번호를 다시 입력하세요"
               />
             </div>
