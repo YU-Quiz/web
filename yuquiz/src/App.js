@@ -21,5 +21,9 @@ function App() {
     </div>
   );
 }
+<<<<<<< HEAD
+//pr test용
+=======
 //브랜치에 올리기
+>>>>>>> b970dc3dd8be5de19d67809ab9d3ebc76d43f17c
 export default App;
