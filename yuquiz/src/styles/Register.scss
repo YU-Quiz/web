@@ -17,6 +17,19 @@ body{
     overflow-y: auto;
     width: 100%;
     
+    .back-button {
+        position: absolute; /* 버튼을 절대 위치로 설정 */
+        top: 20px; /* 상단에서 20px 아래 */
+        left: 20px; /* 좌측에서 20px 오른쪽 */
+        background: none;
+        border: none;
+        font-size: 50px;
+        cursor: pointer;
+        &:hover{
+            background-color: silver;
+            border-radius: 20px;
+        }
+    }
     .title-container{
         display: flex;
         justify-content: center;

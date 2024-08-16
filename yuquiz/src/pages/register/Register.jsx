@@ -1,7 +1,9 @@
 import '../../styles/Register.scss';
+import { IoMdArrowBack } from "react-icons/io";
 export default function Register() {
     return (
       <div className='root-container'>
+        <button className="back-button"><IoMdArrowBack/></button>
         <div>
           <div className='title-container'>
             <p className='logo'>YU Quiz</p>
@@ -109,7 +111,7 @@ export default function Register() {
               </label>
             </div>
             <div>
-              <button
+              <button   
                 type="submit"
                 className='button-register-done'
               >
