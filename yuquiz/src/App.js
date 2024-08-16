@@ -21,6 +21,5 @@ function App() {
     </div>
   );
 }
-//main브랜치에 올리기
-//sunan 브랜치에 올리기
+//브랜치에 올리기
 export default App;
