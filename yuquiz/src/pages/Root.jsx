@@ -1,10 +1,11 @@
+import Login from "./login/Login";
 import Register from "./register/Register";
 
 const Root = () => {
   
   return (
     <div>
-      <Register />
+      <Login />
     </div>
   );
 }
