@@ -1,12 +1,12 @@
+import QuizCreator from "./quiz/QuizCreator";
 import Register from "./register/Register";
 
 const Root = () => {
-  
   return (
     <div>
-      <Register />
+      <QuizCreator />
     </div>
   );
-}
+};
 
 export default Root;
