@@ -1,11 +1,9 @@
-import Register from "./register/Register";
+import QuizListPage from "./QuizListPage";
 
 const Root = () => {
   
   return (
-    <div>
-      <Register />
-    </div>
+    <QuizListPage />
   );
 }
 
