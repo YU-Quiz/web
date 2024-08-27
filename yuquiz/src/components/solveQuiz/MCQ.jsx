@@ -8,8 +8,16 @@ const Quiz = () => {
 
   const questions = [
     {
-      question: "What is the capital of France?",
-      correctAnswer: "O",
+      question: "한국의 수도는 대구이다?",
+      correctAnswer: "true",
+    },
+    {
+      question: "영남대학교에선 신발을 벗고 걸어야 한다?",
+      correctAnswer: "false",
+    },
+    {
+      question: "'반갑습니다'는 일본어이다?",
+      correctAnswer: "false",
     },
   ];
 
@@ -35,16 +43,18 @@ const Quiz = () => {
             {questions[currentQuestion].question}
           </p>
           <div className="quiz-options">
-            <button onClick={() => handleAnswerClick("O")}>O</button>
-            <button onClick={() => handleAnswerClick("X")}>X</button>
+            <button onClick={() => handleAnswerClick("true")}>O</button>
+            <button onClick={() => handleAnswerClick("false")}>X</button>
           </div>
-          <button
-            onClick={handleSubmit}
-            disabled={selectedAnswer === null}
-            className="quiz-submit"
-          >
-            Submit
-          </button>
+          <div className="submit-box">
+            <button
+              onClick={handleSubmit}
+              disabled={selectedAnswer === null}
+              className="quiz-submit"
+            >
+              제출
+            </button>
+          </div>
           <p className="quiz-score">
             Score: {score}/{questions.length}
           </p>

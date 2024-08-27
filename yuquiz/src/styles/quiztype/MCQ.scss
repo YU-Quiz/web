@@ -1,6 +1,5 @@
 .quiz-container {
-    width: 300px;
-    margin: 0 auto;
+    width: 100vh;
     text-align: center;
     border: 2px solid silver;
     border-radius: 8px;
@@ -25,8 +24,12 @@
     button {
       background-color: #f9f9f9;
       padding: 10px 20px;
-      border: 1px solid #ccc;
+      border: 2px solid #ccc;
+      border-radius: 8px;
       cursor: pointer;
+      margin-left: 5px;
+      margin-right: 5px;
+      width: 400px;
       transition: background-color 0.3s;
   
       &:hover {
@@ -39,14 +42,21 @@
     }
   }
   
-  .quiz-submit {
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  
-    &:disabled {
-      background-color: #ddd;
-      cursor: not-allowed;
+  .submit-box{
+    display: flex;
+    align-items: flex-end;
+    width: 100vh; 
+    .quiz-submit {
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-left: 74vh;
+      border-radius: 8px;
+      border: 1px solid black;
+      transition: background-color 0.3s;
+    
+      &:disabled {
+        cursor: not-allowed;
+      }
     }
   }
   
