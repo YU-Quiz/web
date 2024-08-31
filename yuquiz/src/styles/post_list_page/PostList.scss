@@ -1,0 +1,32 @@
+/* src/styles/post_list_page/PostList.scss */
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 각 포스트 아이템 간의 간격 */
+  }
+  
+  .post-item {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-type {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .post-question {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .post-subject {
+    font-size: 14px;
+    color: #888;
+  }
+  
