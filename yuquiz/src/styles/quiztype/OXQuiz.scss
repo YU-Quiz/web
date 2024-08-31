@@ -18,6 +18,7 @@
   
   .quiz-options {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     margin-bottom: 20px;
   
@@ -29,7 +30,7 @@
       cursor: pointer;
       margin-left: 5px;
       margin-right: 5px;
-      width: 400px;
+      width: 30vh;
       transition: background-color 0.3s;
   
       &:hover {

@@ -22,7 +22,18 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-  
+    .input-box{
+        width: 350px;
+        flex-direction: column;
+        height: 50px;
+        margin-bottom: 14px;
+        border-radius: 8px;
+        border: 1px solid silver;
+        padding-left: 15px; 
+        &::placeholder {
+            opacity: 0.7;
+        }
+    }
     button {
       background-color: #f9f9f9;
       padding: 10px 20px;

@@ -40,7 +40,7 @@ export const ShortAnswer = () => {
       <div className="quiz-options">
         <input
           type="text"
-          className="answer-box"
+          className="input-box"
           onChange={handleInputAnswer}
         ></input>
       </div>
