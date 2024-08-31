@@ -1,0 +1,23 @@
+.list-box {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    height: 40vh;
+  }
+  
+  .list-box h3 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  .list-box ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .list-box li {
+    margin-bottom: 5px;
+  }

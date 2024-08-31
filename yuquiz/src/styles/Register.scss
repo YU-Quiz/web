@@ -1,0 +1,99 @@
+$primary-color : #00CBF7;
+$hover-color : #00caf778;
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.root-container{       
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    width: 100%;
+    
+    .back-button {
+        position: absolute; /* 버튼을 절대 위치로 설정 */
+        top: 20px; /* 상단에서 20px 아래 */
+        left: 20px; /* 좌측에서 20px 오른쪽 */
+        background: none;
+        border: none;
+        font-size: 50px;
+        cursor: pointer;
+        &:hover{
+            background-color: silver;
+            border-radius: 20px;
+        }
+    }
+    .title-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 17px;
+        color: black;
+
+        .logo{
+            color: $primary-color;
+            font-size: 50px;
+            font-weight: 400;
+            text-align: center; /* 로고 텍스트 중앙 정렬 */
+        }
+    }
+
+    .form{
+        width: 350px;
+        height: 50px;
+        margin-bottom: 14px;
+        border-radius: 8px;
+        border: 1px solid silver;
+        padding-left: 15px; 
+        &::placeholder {
+            opacity: 0.7;
+        }
+    }
+
+    .button{
+        width: 100px;
+        height: 50px;
+        margin-left: 10px;
+        margin-top: 7px;
+        margin-bottom: 7px;
+        border-radius: 8px;
+        border: 1px solid silver;
+        background-color: #00CBF7;
+        font-size: 12px;
+        font-weight: 750;
+        &:hover{
+            background-color: $hover-color; 
+        }
+    }
+    .button-register-done{
+        width: 350px;
+        height: 50px;
+        margin-top: 14px;
+        border-radius: 8px;
+        border: 1px solid silver;
+        padding-left: 15px; 
+        font-weight: 750;
+        font-size: 20px;
+        background-color: $primary-color    ;
+        &:hover{
+            background-color: $hover-color; 
+        }
+    }
+    .checkbox-label{
+        margin-left: 5px;
+        font-size: 15px;
+        color: rgba(0, 0, 0, 0.655);
+    }
+    .register-font{
+        font-weight: 800;
+        font-size: 20px;
+    }
+}

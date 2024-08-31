@@ -1,0 +1,84 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%; /* 높이를 부모 컨테이너에 맞춤 */
+  }
+  
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .profile-details {
+    text-align: center;
+  }
+  
+  .profile-details h2 {
+    margin: 10px 0;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .profile-details p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #777;
+  }
+  
+  .profile-stats {
+    margin-top: 10px;
+  }
+  
+  .profile-stats p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .profile-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .action-btn {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        color: #fff;
+        background-color: #ff0000;
+    }
+  }
+  
+  .profile-actions button:first-child {
+    background-color: #28a745;
+  }
+  
+  .withdraw-btn {
+    margin-top: auto; /* 자동으로 위로 밀리게 하여 맨 아래 배치 */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    color: #9f9f9f;
+    font-size: 16px;
+    cursor: pointer;
+
+  }
+  

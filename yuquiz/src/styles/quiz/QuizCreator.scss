@@ -1,0 +1,123 @@
+
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 50px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: silver;
+        border-radius: 20px;
+    }
+}
+
+.quiz-creator {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    height: 100vh;
+    overflow-y: scroll; /* 스크롤을 가능하게 설정 */
+    scrollbar-width: none; /* Firefox에서 스크롤바 감추기 */
+    -ms-overflow-style: none; /* IE에서 스크롤바 감추기 */
+    .title {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+
+        label {
+            display: block;
+            font-size: 16px;
+            font-weight: 650;
+            margin-bottom: 5px;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #e4c7c7;
+            border-radius: 4px;
+        }
+
+        textarea {
+            resize: none;
+            overflow: hidden;
+        }
+
+        ::-webkit-file-upload-button {
+            border: none;
+            background-color: transparent;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    }
+
+    .answers-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        .answer-label {
+            font-weight: 800;
+        }
+
+        .answer-group {
+            width: 48%;
+            margin-bottom: 15px;
+
+            input[type="text"] {
+                width: 100%;
+                padding: 8px;
+                font-size: 16px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                margin-bottom: 5px;
+            }
+
+            label {
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+
+                input[type="checkbox"] {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+
+    .button-box {
+        display: flex;
+        justify-content: end;
+        margin-top: 20px;
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #333;
+            }
+        }
+    }
+}

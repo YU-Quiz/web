@@ -1,0 +1,55 @@
+.root-container {
+    display: flex;
+
+    .sidebar {
+        width: 15%;
+        margin: 20px;
+    }
+
+    .dashboard-container{
+        width: 85%;
+        margin: 20px;
+        margin-left: 0px;
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+          
+            .nav-links {
+                display: flex;
+                align-items: center;
+            
+                a {
+                    color: #333;
+                    text-decoration: none;
+                    margin-right: 20px;
+                }
+            }
+          
+            .create-btn {
+                background-color: #000;
+                color: #fff;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                font-weight: 600;
+                transition: background-color 0.3s ease;
+            
+                &:hover {
+                    background-color: #333;
+                }
+            }
+        }
+
+        .quizzes-container{
+            height: 200px;
+            display: flex;
+        }
+        .posts-container{
+            height: 400px;
+            display: flex;
+        }
+    }
+}
