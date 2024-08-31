@@ -113,10 +113,7 @@ export default function QuizCreator() {
           />
         </div>
 
-        <div className="button-group">
-          <button className="button-quiz-add" onClick={handleAddQuestion}>
-            Quiz 추가
-          </button>
+        <div className="button-box">
           <button onClick={handleSubmitQuiz}>Quiz 생성 완료</button>
         </div>
       </div>
