@@ -1,11 +1,13 @@
 .quiz-container {
+    display:flex ;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
     width: 100vh;
     text-align: center;
     border: 2px solid silver;
     border-radius: 8px;
-    padding: 50px;
   }
-  
   .quiz-header {
     font-size: 24px;
     font-weight: bold;
@@ -27,8 +29,6 @@
       border: 2px solid #ccc;
       border-radius: 8px;
       cursor: pointer;
-      margin-left: 5px;
-      margin-right: 5px;
       width: 400px;
       transition: background-color 0.3s;
   
@@ -49,7 +49,7 @@
     .quiz-submit {
       padding: 10px 20px;
       cursor: pointer;
-      margin-left: 74vh;
+      margin-right: 10vh;
       border-radius: 8px;
       border: 1px solid black;
       transition: background-color 0.3s;
@@ -59,22 +59,3 @@
       }
     }
   }
-  
-  .quiz-score {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .progress-bar {
-    height: 10px;
-    background-color: #ccc;
-    margin-top: 20px;
-  
-    .progress {
-      background-color: #000;
-      height: 100%;
-      transition: width 0.3s;
-    }
-  }
-  

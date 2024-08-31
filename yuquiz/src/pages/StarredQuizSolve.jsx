@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import "../../styles/quiztype/MCQ.scss";
+import "../styles/quiztype/OXQuiz.scss";
+import "../styles/quiztype/StarredQuizSolve.scss";
+import { OXQuiz } from "../components/solveQuiz/OXQuiz";
 
 const StarredQuizSolve = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -34,27 +36,10 @@ const StarredQuizSolve = () => {
   };
 
   return (
-    <div className="quiz-container">
+    <div className="container">
       {currentQuestion < questions.length ? (
         <>
-          <h2 className="quiz-header">O/X Quiz</h2>
-          <p className="quiz-question">
-            {currentQuestion + 1}/{questions.length}:{" "}
-            {questions[currentQuestion].question}
-          </p>
-          <div className="quiz-options">
-            <button onClick={() => handleAnswerClick("true")}>O</button>
-            <button onClick={() => handleAnswerClick("false")}>X</button>
-          </div>
-          <div className="submit-box">
-            <button
-              onClick={handleSubmit}
-              disabled={selectedAnswer === null}
-              className="quiz-submit"
-            >
-              제출
-            </button>
-          </div>
+          <OXQuiz />
           <p className="quiz-score">
             Score: {score}/{questions.length}
           </p>
@@ -62,7 +47,7 @@ const StarredQuizSolve = () => {
             <div
               className="progress"
               style={{
-                width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+                width: `${(currentQuestion / questions.length) * 100}%`,
               }}
             ></div>
           </div>
