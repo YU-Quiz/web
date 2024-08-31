@@ -4,111 +4,103 @@
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 import '../../styles/Register.scss';
+import { IoMdArrowBack } from "react-icons/io";
 export default function Register() {
     return (
-      <div>
+      <div className='root-container'>
+        <button className="back-button"><IoMdArrowBack/></button>
         <div>
+          <div className='title-container'>
+            <p className='logo'>YU Quiz</p>
+            </div>
           <div>
-            <h3>YU Quiz 회원가입</h3>
-          </div>
-          <div>
+          <p className='register-font'>회원가입</p>
             <div>
-              <label htmlFor="username">
-                아이디
-              </label>
               <div>
                 <input
                   type="text"
                   id="username"
-                  placeholder="아이디를 입력하세요"
+                  className='form'
+                  placeholder="아이디"
                 />
                 <button
                   type="button"
+                  className='button'
                 >
                   중복 확인
                 </button>
               </div>
             </div>
             <div>
-              <label htmlFor="password">
-                비밀번호
-              </label>
               <input
                 type="password"
                 id="password"
-                placeholder="비밀번호를 입력하세요"
+                className='form'
+                placeholder="비밀번호"
               />
             </div>
             <div>
-              <label htmlFor="password-confirm">
-                비밀번호 확인
-              </label>
               <input
                 type="password"
                 id="password-confirm"
-                
-                placeholder="비밀번호를 다시 입력하세요"
+                className='form'
+                placeholder="비밀번호 재입력"
               />
             </div>
             <div>
-              <label htmlFor="nickname" >
-                닉네임
-              </label>
               <div>
                 <input
                   type="text"
                   id="nickname"
-                  placeholder="닉네임을 입력하세요"
+                  className='form'
+                  placeholder="닉네임"
                 />
                 <button
                   type="button"
+                  className='button'
                 >
                   중복 확인
                 </button>
               </div>
             </div>
             <div>
-              <label htmlFor="email" >
-                이메일
-              </label>
-              <div className="flex items-center">
+              <div>
                 <input
                   type="email"
                   id="email"
-                  placeholder="이메일을 입력하세요"
+                  className='form'
+                  placeholder="이메일"
                 />
                 <button
                   type="button"
+                  className='button'
                 >
-                  인증번호 발급
+                  인증번호 요청
                 </button>
               </div>
             </div>
             <div>
-              <label htmlFor="verification-code">
-                인증번호
-              </label>
               <div>
                 <input
                   type="text"
                   id="verification-code"
-                  placeholder="인증번호를 입력하세요"
+                  className='form'
+                  placeholder="인증번호"
                 />
                 <button
                   type="button"
+                  className='button'
                 >
                   확인
                 </button>
               </div>
             </div>
-            <div className="space-y-2">
-              <label htmlFor="department" >
-                학과 선택
-              </label>
+            <div>
               <select
                 id="department"
+                className='form'
               >
-                <option value="">학과를 선택하세요</option>
+                <option value="">학과선택</option>
                 <option value="computer-science">컴퓨터공학과</option>
                 <option value="business-administration">경영학과</option>
                 <option value="economics">경제학과</option>
@@ -119,13 +111,14 @@ export default function Register() {
                 type="checkbox"
                 id="newsletter-consent"
               />
-              <label htmlFor="newsletter-consent" >
+              <label htmlFor="newsletter-consent" className='checkbox-label'>
                 알림 메일 수신 동의(선택)
               </label>
             </div>
             <div>
-              <button
+              <button   
                 type="submit"
+                className='button-register-done'
               >
                 회원 가입 하기
               </button>
