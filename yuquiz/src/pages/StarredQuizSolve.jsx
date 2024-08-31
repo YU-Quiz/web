@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/quiztype/MCQ.scss";
 
-const Quiz = () => {
+const StarredQuizSolve = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -76,4 +76,4 @@ const Quiz = () => {
   );
 };
 
-export default Quiz;
+export default StarredQuizSolve;
