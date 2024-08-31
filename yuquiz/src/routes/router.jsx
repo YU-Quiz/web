@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
+import QuizFix from "../pages/quiz/QuizFix";
+import QuizCreator from "../pages/quiz/QuizCreator";
 
 const router = createBrowserRouter([
   {
