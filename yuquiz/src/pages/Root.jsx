@@ -4,7 +4,6 @@ import QuizCard from "../components/root/QuizCard";
 import "../styles/root/Root.scss";
 
 const Root = () => {
-  
   return (
     <div className="root-container">
         <div className="sidebar">
@@ -42,6 +41,6 @@ const Root = () => {
         </div>
     </div>
   );
-}
+};
 
 export default Root;
