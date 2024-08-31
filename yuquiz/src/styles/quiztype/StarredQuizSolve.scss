@@ -1,0 +1,38 @@
+.contailner{
+    .submit-box{
+    display: flex;
+    align-items: flex-end;
+    width: 100vh; 
+    .quiz-submit {
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-left: 74vh;
+      border-radius: 8px;
+      border: 1px solid black;
+      transition: background-color 0.3s;
+    
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+  
+  .quiz-score {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .progress-bar {
+    height: 10px;
+    background-color: #ccc;
+    margin-top: 20px;
+  
+    .progress {
+      background-color: #000;
+      height: 100%;
+      transition: width 0.3s;
+    }
+  }
+  
+}
