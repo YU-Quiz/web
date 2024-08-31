@@ -13,7 +13,7 @@ export const MultipleChoose = () => {
       quizImg: null,
       quizType: "MULTIPLE_CHOICE",
       likeCount: 0,
-      choices: ["1.뭐요", "2.뭘봐요", "3.아닌데", "아닌가?", "기억이 잘..."],
+      choices: ["1.뭐요", "2.뭘봐요", "3.아닌데", ""],
       subject: "마이크로프로세서",
       writer: "테스터입니다",
       createdAt: "2024-08-10T16:33:00",

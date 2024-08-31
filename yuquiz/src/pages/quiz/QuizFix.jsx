@@ -1,47 +1,68 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoMdArrowBack } from "react-icons/io";
-import "../../styles/quiz/QuizCreator.scss";
+import "../../styles/quiz/QuizFix.scss";
 
-export default function QuizCreator() {
+export default function QuizFix() {
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionContent, setQuestionContent] = useState("");
-  const [questionType, setQuestionType] = useState("Multiple Choice");
-  const [answers, setAnswers] = useState([
-    { num: 1, text: "", correct: false },
-    { num: 2, text: "", correct: false },
-    { num: 3, text: "", correct: false },
-    { num: 4, text: "", correct: false },
-  ]);
+  const [questionType, setQuestionType] = useState("");
+  const [answers, setAnswers] = useState([]);
   const [image, setImage] = useState(null);
-
   const textAreaRef = useRef(null);
 
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+  // 예제 퀴즈 데이터
+  const questions = {
+    title: "알고리즘 문제",
+    question: "퀵정렬 알고리즘의 시간복잡도는?",
+    quizImg: "?",
+    answer: "2",
+    quizType: "MULTIPLE_CHOICE", // 유형
+    choices: ["1.O(N)", "2.O(N^2)", "3.O(NlogN)"],
+    subjectId: 2,
+  };
 
-      textAreaRef.current.scrollIntoView({ block: "nearest" });
+  // 유형 텍스트
+  const getQuizTypeLabel = (quizType) => {
+    switch (quizType) {
+      case "MULTIPLE_CHOICE":
+        return "객관식";
+      case "TRUE_FALSE":
+        return "O/X";
+      case "SHORT_ANSWER":
+        return "단답식";
+      default:
+        return "알 수 없음";
     }
-  }, [questionContent]);
+  };
 
+  // 기존 데이터를 로드하여 상태 설정
   useEffect(() => {
-    if (questionType === "True/False") {
+    const quiz = questions;
+
+    setQuestionTitle(quiz.title);
+    setQuestionContent(quiz.question);
+    setQuestionType(quiz.quizType);
+
+    // 유형에 따라 answers 상태를 설정
+    if (quiz.quizType === "MULTIPLE_CHOICE") {
+      setAnswers(
+        quiz.choices.map((choice, index) => ({
+          num: index + 1,
+          text: choice,
+          correct: quiz.answer === `${index + 1}`, // 정답을 표시
+        }))
+      );
+    } else if (quiz.quizType === "TRUE_FALSE") {
       setAnswers([
-        { num: 1, text: "True", correct: false },
-        { num: 2, text: "False", correct: false },
+        { num: 1, text: "True", correct: quiz.answer === "True" },
+        { num: 2, text: "False", correct: quiz.answer === "False" },
       ]);
-    } else if (questionType === "Short Answer") {
-      setAnswers([{ num: 1, text: "", correct: true }]); // 단답식은 하나의 정답만 존재
-    } else {
-      setAnswers([
-        { num: 1, text: "", correct: false },
-        { num: 2, text: "", correct: false },
-        { num: 3, text: "", correct: false },
-        { num: 4, text: "", correct: false },
-      ]);
+    } else if (quiz.quizType === "SHORT_ANSWER") {
+      setAnswers([{ num: 1, text: quiz.answer, correct: true }]);
     }
-  }, [questionType]);
+
+    setImage(quiz.quizImg); // 이미지 설정
+  }, []);
 
   const handleAnswerChange = (index, field, value) => {
     const newAnswers = [...answers];
@@ -49,13 +70,26 @@ export default function QuizCreator() {
     setAnswers(newAnswers);
   };
 
-  const handleAddQuestion = () => {
-    // 추후 추가
-    // 빈 답들이 입력되었을때 처리하는 로직
-  };
-
   const handleSubmitQuiz = () => {
-    // 추후 추가
+    // 퀴즈 데이터를 서버로 제출하는 로직
+    const updatedQuiz = {
+      title: questionTitle,
+      question: questionContent,
+      quizType: questionType,
+      choices:
+        questionType === "MULTIPLE_CHOICE" || questionType === "TRUE_FALSE"
+          ? answers.map((answer) => answer.text)
+          : [],
+      answer:
+        questionType === "MULTIPLE_CHOICE" || questionType === "TRUE_FALSE"
+          ? answers.find((answer) => answer.correct)?.text || ""
+          : answers[0].text,
+      quizImg: image,
+      // 기타 필요한 데이터 추가
+    };
+
+    console.log("Updated Quiz:", updatedQuiz);
+    // 여기서 updatedQuiz를 서버로 보내는 API 호출을 하면 됩니다.
   };
 
   return (
@@ -65,7 +99,7 @@ export default function QuizCreator() {
       </button>
       <div className="container">
         <div className="quiz-creator">
-          <h2 className="title">Quiz 생성</h2>
+          <h2 className="title">Quiz 수정</h2>
           <div className="form-group">
             <label>Quiz 제목</label>
             <input
@@ -84,19 +118,20 @@ export default function QuizCreator() {
           </div>
 
           <div className="form-group">
-            <label>Quiz 유형</label>
+            <label>Quiz 유형(유형은 수정❌)</label>
             <select
               value={questionType}
               onChange={(e) => setQuestionType(e.target.value)}
+              disabled
             >
-              <option value="Multiple Choice">중복 정답</option>
-              <option value="True/False">O/X</option>
-              <option value="Short Answer">단답식</option>
+              <option value={questions.quizType}>
+                {getQuizTypeLabel(questions.quizType)}
+              </option>
             </select>
           </div>
 
           <div className="answers-container">
-            {questionType === "Multiple Choice" &&
+            {questionType === "MULTIPLE_CHOICE" &&
               answers.map((answer, index) => (
                 <div key={index} className="answer-group">
                   <label className="answer-label" htmlFor={`answer-${index}`}>
@@ -123,7 +158,7 @@ export default function QuizCreator() {
                 </div>
               ))}
 
-            {questionType === "True/False" &&
+            {questionType === "TRUE_FALSE" &&
               answers.map((answer, index) => (
                 <div key={index} className="answer-group">
                   <label className="answer-label" htmlFor={`answer-${index}`}>
@@ -141,7 +176,7 @@ export default function QuizCreator() {
                 </div>
               ))}
 
-            {questionType === "Short Answer" && (
+            {questionType === "SHORT_ANSWER" && (
               <div className="answer-group">
                 <label className="answer-label" htmlFor={`answer-1`}>
                   정답
@@ -168,7 +203,7 @@ export default function QuizCreator() {
           </div>
 
           <div className="button-box">
-            <button onClick={handleSubmitQuiz}>Quiz 생성 완료</button>
+            <button onClick={handleSubmitQuiz}>Quiz 수정 완료</button>
           </div>
         </div>
       </div>
