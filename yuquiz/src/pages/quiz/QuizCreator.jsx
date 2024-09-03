@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import "../../styles/quiz/QuizCreator.scss";
 
-export default function QuizCreator() {
+export const QuizCreator = () => {
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionContent, setQuestionContent] = useState("");
   const [questionType, setQuestionType] = useState("Multiple Choice");

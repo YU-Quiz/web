@@ -8,9 +8,7 @@
 */
 
 import React, { useState } from 'react';
-import "../styles/EditProfile.scss";
-import ProfileCard from '../components/mypage/ProfileCard';
-
+import "../../styles/mypage/EditProfile.scss";
 
 const EditProfile = () => {
     const initialData = {
@@ -37,9 +35,7 @@ const EditProfile = () => {
     };
   
     return (
-        <div className='mypage-container'>
-            <ProfileCard />
-            <div className="edit-profile-container">
+        <div className="edit-profile-container">
                 <h2>내 정보 수정</h2>
                 <p>소중한 내 정보를 최신으로 관리하세요.</p>
                 <form onSubmit={handleSubmit} className="edit-profile-form">
@@ -101,7 +97,6 @@ const EditProfile = () => {
                 </div>
                 </form>
             </div>
-        </div>
     );
   }
   

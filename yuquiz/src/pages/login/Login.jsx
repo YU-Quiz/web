@@ -1,8 +1,9 @@
 import "../../styles/login/Login.scss";
 import { IoMdArrowBack } from "react-icons/io";
-export default function Login() {
+
+export const Login = () => {
   return (
-    <div className="root-container">
+    <div className="login-container">
       <button className="back-button">
         <IoMdArrowBack />
       </button>

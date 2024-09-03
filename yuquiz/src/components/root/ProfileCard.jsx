@@ -3,7 +3,7 @@ import '../../styles/root/ProfileCard.scss';
 
 const ProfileCard = () => {
     return (
-        <div className="profile-container">
+        <div className="root-profile-container">
             <div className="profile-picture"></div>
             <div className="profile-details">
                 <h2>원영 정</h2>

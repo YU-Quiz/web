@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 
 import React from 'react';
 import '../../styles/quiz_list_page/SubjectDropdown.scss';

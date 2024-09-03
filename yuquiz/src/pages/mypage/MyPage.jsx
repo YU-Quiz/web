@@ -1,6 +1,5 @@
-import ListBox from "../components/mypage/ListBox";
-import ProfileCard from "../components/mypage/ProfileCard";
-import "../styles/mypage/MyPage.scss";
+import ListBox from "../../components/mypage/ListBox";
+import "../../styles/mypage/MyPage.scss";
 
 const MyPage = () => {
     // 샘플 데이터
@@ -14,22 +13,19 @@ const MyPage = () => {
   };
 
     return (
-        <div className="mypage-container">
-            <ProfileCard />
-            <div className="dashboard-container">
-                <button>홈으로</button>
-                <div className="row">
-                    <ListBox title="알림함" items={data.alerts} />
-                    <ListBox title="작성한 퀴즈 목록" items={data.quizzes} />
-                    <ListBox title="작성한 게시글 목록" items={data.posts} />
-                </div>
-                <div className="row">
-                    <ListBox title="즐겨찾기 목록" items={data.bookmarks} />
-                    <ListBox title="풀린 문제 목록" items={data.solvedProblems} />
-                    <ListBox title="좋아요 목록" items={data.favorites} />
-                </div>
-            </div>
-        </div>
+      <div className="dashboard-container">
+      <button className="my-home-btn">홈으로</button>
+      <div className="row">
+          <ListBox title="알림함" items={data.alerts} />
+          <ListBox title="작성한 퀴즈 목록" items={data.quizzes} />
+          <ListBox title="작성한 게시글 목록" items={data.posts} />
+      </div>
+      <div className="row">
+          <ListBox title="즐겨찾기 목록" items={data.bookmarks} />
+          <ListBox title="풀린 문제 목록" items={data.solvedProblems} />
+          <ListBox title="좋아요 목록" items={data.favorites} />
+      </div>
+  </div>
       );
 }
 

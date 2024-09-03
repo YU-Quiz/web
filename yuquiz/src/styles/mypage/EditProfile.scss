@@ -1,114 +1,104 @@
-.mypage-container{
-    display: flex;
-    margin: 0 auto;  /* 중앙 정렬 */
-    padding: 20px;  /* 페이지 전체의 여백 */
-    gap: 20px;
-    height: 100vh;
+.edit-profile-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 
-    .edit-profile-container {
-        width: 100%;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-      
-        h2 {
-          font-size: 24px;
-          font-weight: bold;
-          margin-bottom: 10px;
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #777;
+    margin-bottom: 20px;
+  }
+
+  .edit-profile-form {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 10px;
+        vertical-align: top;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        width: 200px;
+        font-weight: bold;
+        background-color: #f0f0f0;
+      }
+
+      td {
+        input[type="text"],
+        input[type="email"],
+        select {
+          width: 100%;
+          padding: 8px;
+          font-size: 14px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
         }
-      
-        p {
-          color: #777;
-          margin-bottom: 20px;
+
+        .hint {
+          margin-top: 5px;
+          font-size: 12px;
+          color: #888;
         }
-      
-        .edit-profile-form {
-          table {
-            width: 100%;
-            border-collapse: collapse;
-      
-            th, td {
-              padding: 10px;
-              vertical-align: top;
-              text-align: left;
-              border-bottom: 1px solid #ddd;
-            }
-      
-            th {
-              width: 200px;
-              font-weight: bold;
-              background-color: #f0f0f0;
-            }
-      
-            td {
-              input[type="text"],
-              input[type="email"],
-              select {
-                width: 100%;
-                padding: 8px;
-                font-size: 14px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-              }
-      
-              .hint {
-                margin-top: 5px;
-                font-size: 12px;
-                color: #888;
-              }
-      
-              label {
-                font-size: 14px;
-              }
-      
-              input[type="checkbox"] {
-                margin-right: 5px;
-              }
-            }
-          }
-      
-          .submit-section {
-            display: flex;
-            justify-content: space-between; /* 양쪽 끝에 버튼 배치 */
-            margin-top: 20px;
-      
-            button {
-              padding: 10px 20px;
-              font-size: 14px;
-              font-weight: bold;
-              color: white;
-              background-color: #007bff;
-              border: none;
-              border-radius: 4px;
-              cursor: pointer;
-              transition: background-color 0.3s;
-      
-              &:hover {
-                background-color: #0056b3;
-              }
-            }
-      
-            .home-btn {
-              background-color: #6c757d; /* 홈으로 버튼 다른 색상 */
-              
-              &:hover {
-                background-color: #5a6268;
-              }
-            }
-      
-            .save-btn {
-              background-color: #007bff;
-      
-              &:hover {
-                background-color: #0056b3;
-              }
-            }
+
+        label {
+          font-size: 14px;
         }
+
+        input[type="checkbox"] {
+          margin-right: 5px;
         }
       }
+    }
+
+    .submit-section {
+      display: flex;
+      justify-content: space-between; /* 양쪽 끝에 버튼 배치 */
+      margin-top: 20px;
+
+      button {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+
+      .home-btn {
+        background-color: #6c757d; /* 홈으로 버튼 다른 색상 */
+        
+        &:hover {
+          background-color: #5a6268;
+        }
+      }
+
+      .save-btn {
+        background-color: #007bff;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+  }
+  }
 }
-
-
   

@@ -1,0 +1,7 @@
+.mypage-container {
+    display: flex;
+    margin: 0 auto;  /* 중앙 정렬 */
+    padding: 20px;  /* 페이지 전체의 여백 */
+    gap: 20px;  /* ProfileCard와 Dashboard 사이의 간격 */
+    height: 100vh;
+}

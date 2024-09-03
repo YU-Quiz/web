@@ -1,6 +1,6 @@
 /* src/styles/SearchBar.scss */
 
-.search-bar {
+.post-search-bar {
     display: flex;
     justify-content: center;
     margin: 20px 0;
@@ -14,7 +14,7 @@
       margin-right: 10px;
     }
   
-    button {
+    .post-search-btn {
       padding: 10px 20px;
       background-color: #000;
       color: #fff;

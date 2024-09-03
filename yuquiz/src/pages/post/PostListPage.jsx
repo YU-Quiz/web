@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import SearchBar from '../components/postlist/SearchBar';
-import SubjectDropdown from '../components/postlist/SubjectDropdown';
-import PostList from '../components/postlist/PostList';
-import '../styles/post_list_page/PostListPage.scss';
+
+import '../../styles/post_list_page/PostListPage.scss';
+import SearchBar from '../../components/postlist/SearchBar';
+import SubjectDropdown from '../../components/postlist/SubjectDropdown';
+import PostList from '../../components/postlist/PostList';
 
 const PostListPage = () => {
     const postsData = [
