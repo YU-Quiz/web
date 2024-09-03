@@ -12,7 +12,7 @@ import "../styles/EditProfile.scss";
 import ProfileCard from '../components/mypage/ProfileCard';
 
 
-function EditProfile() {
+const EditProfile = () => {
     const initialData = {
       nickname: '테스터',
       email: 'test@gmail.com',
