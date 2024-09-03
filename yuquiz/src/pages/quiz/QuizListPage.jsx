@@ -1,10 +1,11 @@
 // src/pages/QuizListPage.jsx
 
 import React, { useState } from 'react';
-import QuizList from '../components/quizlist/QuizList';
-import SearchBar from '../components/quizlist/SearchBar';
-import SubjectDropdown from '../components/quizlist/SubjectDropdown'; // 드롭다운 컴포넌트로 변경
-import '../styles/quiz_list_page/QuizListPage.scss';
+
+import '../../styles/quiz_list_page/QuizListPage.scss';
+import QuizList from '../../components/quizlist/QuizList';
+import SearchBar from '../../components/quizlist/SearchBar';
+import SubjectDropdown from '../../components/quizlist/SubjectDropdown';
 
 const QuizListPage = () => {
   const quizzesData = [

@@ -1,13 +1,10 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/4sYrEfEk5io
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-import '../../styles/Register.scss';
+
+import '../../styles/register/Register.scss';
 import { IoMdArrowBack } from "react-icons/io";
-export default function Register() {
+
+export const Register = () => {
     return (
-      <div className='root-container'>
+      <div className='register-container'>
         <button className="back-button"><IoMdArrowBack/></button>
         <div>
           <div className='title-container'>

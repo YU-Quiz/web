@@ -10,14 +10,14 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <form className="search-bar" onSubmit={handleSearch}>
+    <form className="post-search-bar" onSubmit={handleSearch}>
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="검색어를 입력하세요..."
       />
-      <button type="submit">검색</button>
+      <button className='post-search-btn' type="submit">검색</button>
     </form>
   );
 };
