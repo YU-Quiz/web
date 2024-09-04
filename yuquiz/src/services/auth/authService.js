@@ -6,7 +6,7 @@ const SERVER_API = process.env.REACT_APP_YUQUIZ;
 // 리프레시토큰을 이용하여 엑세스토큰 재발급
 const reissueAccessToken = async () =>{
     try{
-        const response = await axios.post(`${SERVER_API}auth//token-reissue`,{withCredentials: true,}); // 쿠키와 함께 요청 전송
+        const response = await axios.post(`${SERVER_API}auth/token-reissue`,{withCredentials: true,}); // 쿠키와 함께 요청 전송
 
         const newAccessToken = response.data.accessToken;
         setAccessToken(newAccessToken);
