@@ -1,11 +1,13 @@
 import "../../styles/register/Register.scss";
 import { IoMdArrowBack } from "react-icons/io";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   handlerCheckDupID,
   handlerCheckDupNick,
   handlerCheckEmail,
   handlerCheckEmailVerify,
+  handlerSubmit,
 } from "../../services/auth/register/Register";
 
 export const Register = () => {
@@ -27,20 +29,38 @@ export const Register = () => {
   const pwRegex = /(?=.*[0-9])(?=.*[a-zA-Z]).{8,16}/;
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+  const navigate = useNavigate();
   const handleCheckDupID = async () => {
     if (!idRegex.test(InputID)) {
       alert("아이디는 4~20자의 영문 대소문자와 숫자만 사용할 수 있습니다.");
       setInputID("");
       return;
     }
-    const response = await handlerCheckDupID(InputID);
-    if (response.status === 200) {
-      alert("사용 가능한 아이디입니다.");
-      setCheckID(InputID);
-    } else if (response.status === 409) {
-      alert(response.data.message || "이미 사용 중인 아이디입니다.");
-    } else {
-      alert(response.data.message || "문제 발생.🚨");
+
+    try {
+      const response = await handlerCheckDupID(InputID);
+
+      // response가 존재하는지 확인 후 처리
+      if (response && response.status === 200) {
+        alert("사용 가능한 아이디입니다.");
+        setCheckID(InputID);
+      } else if (response && response.status === 409) {
+        alert(response.data.message || "이미 사용 중인 아이디입니다.");
+      } else {
+        alert(response?.data?.username || "아이디가 유효하지 않습니다.");
+      }
+    } catch (error) {
+      console.error("Error in handleCheckDupID:", error);
+
+      // 서버로부터의 400 응답 처리
+      if (error.response && error.response.status === 400) {
+        // 서버에서 400 응답으로 보내는 데이터 출력
+        alert(
+          error.response.data.message || "아이디 형식이 올바르지 않습니다."
+        );
+      } else {
+        alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+      }
     }
   };
 
@@ -123,7 +143,6 @@ export const Register = () => {
   };
 
   const handleSubmit = async () => {
-    // 마지막에 제출할 때 id 중복 확인 한번 더 수행
     if (checkID !== InputID) {
       alert("중복확인을 마친 아이디와 일치하지 않습니다.");
       return;
@@ -145,15 +164,39 @@ export const Register = () => {
       alert("전공을 선택해주세요.");
       return;
     }
-    const response = await handleSubmit({
+
+    const registerData = {
       username: InputID,
       password: InputPW,
       nickname: InputNickname,
       email: InputEmail,
       majorName: InputMajor,
       agreeEmail: emailAgree,
-    });
-    if (response) {
+    };
+
+    try {
+      // 회원가입 요청 API 호출
+      const response = await handlerSubmit(registerData);
+
+      // 성공 응답 처리
+      if (response && response.status === 200) {
+        alert("회원가입 성공!");
+        navigate("/");
+      } else if (response && response.status === 400) {
+        alert(response.data.message || "회원가입에 실패했습니다.");
+      } else {
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("회원가입 중 오류 발생:", error);
+      if (error.response && error.response.data) {
+        // 서버에서 온 에러 메시지 처리
+        alert(
+          error.response.data.message || "회원가입 중 문제가 발생했습니다."
+        );
+      } else {
+        alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+      }
     }
   };
 

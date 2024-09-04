@@ -4,8 +4,8 @@ const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
 const handlerCheckDupID = async (data) => {
     try {
-        const res = await axios.get(`${SERVER_API}/users/verify-username`, {
-            params: { username: data }
+        const res = await axios.post(`${SERVER_API}/users/verify-username`, {
+            username: data
         });
         return res;
     } catch (e) {
@@ -14,8 +14,8 @@ const handlerCheckDupID = async (data) => {
 };
 const handlerCheckDupNick = async (data) => {
     try {
-        const res = await axios.get(`${SERVER_API}/users/verify-nickname`, {
-            params: { nickname: data }
+        const res = await axios.post(`${SERVER_API}/users/verify-nickname`, {
+            nickname: data
         });
         return res;
     } catch (e) {
@@ -45,14 +45,14 @@ const handlerCheckEmailVerify = async (data) => {
 };
 const handlerSubmit = async (data) =>{
     try{
-        const res = await axios.post(`${SERVER_API}/users/email/code-verification`,{
+        const res = await axios.post(`${SERVER_API}/auth/sign-up`,{
             username: data.username,
             password: data.password,
             nickname: data.nickname,
             email: data.email,
             majorName: data.majorName,
             agreeEmail: data.agreeEmail
-        });
+        }); 
         return res;
     }catch(e){
         console.error(e);
