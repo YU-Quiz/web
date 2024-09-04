@@ -2,12 +2,17 @@ import { Link } from 'react-router-dom';
 import '../../styles/register/Register.scss';
 import { IoMdArrowBack } from "react-icons/io";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   handlerCheckDupID,
   handlerCheckDupNick,
-} from "../../services/auth/login/register/Register";
+  handlerCheckEmail,
+  handlerCheckEmailVerify,
+  handlerSubmit,
+} from "../../services/auth/register/Register";
 
 export const Register = () => {
+  //input 값들 state
   const [InputID, setInputID] = useState("");
   const [InputPW, setInputPW] = useState("");
   const [InputRePW, setInputRePW] = useState("");
@@ -16,40 +21,183 @@ export const Register = () => {
   const [InputConfirm, setConfirm] = useState("");
   const [InputMajor, setMajor] = useState(null);
   const [emailAgree, setAgree] = useState(false);
-
+  const [checkID, setCheckID] = useState("");
+  const [checkNick, setCheckNick] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  //형식 정규식
   const idRegex = /^[a-zA-Z0-9]{4,20}$/;
   const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,10}$/;
+  const pwRegex = /(?=.*[0-9])(?=.*[a-zA-Z]).{8,16}/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+  const navigate = useNavigate();
   const handleCheckDupID = async () => {
     if (!idRegex.test(InputID)) {
       alert("아이디는 4~20자의 영문 대소문자와 숫자만 사용할 수 있습니다.");
       setInputID("");
       return;
     }
-    const response = await handlerCheckDupID(InputID);
-    if (response.status === 200) {
-      alert("사용 가능한 아이디입니다.");
-    } else if (response.status === 409) {
-      alert(response.data.message || "이미 사용 중인 아이디입니다.");
-    } else {
-      alert(response.data.message || "문제 발생.🚨");
+
+    try {
+      const response = await handlerCheckDupID(InputID);
+
+      // response가 존재하는지 확인 후 처리
+      if (response && response.status === 200) {
+        alert("사용 가능한 아이디입니다.");
+        setCheckID(InputID);
+      } else if (response && response.status === 409) {
+        alert(response.data.message || "이미 사용 중인 아이디입니다.");
+      } else {
+        alert(response?.data?.username || "아이디가 유효하지 않습니다.");
+      }
+    } catch (error) {
+      console.error("Error in handleCheckDupID:", error);
+
+      // 서버로부터의 400 응답 처리
+      if (error.response && error.response.status === 400) {
+        // 서버에서 400 응답으로 보내는 데이터 출력
+        alert(
+          error.response.data.message || "아이디 형식이 올바르지 않습니다."
+        );
+      } else {
+        alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+      }
     }
   };
 
   const handleCheckDupNickname = async () => {
     if (!nicknameRegex.test(InputNickname)) {
-      alert("닉네임은 2~10자의 영문 대소문자와 숫자만 사용할 수 있습니다.");
+      alert("닉네임은 2~10자의 영문, 숫자, 한글만 사용할 수 있습니다.");
       setNickname("");
       return;
     }
-
-    const response = await handlerCheckDupNick(InputID);
+    const response = await handlerCheckDupNick(InputNickname);
     if (response.status === 200) {
       alert("사용 가능한 닉네임입니다.");
+      setCheckNick(InputNickname);
     } else if (response.status === 409) {
       alert(response.data.message || "이미 사용 중인 닉네임입니다.");
     } else {
       alert(response.data.message || "문제 발생.🚨");
+    }
+  };
+
+  const handleCheckEmail = async () => {
+    if (!emailRegex.test(InputEmail)) {
+      alert("유효한 이메일 주소를 입력하세요.");
+      return;
+    }
+    try {
+      const EmailResponse = await handlerCheckEmail(InputEmail);
+      console.log(EmailResponse);
+      if (EmailResponse && EmailResponse.status === 200) {
+        alert(EmailResponse.data.response || "인증번호를 발송했습니다.");
+      } else if (EmailResponse.status === 429) {
+        alert(EmailResponse.data.message || "조금있다 다시 시도해 주세요.");
+      } else {
+        alert(EmailResponse?.data?.message || "문제 발생.🚨");
+      }
+    } catch (error) {
+      console.error("Error in handleCheckEmail:", error);
+      alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+    }
+  };
+  const handleCheckEmailVerify = async () => {
+    try {
+      const EmailResponse = await handlerCheckEmailVerify({
+        email: InputEmail,
+        code: InputConfirm,
+      });
+
+      if (!EmailResponse) {
+        throw new Error("서버 응답이 없습니다.");
+      }
+
+      // 서버 응답 로그 확인
+      //console.log(EmailResponse);
+
+      // 인증 성공
+      if (EmailResponse.data.response || EmailResponse.status === 200) {
+        alert("인증번호 확인 성공");
+        setEmailVerified(true); // 이메일 인증 성공 시 상태 업데이트
+      }
+      // 인증번호 불일치 (400)
+      else if (EmailResponse.data?.status === 400) {
+        alert(EmailResponse.data.message || "인증번호가 일치하지 않습니다.");
+      }
+      // 이미 존재하는 이메일 (409)
+      else if (EmailResponse.data?.status === 409) {
+        alert(EmailResponse.data.message || "이미 존재하는 이메일입니다.");
+      }
+      // 유효시간 만료 (410)
+      else if (EmailResponse.data?.status === 410) {
+        alert(EmailResponse.data.message || "유효시간이 지났습니다.");
+      }
+      // 기타 디기당당
+      else {
+        alert(EmailResponse.data?.message || "알 수 없는 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Error in handleCheckEmailVerify:", error);
+      alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (checkID !== InputID) {
+      alert("중복확인을 마친 아이디와 일치하지 않습니다.");
+      return;
+    } else if (!pwRegex.test(InputPW)) {
+      alert("비밀번호는 8~16자의 영문 대소문자와 숫자를 포함해야 합니다.");
+      setNickname("");
+      return;
+    } else if (InputPW !== InputRePW) {
+      alert("비밀번호가 일치하지 않습니다.");
+      setInputRePW("");
+      return;
+    } else if (InputNickname !== checkNick) {
+      alert("중복확인을 마친 닉네임과 일치하지 않습니다.");
+      return;
+    } else if (!emailVerified) {
+      alert("이메일 인증이 필요합니다.");
+      return;
+    } else if (InputMajor === "") {
+      alert("전공을 선택해주세요.");
+      return;
+    }
+
+    const registerData = {
+      username: InputID,
+      password: InputPW,
+      nickname: InputNickname,
+      email: InputEmail,
+      majorName: InputMajor,
+      agreeEmail: emailAgree,
+    };
+
+    try {
+      // 회원가입 요청 API 호출
+      const response = await handlerSubmit(registerData);
+
+      // 성공 응답 처리
+      if (response && response.status === 200) {
+        alert("회원가입 성공!");
+        navigate("/");
+      } else if (response && response.status === 400) {
+        alert(response.data.message || "회원가입에 실패했습니다.");
+      } else {
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("회원가입 중 오류 발생:", error);
+      if (error.response && error.response.data) {
+        // 서버에서 온 에러 메시지 처리
+        alert(
+          error.response.data.message || "회원가입 중 문제가 발생했습니다."
+        );
+      } else {
+        alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+      }
     }
   };
 
@@ -140,8 +288,13 @@ export const Register = () => {
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
+                  disabled={emailVerified}
                 />
-                <button type="button" className="button">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={handleCheckEmail}
+                >
                   인증번호 요청
                 </button>
               </div>
@@ -158,7 +311,11 @@ export const Register = () => {
                     setConfirm(e.target.value);
                   }}
                 />
-                <button type="button" className="button">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={handleCheckEmailVerify}
+                >
                   확인
                 </button>
               </div>
@@ -192,7 +349,11 @@ export const Register = () => {
               </label>
             </div>
             <div>
-              <button type="submit" className="button-register-done">
+              <button
+                type="submit"
+                className="button-register-done"
+                onClick={handleSubmit}
+              >
                 회원 가입 하기
               </button>
             </div>
