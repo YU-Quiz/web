@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/post/PostFix.scss';
+import { Link } from 'react-router-dom';
 
 const PostFix = ({ post }) => {
     const existingPost = {
@@ -69,8 +70,8 @@ const PostFix = ({ post }) => {
         ></textarea>
 
         <div className="button-container">
-          <button type="submit" className="submit-btn">게시글 수정</button>
-          <button type="button" className="back-btn">목록으로</button>
+          <Link to='/posts/edit' className='submit-btn'>게시글 수정</Link>
+          <Link to='/posts/list' className='back-btn'>목록으로</Link>
         </div>
       </form>
     </div>

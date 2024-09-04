@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import PostCard from "../components/root/PostCard";
 import ProfileCard from "../components/root/ProfileCard";
 import QuizCard from "../components/root/QuizCard";
@@ -12,11 +13,11 @@ const Root = () => {
         <div className="dashboard-container">
             <nav className="navbar">
                 <div className="nav-links">
-                    <a href="#">Quizzes</a>
-                    <a href="#">Posts</a>
-                    <a href="#">Leaderboard</a>
+                    <Link to='/quiz/list'>Quizzes</Link>
+                    <Link to='/posts/list'>Posts</Link>
+                    <Link to='/leaderboard'>LeaderBoard</Link>
                 </div>
-                <a href="#" className="create-btn">Create Quiz</a>
+                <Link to='/quiz/create' className="create-btn">Create Quiz</Link>
             </nav>
             <section className="quizzes-container">
                 <QuizCard title="What is the capital city of France?" quizType="O/X" />
@@ -27,11 +28,11 @@ const Root = () => {
 
             <nav className="navbar">
                 <div className="nav-links">
-                    <a href="#">공지사항</a>
-                    <a href="#">자유 게시판</a>
-                    <a href="#">풀이 게시판</a>
+                    <Link to='/posts/list'>공지사항</Link>
+                    <Link to='/posts/list'>자유 게시판</Link>
+                    <Link to='/posts/list'>풀이 게시판</Link>
                 </div>
-                <a href="#" className="create-btn">Post</a>
+                <Link to='/posts/create' className="create-btn">Post</Link>
             </nav>
             <section className="posts-container">
                 <PostCard title="Important Platform Update: New Features and Changes" category="Announcements" isNew={true} />

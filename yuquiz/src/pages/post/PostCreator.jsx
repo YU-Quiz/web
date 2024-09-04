@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/post/PostCreator.scss';
+import { Link } from 'react-router-dom';
 
 const PostCreator = () => {
   const [category, setCategory] = useState('');
@@ -62,8 +63,8 @@ const PostCreator = () => {
         ></textarea>
 
         <div className="button-container">
-          <button type="submit" className="submit-btn">게시글 작성</button>
-          <button type="button" className="back-btn">목록으로</button>
+          <Link to='/posts/create' className='submit-btn'>게시글 작성</Link>
+          <Link to='/posts/list' className='back-btn'>목록으로</Link>
         </div>
       </form>
     </div>
