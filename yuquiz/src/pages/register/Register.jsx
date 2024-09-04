@@ -4,7 +4,9 @@ import { useState } from "react";
 import {
   handlerCheckDupID,
   handlerCheckDupNick,
-} from "../../services/auth/login/register/Register";
+  handlerCheckEmail,
+  handlerCheckEmailVerify,
+} from "../../services/auth/register/Register";
 
 export const Register = () => {
   const [InputID, setInputID] = useState("");
@@ -15,10 +17,10 @@ export const Register = () => {
   const [InputConfirm, setConfirm] = useState("");
   const [InputMajor, setMajor] = useState(null);
   const [emailAgree, setAgree] = useState(false);
-
   const idRegex = /^[a-zA-Z0-9]{4,20}$/;
   const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,10}$/;
-
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [checkID, setCheckID] = useState("");
   const handleCheckDupID = async () => {
     if (!idRegex.test(InputID)) {
       alert("아이디는 4~20자의 영문 대소문자와 숫자만 사용할 수 있습니다.");
@@ -28,6 +30,7 @@ export const Register = () => {
     const response = await handlerCheckDupID(InputID);
     if (response.status === 200) {
       alert("사용 가능한 아이디입니다.");
+      setCheckID(InputID);
     } else if (response.status === 409) {
       alert(response.data.message || "이미 사용 중인 아이디입니다.");
     } else {
@@ -37,12 +40,11 @@ export const Register = () => {
 
   const handleCheckDupNickname = async () => {
     if (!nicknameRegex.test(InputNickname)) {
-      alert("닉네임은 2~10자의 영문 대소문자와 숫자만 사용할 수 있습니다.");
+      alert("닉네임은 2~10자의 영문, 숫자, 한글만 사용할 수 있습니다.");
       setNickname("");
       return;
     }
-
-    const response = await handlerCheckDupNick(InputID);
+    const response = await handlerCheckDupNick(InputNickname);
     if (response.status === 200) {
       alert("사용 가능한 닉네임입니다.");
     } else if (response.status === 409) {
@@ -50,6 +52,54 @@ export const Register = () => {
     } else {
       alert(response.data.message || "문제 발생.🚨");
     }
+  };
+
+  const handleCheckEmail = async () => {
+    if (!emailRegex.test(InputEmail)) {
+      alert("유효한 이메일 주소를 입력하세요.");
+      return;
+    }
+    try {
+      const EmailResponse = await handlerCheckEmail(InputEmail);
+      console.log(EmailResponse);
+      if (EmailResponse && EmailResponse.status === 200) {
+        alert(EmailResponse.data.response || "인증번호를 발송했습니다.");
+      } else if (EmailResponse.status === 429) {
+        alert(EmailResponse.data.message || "조금있다 다시 시도해 주세요.");
+      } else {
+        alert(EmailResponse?.data?.message || "문제 발생.🚨");
+      }
+    } catch (error) {
+      console.error("Error in handleCheckEmail:", error);
+      alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+    }
+  };
+  const handleCheckEmailVerify = async () => {
+    try {
+      const EmailResponse = await handlerCheckEmailVerify(InputConfirm);
+      console.log(EmailResponse);
+      if (EmailResponse && EmailResponse.status === 200) {
+        alert(EmailResponse.data.response || "인증번호를 발송했습니다.");
+      } else if (EmailResponse.status === 429) {
+        alert(EmailResponse.data.message || "조금있다 다시 시도해 주세요.");
+      } else {
+        alert(EmailResponse?.data?.message || "문제 발생.🚨");
+      }
+    } catch (error) {
+      console.error("Error in handleCheckEmail:", error);
+      alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+    }
+  };
+  const handleSubmit = async () => {
+    // 마지막에 제출할 때 id 중복 확인 한번 더 수행
+    if (checkID !== InputID) {
+      alert("아이디를 다시 확인하세요.");
+      return;
+    } else if (InputPW !== InputRePW) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    // 회원가입 처리 로직 추가
   };
 
   return (
@@ -142,7 +192,11 @@ export const Register = () => {
                     setEmail(e.target.value);
                   }}
                 />
-                <button type="button" className="button">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={handleCheckEmail}
+                >
                   인증번호 요청
                 </button>
               </div>
@@ -159,7 +213,11 @@ export const Register = () => {
                     setConfirm(e.target.value);
                   }}
                 />
-                <button type="button" className="button">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={handleCheckEmailVerify}
+                >
                   확인
                 </button>
               </div>
@@ -193,7 +251,11 @@ export const Register = () => {
               </label>
             </div>
             <div>
-              <button type="submit" className="button-register-done">
+              <button
+                type="submit"
+                className="button-register-done"
+                onClick={handleSubmit}
+              >
                 회원 가입 하기
               </button>
             </div>
