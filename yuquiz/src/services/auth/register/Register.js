@@ -34,14 +34,30 @@ const handlerCheckEmail = async (data) => {
 };
 const handlerCheckEmailVerify = async (data) => {
     try {
-        const res = await axios.post(`${SERVER_API}/users/email/verification-request`, {
-            email: data
+        const res = await axios.post(`${SERVER_API}/users/email/code-verification`, {
+            email : data.email,
+            code : data.code
         });
         return res;
     } catch (e) {
         console.error(e);
     }
 };
+const handlerSubmit = async (data) =>{
+    try{
+        const res = await axios.post(`${SERVER_API}/users/email/code-verification`,{
+            username: data.username,
+            password: data.password,
+            nickname: data.nickname,
+            email: data.email,
+            majorName: data.majorName,
+            agreeEmail: data.agreeEmail
+        });
+        return res;
+    }catch(e){
+        console.error(e);
+    }
+}
 
 
-export { handlerCheckDupID, handlerCheckDupNick, handlerCheckEmail,handlerCheckEmailVerify };
+export { handlerCheckDupID, handlerCheckDupNick, handlerCheckEmail,handlerCheckEmailVerify,handlerSubmit };
