@@ -1,12 +1,11 @@
+import { Link } from "react-router-dom";
 import "../../styles/login/Login.scss";
 import { IoMdArrowBack } from "react-icons/io";
 
 export const Login = () => {
   return (
     <div className="login-container">
-      <button className="back-button">
-        <IoMdArrowBack />
-      </button>
+      <Link to='/' className="back-button"><IoMdArrowBack /></Link>
       <div className="title-box">
         <p className="logo">YU Quiz</p>
       </div>
@@ -47,7 +46,7 @@ export const Login = () => {
         </div>
       </div>
       <div className="other-container">
-        <button className="button-others">회원가입</button>/
+        <Link to='/register' className="button-others">회원가입</Link>
         <button className="button-others">비밀번호 찾기</button>
       </div>
     </div>

@@ -6,6 +6,7 @@ import '../../styles/quiz_list_page/QuizListPage.scss';
 import QuizList from '../../components/quizlist/QuizList';
 import SearchBar from '../../components/quizlist/SearchBar';
 import SubjectDropdown from '../../components/quizlist/SubjectDropdown';
+import { Link } from 'react-router-dom';
 
 const QuizListPage = () => {
   const quizzesData = [
@@ -29,8 +30,8 @@ const QuizListPage = () => {
   return (
     <div className="quiz-list-page-container">
       <nav className="navbar">
-        <button className="nav-button">홈으로</button>
-        <button className="nav-button">마이페이지</button>
+        <Link to='/' className="nav-button">홈으로</Link>
+        <Link to='/my' className="nav-button">마이페이지</Link>
       </nav>
       <div className='controls-container'>
         <SearchBar onSearch={handleSearch} />

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ListBox from "../../components/mypage/ListBox";
 import "../../styles/mypage/MyPage.scss";
 
@@ -14,7 +15,7 @@ const MyPage = () => {
 
     return (
       <div className="dashboard-container">
-      <button className="my-home-btn">홈으로</button>
+      <Link to='/' className="my-home-btn">홈으로</Link>
       <div className="row">
           <ListBox title="알림함" items={data.alerts} />
           <ListBox title="작성한 퀴즈 목록" items={data.quizzes} />

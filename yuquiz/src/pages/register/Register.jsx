@@ -1,11 +1,12 @@
 
+import { Link } from 'react-router-dom';
 import '../../styles/register/Register.scss';
 import { IoMdArrowBack } from "react-icons/io";
 
 export const Register = () => {
     return (
       <div className='register-container'>
-        <button className="back-button"><IoMdArrowBack/></button>
+        <Link to='/' className="back-button"><IoMdArrowBack /></Link>
         <div>
           <div className='title-container'>
             <p className='logo'>YU Quiz</p>

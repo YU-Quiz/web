@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import "../../styles/mypage/EditProfile.scss";
+import { Link } from 'react-router-dom';
 
 const EditProfile = () => {
     const initialData = {
@@ -92,7 +93,7 @@ const EditProfile = () => {
                     </tbody>
                 </table>
                 <div className="submit-section">
-                    <button type="button" className="home-btn">마이페이지로</button>
+                    <Link to='/' className='home-btn'>마이페이지로</Link>
                     <button type="submit">저장</button>
                 </div>
                 </form>

@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../styles/root/PostCard.scss';
+import { Link } from 'react-router-dom';
 
 const PostCard = ({ title, category }) => {
     return (
@@ -7,7 +8,7 @@ const PostCard = ({ title, category }) => {
             <div className="post-content">
                 <h4>{category}</h4>
                 <h2>{title}</h2>
-                <a href="#">Read More</a>
+                <Link to='/posts/view/123'>더보기</Link>
             </div>
         </div>
     );

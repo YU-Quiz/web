@@ -1,7 +1,7 @@
+import { Link } from 'react-router-dom';
 import '../../styles/mypage/ProfileCard.scss';
 
 const ProfileCard = () =>{
-
     return(
         <div className="profile-container">
             <div className="profile-picture"></div>
@@ -15,11 +15,10 @@ const ProfileCard = () =>{
                 </div>
             </div>
             <div className="profile-actions">
-                <button className='action-btn'>정보 수정하기</button>
-                <button className='action-btn'>로그아웃</button>
+                <Link to='/my/edit' className='action-btn'></Link>
+                <Link to='/'>로그아웃</Link>
             </div>
-
-            <button className='withdraw-btn'>회원탈퇴</button>
+            <Link to='/' className='withdraw-btn'>회원탈퇴</Link>
         </div>
     );
 }

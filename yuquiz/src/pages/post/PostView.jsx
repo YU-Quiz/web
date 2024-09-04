@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/post/PostView.scss';
+import { Link } from 'react-router-dom';
 
 const PostView = ({ post }) => {
     const existingPost = {
@@ -42,12 +43,8 @@ const PostView = ({ post }) => {
         <div className="post-content">{content}</div>
 
         <div className="button-container">
-          <button className="edit-btn" onClick={handleEditClick}>
-            게시글 수정
-          </button>
-          <button className="back-btn" onClick={handleBackClick}>
-            목록으로
-          </button>
+          <Link to='/posts/edit' className='edit-btn' onClick={handleEditClick}>게시글 수정</Link>
+          <Link to='/posts/list' className='back-btn' onClick={handleBackClick}>목록으로</Link>
         </div>
 
         <div className="comments-section">

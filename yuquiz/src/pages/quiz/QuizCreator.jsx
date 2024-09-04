@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import "../../styles/quiz/QuizCreator.scss";
+import { Link } from "react-router-dom";
 
 export const QuizCreator = () => {
   const [questionTitle, setQuestionTitle] = useState("");
@@ -60,9 +61,7 @@ export const QuizCreator = () => {
 
   return (
     <div>
-      <button className="back-button">
-        <IoMdArrowBack />
-      </button>
+      <Link to='/quiz/list' className="back-button"><IoMdArrowBack /></Link>
       <div className="container">
         <div className="quiz-creator">
           <h2 className="title">Quiz 생성</h2>

@@ -4,6 +4,7 @@ import '../../styles/post_list_page/PostListPage.scss';
 import SearchBar from '../../components/postlist/SearchBar';
 import SubjectDropdown from '../../components/postlist/SubjectDropdown';
 import PostList from '../../components/postlist/PostList';
+import { Link } from 'react-router-dom';
 
 const PostListPage = () => {
     const postsData = [
@@ -30,8 +31,8 @@ const PostListPage = () => {
   return (
     <div className="post-list-page-container">
       <nav className="navbar">
-        <button className="nav-button">홈으로</button>
-        <button className="nav-button">마이페이지</button>
+        <Link to='/' className="nav-button">홈으로</Link>
+        <Link to='/my' className="nav-button">마이페이지</Link>
       </nav>
       <div className='controls-container'>
         <SearchBar onSearch={handleSearch} />
