@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/register/Register.scss";
 import { IoMdArrowBack } from "react-icons/io";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   handlerCheckDupID,
   handlerCheckDupNick,
@@ -10,22 +9,31 @@ import {
   handlerCheckEmailVerify,
   handlerSubmit,
 } from "../../services/auth/register/Register";
+import useAuthStore from "../../stores/auth/authStore"; // Zustand 상태 사용
 
 export const Register = () => {
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated); // 로그인 상태 가져오기
+
   // Input 값들 state
   const [InputID, setInputID] = useState("");
   const [InputPW, setInputPW] = useState("");
   const [InputRePW, setInputRePW] = useState("");
-  const [InputNickname, setNickname] = useState(""); // InputNickname 선언
+  const [InputNickname, setNickname] = useState("");
   const [InputEmail, setEmail] = useState("");
   const [InputConfirm, setConfirm] = useState("");
   const [InputMajor, setMajor] = useState(null);
   const [emailAgree, setAgree] = useState(false);
   const [checkID, setCheckID] = useState("");
-  const [checkNick, setCheckNick] = useState(""); // 중복 확인된 닉네임 상태
+  const [checkNick, setCheckNick] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
 
-  const navigate = useNavigate();
+  // 로그인된 상태면 홈 페이지로 리다이렉트
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/"); // 이미 로그인 상태일 경우 홈으로 리디렉트
+    }
+  }, [isAuthenticated, navigate]);
 
   // 아이디 중복 확인
   const handleCheckDupID = async () => {
@@ -33,10 +41,10 @@ export const Register = () => {
     if (result) setCheckID(InputID);
   };
 
-  // 닉네임이 변경될 때 중복 확인 상태 초기화
+  // 닉네임 변경 시 중복 확인 상태 초기화
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
-    setCheckNick(""); // 닉네임이 변경되면 중복 확인 상태 초기화
+    setCheckNick("");
   };
 
   // 닉네임 중복 확인
@@ -47,7 +55,7 @@ export const Register = () => {
       setCheckNick
     );
     if (result) {
-      setCheckNick(InputNickname); // 중복 확인된 닉네임을 저장
+      setCheckNick(InputNickname);
     }
   };
 
@@ -66,7 +74,7 @@ export const Register = () => {
     if (result) setEmailVerified(true);
   };
 
-  // 회원가입
+  // 회원가입 처리
   const handleSubmit = async () => {
     const registerData = {
       username: InputID,
@@ -77,7 +85,6 @@ export const Register = () => {
       agreeEmail: emailAgree,
     };
 
-    // checkNick이 비어 있거나 현재 입력된 닉네임과 중복 확인된 닉네임이 다르면 경고
     if (!checkNick || InputNickname !== checkNick) {
       alert("닉네임 중복 확인을 완료해주세요.");
       return;
