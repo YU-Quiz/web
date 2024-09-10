@@ -2,34 +2,50 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/login/Login.scss";
 import { IoMdArrowBack } from "react-icons/io";
 import { useState } from "react";
-import { login } from "../../services/auth/login/loginService";
+import { login } from "../../services/auth/login/authService"; // 로그인 서비스 함수
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState(""); // 아이디 입력 상태
+  const [password, setPassword] = useState(""); // 비밀번호 입력 상태
+  const [error, setError] = useState(null); // 에러 메시지 상태
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // 기본 폼 제출 동작을 막음
-    try {
-      // 토큰을 사용할 데가 있는가?
-      const { accessToken } = await login(username, password);
+    e.preventDefault();
+    setError(null); // 이전 에러 초기화
+    setIsLoading(true); // 로딩 시작
 
-      // 로그인 성공 후 홈으로
-      navigate('/');
-      console.log('로그인 성공!');
+    try {
+      // 로그인 요청
+      await login(username, password);
+
+      // 로그인 성공 시 alert 및 홈 페이지로 이동
+      alert("로그인 성공!");
+      navigate("/");
     } catch (error) {
-      console.log('로그인 실패!');
+      // 에러 처리: 상태 코드에 따라 다른 메시지 표시
+      if (error.message.includes("404")) {
+        setError("아이디 또는 비밀번호가 유효하지 않습니다.");
+      } else if (error.message.includes("423")) {
+        setError("정지된 계정입니다. 잠금 해제 시간을 확인해주세요.");
+      } else {
+        setError("로그인 중 문제가 발생했습니다. 다시 시도해주세요.");
+      }
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
 
   return (
     <div className="login-container">
-      <Link to='/' className="back-button"><IoMdArrowBack /></Link>
+      <Link to="/" className="back-button">
+        <IoMdArrowBack />
+      </Link>
       <div className="title-box">
         <p className="logo">YU Quiz</p>
       </div>
-      <form className="login-container" onSubmit={handleLogin}> {/* 폼 태그 추가 */}
+      <form className="login-container" onSubmit={handleLogin}>
         <div>
           <p className="form-label">아이디</p>
           <input
@@ -47,13 +63,19 @@ export const Login = () => {
             id="password"
             className="input-box"
             placeholder="비밀번호를 입력하세요"
-            value={password}  // 상태와 연결
-            onChange={(e) => setPassword(e.target.value)} // 입력 값 업데이트
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit" className="button-login-done"> {/* 버튼의 타입을 submit으로 변경 */}
-            로그인
+          <button
+            type="submit"
+            className="button-login-done"
+            disabled={isLoading}
+          >
+            {isLoading ? "로그인 중..." : "로그인"}
           </button>
+          {error && <p className="error-message">{error}</p>}{" "}
+          {/* 에러 메시지 표시 */}
           <div>
             <button className="button-login-social">
               <img
@@ -71,7 +93,9 @@ export const Login = () => {
         </div>
       </form>
       <div className="other-container">
-        <Link to='/register' className="button-others">회원가입</Link>
+        <Link to="/register" className="button-others">
+          회원가입
+        </Link>
         <button className="button-others">비밀번호 찾기</button>
       </div>
     </div>
