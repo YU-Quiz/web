@@ -82,13 +82,13 @@ export const QuizCreator = () => {
       title: questionTitle,
       question: questionContent,
       quizImg: image,
-      answer: answer, // 정답 번호가 저장된 문자열
+      answer: answer,
       quizType: questionType,
-      choices: choices, // 사용자가 입력한 답안 내용
+      choices: choices,
       subjectId: 2,
     };
 
-    handlerSubmitQuiz(data); // 수정된 데이터를 서브밋 함수로 전달
+    handlerSubmitQuiz(data);
   };
 
   return (
