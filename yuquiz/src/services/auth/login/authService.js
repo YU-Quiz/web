@@ -32,7 +32,7 @@ const logout = async () => {
 
     const response = await api.get(`/auth/sign-out`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`, // Access Token 포함
+        Authorization: `${accessToken}`, // Access Token 포함
       },
     });
 

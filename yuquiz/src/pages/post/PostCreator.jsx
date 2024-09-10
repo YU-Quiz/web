@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import '../../styles/post/PostCreator.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { createPost } from '../../services/post/postService';
 
 const PostCreator = () => {
+  const navigate = useNavigate();
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -19,10 +21,20 @@ const PostCreator = () => {
     setContent(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // 여기에 게시글 제출 로직을 추가하세요.
-    console.log({ category, title, content });
+    try{
+      await createPost(1, title,content);
+
+      alert("게시글 생성 성공!");
+      navigate("/posts/list");
+    }catch(error){
+      console.log("에러 발생!");
+    }
+
+
+    // console.log({ category, title, content });
   };
 
   return (
@@ -63,7 +75,7 @@ const PostCreator = () => {
         ></textarea>
 
         <div className="button-container">
-          <Link to='/posts/create' className='submit-btn'>게시글 작성</Link>
+          <Link to='/posts/create' className='submit-btn' onClick={handleSubmit}>게시글 작성</Link>
           <Link to='/posts/list' className='back-btn'>목록으로</Link>
         </div>
       </form>
