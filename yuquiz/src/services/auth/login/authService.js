@@ -2,9 +2,11 @@ import api from '../../apiService';
 import { setAccessToken, removeAccessToken } from '../../../utils/token';
 import useAuthStore from '../../../stores/auth/authStore';
 
+const SERVER_API = process.env.REACT_APP_YUQUIZ;
+
 const login = async (username, password) => {
   try {
-    const response = await api.post(`/auth/sign-in`, { username, password });
+    const response = await api.post(`${SERVER_API}/auth/sign-in`, { username, password });
     const { accessToken } = response.data;
 
     setAccessToken(accessToken); // sessionStorage에 Access Token 저장
@@ -30,7 +32,7 @@ const logout = async () => {
   try {
     const accessToken = useAuthStore.getState().accessToken;
 
-    const response = await api.get(`/auth/sign-out`, {
+    const response = await api.get(`${SERVER_API}/auth/sign-out`, {
       headers: {
         Authorization: `Bearer ${accessToken}`, // Access Token 포함
       },
