@@ -37,7 +37,7 @@ api.interceptors.response.use(
         const { accessToken } = response.data;
         useAuthStore.getState().setAccessToken(accessToken); // 새로운 Access Token 상태에 저장
         setAccessToken(accessToken); // sessionStorage에 저장
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = `${accessToken}`;
 
         return api(originalRequest); // 갱신된 Access Token으로 요청 재시도
       } catch (refreshError) {
