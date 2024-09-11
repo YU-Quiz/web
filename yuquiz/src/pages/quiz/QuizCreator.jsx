@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import "../../styles/quiz/QuizCreator.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { handlerSubmitQuiz } from "../../services/quiz/quizCreator";
-
 export const QuizCreator = () => {
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionContent, setQuestionContent] = useState("");
@@ -17,6 +16,7 @@ export const QuizCreator = () => {
   const [image, setImage] = useState(null);
 
   const textAreaRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (textAreaRef.current) {
@@ -28,7 +28,7 @@ export const QuizCreator = () => {
   }, [questionContent]);
 
   useEffect(() => {
-    if (questionType === "True/False") {
+    if (questionType === "TRUE_FALSE") {
       setAnswers([
         { num: 1, text: "True", correct: false },
         { num: 2, text: "False", correct: false },
@@ -88,7 +88,10 @@ export const QuizCreator = () => {
       subjectId: 2,
     };
 
-    handlerSubmitQuiz(data);
+    if (handlerSubmitQuiz(data)) {
+      alert("퀴즈 생성 성공!");
+      navigate("/");
+    }
   };
 
   return (
@@ -174,7 +177,7 @@ export const QuizCreator = () => {
                 </div>
               ))}
 
-            {questionType === " SHORT_ANSWER" && (
+            {questionType === "SHORT_ANSWER" && (
               <div className="answer-group">
                 <label className="answer-label" htmlFor={`answer-1`}>
                   정답
