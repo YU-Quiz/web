@@ -10,7 +10,6 @@ const PostView = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
-    // 컴포넌트가 처음 렌더링될 때 게시물 데이터를 가져옵니다
   useEffect(() => {
     const fetchPost = async () => {
       try {
