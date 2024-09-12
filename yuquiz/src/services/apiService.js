@@ -30,7 +30,6 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Refresh Token으로 Access Token 갱신
         const response = await axios.post(`${SERVER_API}/auth/token/refresh`, {}, {
           withCredentials: true, // 쿠키로 Refresh Token 전송
         });
@@ -38,10 +37,11 @@ api.interceptors.response.use(
         const { accessToken } = response.data;
         useAuthStore.getState().setAccessToken(accessToken); // 새로운 Access Token 상태에 저장
         setAccessToken(accessToken); // sessionStorage에 저장
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = `${accessToken}`;
 
         return api(originalRequest); // 갱신된 Access Token으로 요청 재시도
       } catch (refreshError) {
+        alert("로그아웃!");
         useAuthStore.getState().logout(); // 실패 시 로그아웃 처리
         removeAccessToken();
         return Promise.reject(refreshError);

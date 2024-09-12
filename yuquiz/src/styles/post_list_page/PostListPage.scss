@@ -25,7 +25,33 @@
       align-items: center;
       justify-content: center;
     }
-  }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .page-button {
+      padding: 10px 15px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .page-button.active, .page-button:hover {
+      background-color: #007bff;
+      color: #fff;
+    }
+    
+    .page-button:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+    
+}
   
   
   
