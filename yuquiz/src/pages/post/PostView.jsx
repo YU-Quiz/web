@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import '../../styles/post/PostView.scss';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { removePost, showPost } from '../../services/post/postService';
+import React, { useState, useEffect } from "react";
+import "../../styles/post/PostView.scss";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { removePost, showPost } from "../../services/post/postService";
 
 const PostView = () => {
   const navigate = useNavigate();
-  const { postId } = useParams(); // URL에서 
+  const { postId } = useParams(); // URL에서
   const [post, setPost] = useState(null); // 게시물 데이터를 저장할 상태
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -17,9 +17,8 @@ const PostView = () => {
         // console.log(response);
         setPost(postData); // 가져온 데이터를 상태에 저장
         // setComments(response.data.comments || []);
-        
       } catch (error) {
-        console.error('게시물을 불러오는 중 오류가 발생했습니다:', error);
+        console.error("게시물을 불러오는 중 오류가 발생했습니다:", error);
       }
     };
 
@@ -36,32 +35,36 @@ const PostView = () => {
     e.preventDefault();
     if (newComment.trim()) {
       setComments([...comments, newComment]);
-      setNewComment('');
+      setNewComment("");
     }
   };
-
+  //댓글제출이 안됨 새로고침하면 자꾸 없어짐
   const handleDelete = async () => {
-    const confirmDelete = window.confirm("정말로 이 게시물을 삭제하시겠습니까?");
+    const confirmDelete = window.confirm(
+      "정말로 이 게시물을 삭제하시겠습니까?"
+    );
     if (confirmDelete) {
       try {
         await removePost(postId); // 게시글 삭제 API 호출
-        navigate('/posts/list'); // 삭제 후 목록 페이지로 이동
+        navigate("/posts/list"); // 삭제 후 목록 페이지로 이동
       } catch (error) {
-        console.error('게시물 삭제 중 오류 발생:', error);
+        console.error("게시물 삭제 중 오류 발생:", error);
       }
     }
   };
 
   return (
     <div className="postview-container">
-      <div className='postview-box'>
+      <div className="postview-box">
         {/* 게시물이 존재할 경우에만 데이터를 표시 */}
         {post ? (
           <>
             <h2 className="post-title">{post.title}</h2>
             <p className="post-category">카테고리: {post.categoryName}</p>
             <p className="post-nickname">작성자: {post.nickname}</p>
-            <p className="post-date">작성일: {new Date(post.createdAt).toLocaleString()}</p>
+            <p className="post-date">
+              작성일: {new Date(post.createdAt).toLocaleString()}
+            </p>
             <div className="post-content">{post.content}</div>
 
             <div className="post-info">
@@ -71,9 +74,15 @@ const PostView = () => {
             </div>
 
             <div className="button-container">
-              <Link to={`/posts/edit/${postId}`} className='edit-btn'>게시글 수정</Link>
-              <button onClick={handleDelete} className="delete-btn">게시글 삭제</button>
-              <Link to='/posts/list' className='back-btn'>목록으로</Link>
+              <Link to={`/posts/edit/${postId}`} className="edit-btn">
+                게시글 수정
+              </Link>
+              <button onClick={handleDelete} className="delete-btn">
+                게시글 삭제
+              </button>
+              <Link to="/posts/list" className="back-btn">
+                목록으로
+              </Link>
             </div>
 
             <div className="comments-section">

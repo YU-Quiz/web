@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
-import '../../styles/post_list_page/PostList.scss';
+import { Link } from "react-router-dom";
+import "../../styles/post_list_page/PostList.scss";
 
 const PostItem = ({ post }) => {
-  const {postId, postTitle, nickname, categoryName, likeCount, viewCount} = post;
+  const { postId, postTitle, nickname, categoryName, likeCount, viewCount } =
+    post;
 
   return (
     <div className="post-item">
@@ -10,7 +11,9 @@ const PostItem = ({ post }) => {
       <div className="post-type">[{categoryName}]</div>
 
       {/* 게시글 제목 */}
-      <Link to={`/posts/view/${postId}`} className='post-question'>{postTitle}</Link>
+      <Link to={`/posts/view/${postId}`} className="post-question">
+        {postTitle}
+      </Link>
 
       {/* 작성자, 작성일, 좋아요, 조회수 */}
       <div className="post-info">
@@ -21,5 +24,5 @@ const PostItem = ({ post }) => {
     </div>
   );
 };
-
+//조회수 반영 오류
 export default PostItem;
