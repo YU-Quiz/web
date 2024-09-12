@@ -3,6 +3,7 @@ import { setAccessToken, removeAccessToken } from '../../../utils/token';
 import useAuthStore from '../../../stores/auth/authStore';
 
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
+
 const login = async (username, password) => {
   try {
     const response = await api.post(`${SERVER_API}/auth/sign-in`, { username, password });

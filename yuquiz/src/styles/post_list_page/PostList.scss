@@ -12,6 +12,7 @@
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px; /* 리스트에서 아이템 간 간격을 위해 추가 */
   }
   
   .post-type {
@@ -25,8 +26,35 @@
     margin-bottom: 10px;
   }
   
-  .post-subject {
+  .post-info {
+    display: flex;
+    justify-content: space-between;
     font-size: 14px;
     color: #888;
+    margin-top: 10px;
+  }
+  
+  .post-nickname, 
+  .post-date, 
+  .post-likes, 
+  .post-views {
+    margin-right: 10px;
+  }
+  
+  .post-nickname {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .post-date {
+    color: #666;
+  }
+  
+  .post-likes {
+    color: #e74c3c; /* 좋아요 부분을 강조하기 위해 빨간색 추가 */
+  }
+  
+  .post-views {
+    color: #3498db; /* 조회수는 파란색으로 */
   }
   

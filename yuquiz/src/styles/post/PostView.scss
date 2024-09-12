@@ -1,121 +1,158 @@
 .postview-container {
-    display: flex;
-    align-content: center;
-    justify-content: center;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 
-    .postview-box{
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 80vw;
-      height: 100vh;
+  .postview-box {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 80vw;
+    height: 100vh;
+    overflow-y: auto;
 
-      .post-title {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-      
-      .post-category {
-        font-size: 14px;
-        color: #888;
-        margin-bottom: 20px;
-      }
-      
-      .post-content {
-        font-size: 16px;
-        line-height: 1.6;
-        margin-bottom: 30px;
-      }
-      
-      .button-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 30px;
-      }
-      
-      .edit-btn,
-      .back-btn {
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-      
-      .edit-btn {
-        background-color: #000000;
-        color: #fff;
-      }
-      
-      .edit-btn:hover {
-        background-color: #777777;
-      }
-      
-      .back-btn {
-        background-color: #ddd;
-        color: #333;
-      }
-      
-      .back-btn:hover {
-        background-color: #bbb;
-      }
-      
-      /* 댓글 섹션 스타일링 */
-      .comments-section {
-        margin-top: 30px;
-      }
-      
-      .comments-list {
-        list-style: none;
-        padding: 0;
-        margin-bottom: 20px;
-      }
-      
-      .comment-item {
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        background-color: #f9f9f9;
-      }
-      
-      .comment-form {
-        display: flex;
-        flex-direction: column;
-      }
-      
-      .comment-input {
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        resize: none;
-        height: 100px;
-        font-size: 14px;
-      }
-      
-      .submit-comment-btn {
-        align-self: flex-end;
-        padding: 10px 20px;
-        background-color: #000000;
-        color: #fff;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-      
-      .submit-comment-btn:hover {
-        background-color: #787878;
-      }
-      
+    .post-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
+    
+    .post-category {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    
+    .post-nickname {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .post-date {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .post-content {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .post-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+
+      .post-likes,
+      .post-views,
+      .post-modified {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .post-modified {
+        font-style: italic;
+      }
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    
+    .edit-btn,
+    .delete-btn,
+    .back-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .edit-btn {
+      background-color: #000000;
+      color: #fff;
+    }
+    
+    .edit-btn:hover {
+      background-color: #777777;
+    }
+
+    .delete-btn {
+      background-color: #000000;
+      color: #fff;
+    }
+    
+    .delete-btn:hover {
+      background-color: #777777;
+    }
+    
+    .back-btn {
+      background-color: #ddd;
+      color: #333;
+    }
+    
+    .back-btn:hover {
+      background-color: #bbb;
+    }
+    
+    /* 댓글 섹션 스타일링 */
+    .comments-section {
+      margin-top: 30px;
+    }
+    
+    .comments-list {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    
+    .comment-item {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+    }
+    
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .comment-input {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      resize: none;
+      height: 100px;
+      font-size: 14px;
+    }
+    
+    .submit-comment-btn {
+      align-self: flex-end;
+      padding: 10px 20px;
+      background-color: #000000;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .submit-comment-btn:hover {
+      background-color: #787878;
+    }
+  }
 }
-  
-  
