@@ -5,8 +5,8 @@ import "../../styles/quiztype/ShortAnswer.scss";
 export const ShortAnswer = ({ quizID }) => {
   const [quizData, setQuizData] = useState(null);
   const [writtenAnswer, setWrittenAnswer] = useState("");
-  const [score, setScore] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(null);
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -25,22 +25,24 @@ export const ShortAnswer = ({ quizID }) => {
   };
 
   const handleSubmit = () => {
-    if (writtenAnswer === quizData.questions[currentQuestion].correctAnswer) {
-      setScore(score + 1);
-    }
-    setWrittenAnswer("");
-    setCurrentQuestion(currentQuestion + 1);
+    const isAnswerCorrect = writtenAnswer === quizData.correctAnswer;
+    setIsCorrect(isAnswerCorrect ? "맞았습니다!" : "틀렸습니다.");
+    setHasSubmitted(true);
   };
+
+  if (hasSubmitted) {
+    return (
+      <div className="quiz-container">
+        <h2>{quizData.question}</h2>
+        <p>{isCorrect}</p>
+        <button className="gotolist-button">목록으로</button>
+      </div>
+    );
+  }
 
   return (
     <div className="quiz-container">
-      <h2 className="quiz-header">
-        {quizData.questions[currentQuestion].title}
-      </h2>
-      <p className="quiz-question">
-        {currentQuestion + 1}/{quizData.questions.length}:{" "}
-        {quizData.questions[currentQuestion].question}
-      </p>
+      <p className="quiz-question">{quizData.question}</p>
       <div className="quiz-options">
         <input
           type="text"

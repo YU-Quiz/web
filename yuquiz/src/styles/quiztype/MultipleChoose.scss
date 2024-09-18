@@ -1,70 +1,80 @@
 .quiz-container {
-    width: 100vh;
-    text-align: center;
-    border: 2px solid silver;
+  width: 100vh;
+  text-align: center;
+  border: 2px solid silver;
+  border-radius: 8px;
+  padding: 50px;
+  
+  .gotolist-button {
+    margin-top: 10px;
+    border-radius: 6px;
+    width: 90px;
+    height: 30px;
+    &:hover {
+      background-color: silver;
+    }
+  }
+}
+
+.quiz-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.quiz-question {
+  margin-bottom: 20px;
+}
+
+.quiz-options {
+  display: flex;
+  justify-content: center; /* 중앙에 배치 */
+  flex-wrap: wrap; /* 선택지가 너무 많으면 줄바꿈 */
+  gap: 15px; /* 선택지 간격 */
+  margin-bottom: 20px;
+
+  .quiz-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 2px solid #ccc;
     border-radius: 8px;
-    padding: 50px;
-  }
-  
-  .quiz-header {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .quiz-question {
-    margin-bottom: 20px;
-  }
-  
-  .quiz-options {
-    display: flex;
-    flex-direction: column; /* 세로 정렬 */
-    align-items: center; /* 중앙 정렬 */
-    margin-bottom: 20px;
-  
-    .quiz-option {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      width: 100%;
-      padding: 10px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-  
-      &:hover {
-        background-color: #eee;
-      }
-  
-      input {
-        margin-right: 10px;
-      }
-  
-      label {
-        flex-grow: 1;
-        text-align: left;
-      }
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex: 1 1 200px; /* 최소 200px 크기로 가로로 배치 */
+    max-width: 200px; /* 최대 너비 설정 */
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    input {
+      margin-right: 10px;
+    }
+
+    label {
+      flex-grow: 1;
+      text-align: left;
     }
   }
-  
-  .submit-box {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-  
-    .quiz-submit {
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 8px;
-      border: 1px solid black;
-      transition: background-color 0.3s;
-  
-      &:disabled {
-        cursor: not-allowed;
-        background-color: #ccc;
-      }
+}
+
+.submit-box {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+  .quiz-submit {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid black;
+    transition: background-color 0.3s;
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: #ccc;
     }
   }
-  
+}

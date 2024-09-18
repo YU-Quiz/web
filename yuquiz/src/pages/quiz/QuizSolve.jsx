@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // useParams로 URL에서 quizId 가져오기
+import { Link, useNavigate, useParams } from "react-router-dom"; // useParams로 URL에서 quizId 가져오기
 import { getQuiz } from "../../services/quiz/QuizManage";
 import "../../styles/quiz/QuizSolve.scss";
 import { MultipleChoose } from "../../components/solveQuiz/MultipleChoose";
 import { OXQuiz } from "../../components/solveQuiz/OXQuiz";
 import { ShortAnswer } from "../../components/solveQuiz/ShortAnswer";
+import { IoMdArrowBack } from "react-icons/io";
 
 export const QuizSolve = () => {
   const { quizId } = useParams(); // URL에서 quizId를 가져옴
   const [quizData, setQuizData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // 네비게이트 함수만 가져옴
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -41,7 +43,7 @@ export const QuizSolve = () => {
 
   // 퀴즈 타입에 따라 다른 컴포넌트를 렌더링
   const renderQuizComponent = () => {
-    switch (quizData.type) {
+    switch (quizData.quizType) {
       case "MULTIPLE_CHOICE":
         return <MultipleChoose quizID={quizId} />;
       case "TRUE_FALSE":
@@ -54,9 +56,13 @@ export const QuizSolve = () => {
   };
 
   return (
-    <div className="quiz-solve-page">
-      <h1>{quizData.title}</h1>
-      {renderQuizComponent()}
+    <div className="quiz-body">
+      {/* 버튼 클릭 시 navigate(-1) 실행 */}
+      <IoMdArrowBack className="back-button" onClick={() => navigate(-1)} />
+      <div className="quiz-solve-page">
+        <h1>{quizData.title}</h1>
+        {renderQuizComponent()}
+      </div>
     </div>
   );
 };

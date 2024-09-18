@@ -5,8 +5,8 @@ import "../../styles/quiztype/MultipleChoose.scss";
 export const MultipleChoose = ({ quizID }) => {
   const [quizData, setQuizData] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
-  const [score, setScore] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(null);
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -29,40 +29,56 @@ export const MultipleChoose = ({ quizID }) => {
   };
 
   const handleSubmit = () => {
-    const correctAnswers = quizData.questions[currentQuestion].correctAnswer;
     if (
-      selectedAnswers.length === correctAnswers.length &&
-      selectedAnswers.every((answer) => correctAnswers.includes(answer))
+      !quizData ||
+      !quizData.correctAnswer ||
+      !Array.isArray(quizData.correctAnswer)
     ) {
-      setScore(score + 1);
+      console.error("correctAnswer가 정의되지 않았거나 배열이 아닙니다.");
+      return;
     }
-    setSelectedAnswers([]);
-    setCurrentQuestion(currentQuestion + 1);
+
+    const correctAnswers = quizData.correctAnswer;
+
+    const isAllCorrect =
+      selectedAnswers.length === correctAnswers.length &&
+      selectedAnswers.every((answer) => correctAnswers.includes(answer));
+
+    setIsCorrect(isAllCorrect ? "맞았습니다!" : "틀렸습니다.");
+    setHasSubmitted(true);
   };
+
+  if (hasSubmitted) {
+    return (
+      <div className="quiz-container">
+        <h2>{quizData.title}</h2>
+        <p>{isCorrect}</p>
+        <button className="gotolist-button">목록으로</button>
+      </div>
+    );
+  }
 
   return (
     <div className="quiz-container">
-      <h2 className="quiz-header">
-        {quizData.questions[currentQuestion].title}
-      </h2>
-      <p className="quiz-question">
-        {currentQuestion + 1}/{quizData.questions.length}:{" "}
-        {quizData.questions[currentQuestion].question}
-      </p>
+      <p className="quiz-question">{quizData.question}</p>
       <div className="quiz-options">
-        {quizData.questions[currentQuestion].choices.map((choice, index) => (
-          <div key={index} className="quiz-option">
-            <input
-              type="checkbox"
-              id={`choice-${index}`}
-              name="quiz-choice"
-              value={choice}
-              checked={selectedAnswers.includes(choice)}
-              onChange={() => handleAnswerClick(choice)}
-            />
-            <label htmlFor={`choice-${index}`}>{choice}</label>
-          </div>
-        ))}
+        {quizData.choices.map(
+          (choice, index) =>
+            choice && (
+              <div key={index} className="quiz-option">
+                <input
+                  type="checkbox"
+                  className="choose-list"
+                  id={`choice-${index}`}
+                  name="quiz-choice"
+                  value={choice}
+                  checked={selectedAnswers.includes(choice)}
+                  onChange={() => handleAnswerClick(choice)}
+                />
+                <label htmlFor={`choice-${index}`}>{choice}</label>
+              </div>
+            )
+        )}
       </div>
       <div className="submit-box">
         <button
