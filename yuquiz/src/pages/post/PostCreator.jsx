@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/post/PostCreator.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { createPost, getCategories } from '../../services/post/postService';
 
 const PostCreator = () => {
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoriesData = await getCategories();
+        setCategories(categoriesData);
+        console.log(categoriesData);
+      } catch (error) {
+        console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
@@ -19,10 +36,18 @@ const PostCreator = () => {
     setContent(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // 여기에 게시글 제출 로직을 추가하세요.
-    console.log({ category, title, content });
+    try{
+      await createPost(category, title,content);
+
+      alert("게시글 생성 성공!");
+      navigate("/posts/list");
+    }catch(error){
+      console.log("에러 발생!");
+    }
+
   };
 
   return (
@@ -38,9 +63,11 @@ const PostCreator = () => {
           required
         >
           <option value="">카테고리 선택</option>
-          <option value="공지게시판">공지게시판</option>
-          <option value="자유게시판">자유게시판</option>
-          <option value="풀이게시판">풀이게시판</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.categoryName}
+            </option>
+          ))}
         </select>
 
         <label htmlFor="title">제목</label>
@@ -63,7 +90,7 @@ const PostCreator = () => {
         ></textarea>
 
         <div className="button-container">
-          <Link to='/posts/create' className='submit-btn'>게시글 작성</Link>
+          <button type="submit" className='submit-btn'>게시글 작성</button>
           <Link to='/posts/list' className='back-btn'>목록으로</Link>
         </div>
       </form>

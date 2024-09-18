@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/post/PostFix.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { editPost, getCategories, showPost } from '../../services/post/postService';
 
-const PostFix = ({ post }) => {
-    const existingPost = {
-        category: "자유게시판",
-        title: "게시글 수정하겠습니다~",
-        content: "게시글 수정 중~",
-    }
-  // 기존 게시글 데이터를 불러와 상태를 초기화합니다.
-  const [category, setCategory] = useState(existingPost.category || '');
-  const [title, setTitle] = useState(existingPost.title || '');
-  const [content, setContent] = useState(existingPost.content || '');
+const PostFix = () => {
+  const { postId } = useParams(); // URL에서 
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const postData = await showPost(postId); // 서버에서 게시글 데이터 불러오기
+        console.log(postData);
+        setCategory(postData.category || '');
+        setTitle(postData.title || '');
+        setContent(postData.content || '');
+
+        const categoriesData = await getCategories();
+        setCategories(categoriesData);
+        console.log(categoriesData);
+        setLoading(false); // 로딩 완료
+      } catch (error) {
+        console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPostData();
+  }, [postId]);
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
@@ -25,12 +46,21 @@ const PostFix = ({ post }) => {
     setContent(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 게시글 수정 로직을 추가하세요.
-    console.log({ category, title, content });
-    // 예를 들어, 서버에 수정된 데이터를 전송하는 API 호출을 추가할 수 있습니다.
+    try {
+      await editPost(postId, category, title, content ); // 게시글 수정 API 호출
+      alert("게시글 수정 성공!");
+      navigate(`/posts/view/${postId}`);
+      
+    } catch (error) {
+      console.error('게시글 수정 중 오류 발생:', error);
+    }
   };
+
+  if (loading) {
+    return <p>로딩 중...</p>; // 로딩 중일 때 표시
+  }
 
   return (
     <div className="postfix-container">
@@ -45,9 +75,11 @@ const PostFix = ({ post }) => {
           required
         >
           <option value="">카테고리 선택</option>
-          <option value="공지게시판">공지게시판</option>
-          <option value="자유게시판">자유게시판</option>
-          <option value="풀이게시판">풀이게시판</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.categoryName}
+            </option>
+          ))}
         </select>
 
         <label htmlFor="title">제목</label>
@@ -70,8 +102,8 @@ const PostFix = ({ post }) => {
         ></textarea>
 
         <div className="button-container">
-          <Link to='/posts/edit' className='submit-btn'>게시글 수정</Link>
-          <Link to='/posts/list' className='back-btn'>목록으로</Link>
+          <button type="submit" className="submit-btn">게시글 수정</button>
+          <Link to={`/posts/view/${postId}`} className='back-btn'>취소</Link>
         </div>
       </form>
     </div>
