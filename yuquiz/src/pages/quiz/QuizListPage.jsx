@@ -100,7 +100,7 @@ const QuizListPage = () => {
 
       {/* 퀴즈 리스트 */}
       {!isLoading && !error && filteredQuizzes.length === 0 && (
-        <p>표시할 퀴즈가 없습니다.</p>
+        <p>아직은 표시할 퀴즈가 없습니다.</p>
       )}
       <QuizList currentQuizzes={filteredQuizzes} />
 
