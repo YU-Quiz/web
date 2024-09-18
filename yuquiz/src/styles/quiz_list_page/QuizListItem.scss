@@ -1,0 +1,73 @@
+// src/styles/quiz_list_page/QuizListItem.scss
+
+.quiz-list-item {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  .quiz-info-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    .quiz-meta {
+    width: 50%;
+    align-items: end;
+    justify-content: end;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    }
+    .quiz-stats {
+    width: 50%;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    margin-top: 12px;
+    }
+  }  
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .quiz-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .quiz-type {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  
+  
+  .quiz-author,
+  .quiz-date {
+    color: #888;
+  }
+  
+
+  
+  .quiz-likes,
+  .quiz-views {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .quiz-solved {
+    font-weight: bold;
+  }
+  
+  .solved {
+    color: green;
+  }
+  
+  .unsolved {
+    color: red;
+  }
+  

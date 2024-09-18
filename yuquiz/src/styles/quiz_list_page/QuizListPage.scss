@@ -27,8 +27,30 @@
   }
 }
 
+/* src/styles/quiz_list_page/QuizListPage.scss */
 
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+}
 
+.page-button {
+  margin: 0 5px;
+  padding: 10px 20px; /* 버튼을 크게 만듦 */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px; /* 글씨 크기 키움 */
+}
 
+.page-button.active {
+  background-color: #0056b3; /* 활성화된 버튼 색상 */
+}
 
-
+.page-button:hover {
+  background-color: #0056b3; /* 호버 시 색상 */
+}

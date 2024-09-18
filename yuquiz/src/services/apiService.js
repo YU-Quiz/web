@@ -1,6 +1,6 @@
-import axios, { HttpStatusCode } from 'axios';
-import useAuthStore from '../stores/auth/authStore';
-import { setAccessToken, removeAccessToken } from '../utils/token';
+import axios, { HttpStatusCode } from "axios";
+import useAuthStore from "../stores/auth/authStore";
+import { setAccessToken, removeAccessToken } from "../utils/token";
 
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
@@ -26,14 +26,22 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response && error.response.status === HttpStatusCode.Unauthorized && !originalRequest._retry) {
+    if (
+      error.response &&
+      error.response.status === HttpStatusCode.Unauthorized &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
 
       try {
         // Refresh Token으로 Access Token 갱신
-        const response = await axios.post(`${SERVER_API}/auth/token/refresh`, {}, {
-          withCredentials: true, // 쿠키로 Refresh Token 전송
-        });
+        const response = await axios.post(
+          `${SERVER_API}/auth/token/refresh`,
+          {},
+          {
+            withCredentials: true, // 쿠키로 Refresh Token 전송
+          }
+        );
 
         const { accessToken } = response.data;
         useAuthStore.getState().setAccessToken(accessToken); // 새로운 Access Token 상태에 저장
