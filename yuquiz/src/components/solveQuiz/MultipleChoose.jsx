@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getQuiz } from "../../services/quiz/QuizManage";
 import "../../styles/quiztype/MultipleChoose.scss";
 
-export const MultipleChoose = () => {
+export const MultipleChoose = ({ quizID }) => {
+  const [quizData, setQuizData] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const questions = [
-    {
-      title: "테스트 퀴즈입니당~",
-      question: "이중에서 정답은?",
-      quizImg: null,
-      quizType: "MULTIPLE_CHOICE",
-      likeCount: 0,
-      choices: ["1.뭐요", "2.뭘봐요", "3.아닌데", ""],
-      subject: "마이크로프로세서",
-      writer: "테스터입니다",
-      createdAt: "2024-08-10T16:33:00",
-    },
-  ];
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      const data = await getQuiz(quizID);
+      setQuizData(data);
+    };
+    fetchQuizData();
+  }, [quizID]);
+
+  if (!quizData) {
+    return <div>로딩 중...</div>;
+  }
 
   const handleAnswerClick = (answer) => {
     setSelectedAnswers((prevAnswers) =>
@@ -29,7 +29,7 @@ export const MultipleChoose = () => {
   };
 
   const handleSubmit = () => {
-    const correctAnswers = questions[currentQuestion].correctAnswer;
+    const correctAnswers = quizData.questions[currentQuestion].correctAnswer;
     if (
       selectedAnswers.length === correctAnswers.length &&
       selectedAnswers.every((answer) => correctAnswers.includes(answer))
@@ -42,13 +42,15 @@ export const MultipleChoose = () => {
 
   return (
     <div className="quiz-container">
-      <h2 className="quiz-header">{questions[currentQuestion].title}</h2>
+      <h2 className="quiz-header">
+        {quizData.questions[currentQuestion].title}
+      </h2>
       <p className="quiz-question">
-        {currentQuestion + 1}/{questions.length}:{" "}
-        {questions[currentQuestion].question}
+        {currentQuestion + 1}/{quizData.questions.length}:{" "}
+        {quizData.questions[currentQuestion].question}
       </p>
       <div className="quiz-options">
-        {questions[currentQuestion].choices.map((choice, index) => (
+        {quizData.questions[currentQuestion].choices.map((choice, index) => (
           <div key={index} className="quiz-option">
             <input
               type="checkbox"

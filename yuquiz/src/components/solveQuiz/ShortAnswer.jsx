@@ -1,48 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getQuiz } from "../../services/quiz/QuizManage";
 import "../../styles/quiztype/ShortAnswer.scss";
-export const ShortAnswer = () => {
+
+export const ShortAnswer = ({ quizID }) => {
+  const [quizData, setQuizData] = useState(null);
   const [writtenAnswer, setWrittenAnswer] = useState("");
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const questions = [
-    //나중엔 퀴즈 id로 받아와서 넣어줄거임
-    {
-      title: "초간단 퀴즈입니당~",
-      question: "내 이름은?",
-      quizImg: null,
-      quizType: "ShortAnswer",
-      likeCount: 0,
-      choices: null,
-      subject: "관리자",
-      writer: "테스터입니다",
-      createdAt: "2024-08-10T16:33:00",
-    },
-  ];
-  const handleInputAnswer = (answer) => {
-    setWrittenAnswer(answer);
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      const data = await getQuiz(quizID);
+      setQuizData(data);
+    };
+    fetchQuizData();
+  }, [quizID]);
+
+  if (!quizData) {
+    return <div>로딩 중...</div>;
+  }
+
+  const handleInputAnswer = (e) => {
+    setWrittenAnswer(e.target.value);
   };
 
   const handleSubmit = () => {
-    if (writtenAnswer === questions[currentQuestion].correctAnswer) {
+    if (writtenAnswer === quizData.questions[currentQuestion].correctAnswer) {
       setScore(score + 1);
     }
     setWrittenAnswer("");
     setCurrentQuestion(currentQuestion + 1);
   };
+
   return (
     <div className="quiz-container">
-      <h2 className="quiz-header">{questions[currentQuestion].title}</h2>
+      <h2 className="quiz-header">
+        {quizData.questions[currentQuestion].title}
+      </h2>
       <p className="quiz-question">
-        {currentQuestion + 1}/{questions.length}:{" "}
-        {questions[currentQuestion].question}
+        {currentQuestion + 1}/{quizData.questions.length}:{" "}
+        {quizData.questions[currentQuestion].question}
       </p>
       <div className="quiz-options">
         <input
           type="text"
           className="input-box"
           onChange={handleInputAnswer}
-        ></input>
+          value={writtenAnswer}
+        />
       </div>
       <div className="submit-box">
         <button

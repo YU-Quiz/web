@@ -44,4 +44,19 @@ const getQuizList = async (
   }
 };
 
-export { getQuizList, SORT_OPTIONS };
+const getQuiz = async (quizID) => {
+  try {
+    // API 호출
+    const response = await api.get(`${SERVER_API}/quizzes/${quizID}`);
+    console.log(response.data);
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("퀴즈가 존재하지 않습니다.");
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+export { getQuizList, SORT_OPTIONS, getQuiz };
