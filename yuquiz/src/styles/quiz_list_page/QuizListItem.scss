@@ -30,22 +30,23 @@
   }  
   .quiz-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
   }
   
   .quiz-title {
     font-size: 1.5rem;
     font-weight: bold;
+    margin-right: 10px;
   }
   
   .quiz-type {
+    margin-right: 10px;
     font-size: 0.9rem;
-    color: #666;
+    color: black;
+    background-color: rgb(207, 201, 201);
+    border-radius: 2px;
   }
-  
-  
-  
   .quiz-author,
   .quiz-date {
     color: #888;
