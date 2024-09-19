@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import api from "../apiService";
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
@@ -44,4 +45,49 @@ const getQuizList = async (
   }
 };
 
-export { getQuizList, SORT_OPTIONS };
+const getQuiz = async (quizID) => {
+  try {
+    // API 호출
+    const response = await api.get(`${SERVER_API}/quizzes/${quizID}`);
+    console.log(response.data);
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("퀴즈가 존재하지 않습니다.");
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+const fixQuiz = async (quizData) => {
+  try {
+    const response = await api.put(
+      `${SERVER_API}/quizzes/${quizData.quizId}`,
+      quizData
+    );
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("퀴즈 수정 중 문제가 발생했습니다. 다시 시도해주세요.");
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+const deleteQuiz = async (quizId) => {
+  try {
+    const response = await api.delete(`${SERVER_API}/quizzes/${quizId}`);
+    if (response.status === HttpStatusCode.NoContent) {
+      alert("삭제 성공");
+    }
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("퀴즈 삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+export { getQuizList, SORT_OPTIONS, getQuiz, fixQuiz, deleteQuiz };

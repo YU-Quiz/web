@@ -1,9 +1,5 @@
-import axios, { HttpStatusCode } from "axios";
+import { HttpStatusCode } from "axios";
 import api from "../apiService";
-
-const SERVER_API = process.env.REACT_APP_YUQUIZ;
-// credentials 필요?--> apiService에서 다해줌
-
 /*
 {
     "totalPages": 1,
@@ -153,6 +149,7 @@ const editPost = async (postId, categoryId, title, content) =>{
             content: content
         });
 
+        console.log(response.data);
         return response.data;
     } catch (error) {
         if(error.response){
@@ -188,18 +185,6 @@ const removePost = async (postId) =>{
     };
 };
 
-const getCategories = async() =>{
-    try {
-        const response = await api.get('/posts/categories', {});
 
-        return response.data;
-    } catch (error) {
-        if(error.response){
-            throw new Error('카테고리 불러오는 중 문제 발생. 다시 시도해주세요.');
-        }else{
-            throw new Error('서버와 연결할 수 없습니다.');
-        }
-    }
-}
 
-export {createPost, showPost, editPost, removePost, getCategories, getPostsList};
+export {createPost, showPost, editPost, removePost, getPostsList};

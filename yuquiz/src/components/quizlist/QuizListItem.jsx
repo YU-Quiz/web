@@ -1,9 +1,11 @@
 // src/components/quizlist/QuizListItem.jsx
 import React from "react";
 import "../../styles/quiz_list_page/QuizListItem.scss";
+import { Link } from "react-router-dom";
 
 const QuizListItem = ({ quiz }) => {
   const {
+    quizId,
     quizTitle,
     nickname,
     likeCount,
@@ -31,12 +33,13 @@ const QuizListItem = ({ quiz }) => {
   return (
     <div className="quiz-list-item">
       <div className="quiz-header">
-        <h2 className="quiz-title">{quizTitle}</h2>
+        <h2 className="quiz-title">
+          <Link to={`/quiz/play/${quizId}`}>{quizTitle}</Link>
+        </h2>
         <p className="quiz-type">{getQuizTypeLabel(quizType)}</p>{" "}
         {/* 퀴즈 유형 표시 */}
         <p className="quiz-type">{subject || "과목"}</p> {/* 퀴즈 과목 표시 */}
       </div>
-
       <div className="quiz-info-container">
         <div className="quiz-stats">
           <p className="quiz-likes">👍 {likeCount}</p>

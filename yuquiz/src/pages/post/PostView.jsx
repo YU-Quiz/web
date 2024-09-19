@@ -1,122 +1,133 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { showPost, removePost } from "../../services/post/postService";
+import { postLike, postLikeCancel } from "../../services/post/postMetaService";
+import { createComment, editComment, removeComment } from "../../services/post/commentService";
+import PostContent from "../../components/postview/postContent";
+import PostComment from "../../components/postview/postComment";
 import "../../styles/post/PostView.scss";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { removePost, showPost } from "../../services/post/postService";
 
 const PostView = () => {
+  const { postId } = useParams(); // 게시글 id
   const navigate = useNavigate();
-  const { postId } = useParams(); // URL에서
-  const [post, setPost] = useState(null); // 게시물 데이터를 저장할 상태
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
+
+  const [post, setPost] = useState(null); // 게시글 객체
+  const [comments, setComments] = useState([]); // 댓글 리스트
+  const [newComment, setNewComment] = useState(""); // 새로 작성할 댓글
+  const [editingCommentId, setEditingCommentId] = useState(null); // 현재 수정중인 댓글 id
+  const [editedContent, setEditedContent] = useState(""); // 수정된 댓글
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const postData = await showPost(postId); // showPost 함수로 데이터를 가져옵니다
-        // console.log(response);
-        setPost(postData); // 가져온 데이터를 상태에 저장
-        // setComments(response.data.comments || []);
+        const postData = await showPost(postId);
+        setPost(postData.post);
+        setComments(postData.comments || []);
       } catch (error) {
         console.error("게시물을 불러오는 중 오류가 발생했습니다:", error);
       }
     };
 
-    fetchPost(); // 함수 호출
+    fetchPost();
   }, [postId]);
 
-  // 댓글 입력 상태처리
-  const handleCommentChange = (e) => {
-    setNewComment(e.target.value);
-  };
+  // 좋아요 토글
+  const handleLikeToggle = async () => {
+    try {
+      if (post.isLiked) {
+        await postLikeCancel(postId);
+      } else {
+        await postLike(postId);
+      }
 
-  // 댓글 제출
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (newComment.trim()) {
-      setComments([...comments, newComment]);
-      setNewComment("");
+      setPost((prevPost) => ({
+        ...prevPost,
+        isLiked: !prevPost.isLiked,
+        likeCount: prevPost.isLiked ? prevPost.likeCount - 1 : prevPost.likeCount + 1,
+      }));
+    } catch (error) {
+      console.error("좋아요 상태를 변경하는 중 오류가 발생했습니다:", error);
     }
   };
-  //댓글제출이 안됨 새로고침하면 자꾸 없어짐
+
+  // 게시글 삭제
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "정말로 이 게시물을 삭제하시겠습니까?"
-    );
+    const confirmDelete = window.confirm("정말로 이 게시물을 삭제하시겠습니까?");
     if (confirmDelete) {
       try {
-        await removePost(postId); // 게시글 삭제 API 호출
-        navigate("/posts/list"); // 삭제 후 목록 페이지로 이동
+        await removePost(postId);
+        navigate("/posts/list");
       } catch (error) {
         console.error("게시물 삭제 중 오류 발생:", error);
       }
     }
   };
 
+  // 댓글 제출
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (newComment.trim()) {
+      try {
+        const addedComment = await createComment(postId, newComment);
+        setComments([...comments, addedComment]);
+        setNewComment("");
+      } catch (error) {
+        console.error("댓글 작성 중 오류 발생:", error);
+      }
+    }
+  };
+
+  // 댓글 수정 감지 및 변화
+  const handleEditComment = (commentId, content) => {
+    setEditingCommentId(commentId);
+    setEditedContent(content);
+  };
+
+  // 댓글 수정 제출
+  const handleUpdateComment = async (commentId) => {
+    try {
+      const updatedComment = await editComment(commentId, editedContent);
+      setComments(
+        comments.map((comment) =>
+          comment.id === commentId ? { ...comment, content: updatedComment.content, modified: true } : comment
+        )
+      );
+      setEditingCommentId(null);
+    } catch (error) {
+      console.error("댓글 수정 중 오류 발생:", error);
+    }
+  };
+
+  // 댓글 삭제 제출
+  const handleDeleteComment = async (commentId) => {
+    if (window.confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+      try {
+        await removeComment(commentId);
+        setComments(comments.filter((comment) => comment.id !== commentId));
+      } catch (error) {
+        console.error("댓글 삭제 중 오류 발생:", error);
+      }
+    }
+  };
+
   return (
     <div className="postview-container">
-      <div className="postview-box">
-        {/* 게시물이 존재할 경우에만 데이터를 표시 */}
-        {post ? (
-          <>
-            <h2 className="post-title">{post.title}</h2>
-            <p className="post-category">카테고리: {post.categoryName}</p>
-            <p className="post-nickname">작성자: {post.nickname}</p>
-            <p className="post-date">
-              작성일: {new Date(post.createdAt).toLocaleString()}
-            </p>
-            <div className="post-content">{post.content}</div>
+      {post && (
+        <PostContent post={post} postId = {postId} onLikeToggle={handleLikeToggle} onDelete={handleDelete} />
+      )}
 
-            <div className="post-info">
-              <p className="post-likes">좋아요: {post.likeCount}</p>
-              <p className="post-views">조회수: {post.viewCount}</p>
-              {post.modified && <p className="post-modified">(수정됨)</p>}
-            </div>
-
-            <div className="button-container">
-              <Link to={`/posts/edit/${postId}`} className="edit-btn">
-                게시글 수정
-              </Link>
-              <button onClick={handleDelete} className="delete-btn">
-                게시글 삭제
-              </button>
-              <Link to="/posts/list" className="back-btn">
-                목록으로
-              </Link>
-            </div>
-
-            <div className="comments-section">
-              <h3>댓글</h3>
-              <ul className="comments-list">
-                {comments.length > 0 ? (
-                  comments.map((comment, index) => (
-                    <li key={index} className="comment-item">
-                      {comment}
-                    </li>
-                  ))
-                ) : (
-                  <li>댓글이 없습니다.</li>
-                )}
-              </ul>
-
-              <form className="comment-form" onSubmit={handleCommentSubmit}>
-                <textarea
-                  className="comment-input"
-                  placeholder="댓글을 작성하세요..."
-                  value={newComment}
-                  onChange={handleCommentChange}
-                  required
-                ></textarea>
-                <button type="submit" className="submit-comment-btn">
-                  댓글 남기기
-                </button>
-              </form>
-            </div>
-          </>
-        ) : (
-          <p>게시물을 불러오는 중입니다...</p>
-        )}
-      </div>
+      <PostComment
+        comments={comments}
+        newComment={newComment}
+        setNewComment={setNewComment}
+        handleCommentSubmit={handleCommentSubmit}
+        editingCommentId={editingCommentId}
+        setEditedContent={setEditedContent}
+        handleUpdateComment={handleUpdateComment}
+        handleEditComment={handleEditComment}
+        handleDeleteComment={handleDeleteComment}
+      />
+      <Link to="/posts/list" className="back-btn">목록으로</Link>
     </div>
   );
 };

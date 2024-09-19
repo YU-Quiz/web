@@ -4,6 +4,16 @@
     border: 2px solid silver;
     border-radius: 8px;
     padding: 50px;
+    .gotolist-button{
+      margin-top: 10px;
+      border-radius: 6px;
+      width: 90px;
+      height: 30px;
+      &:hover {
+        background-color: silver;
+      }
+    }
+    
   }
   
   .quiz-header {

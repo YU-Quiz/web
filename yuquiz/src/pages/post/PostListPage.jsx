@@ -4,7 +4,8 @@ import SearchBar from '../../components/postlist/SearchBar';
 import SubjectDropdown from '../../components/postlist/SubjectDropdown';
 import PostList from '../../components/postlist/PostList';
 import { Link } from 'react-router-dom';
-import { getCategories, getPostsList } from '../../services/post/postService';
+import { getPostsList } from '../../services/post/postService';
+import { getCategories } from '../../services/post/postMetaService';
 
 // sort: LIKE_DESC, LIKE_ASC, VIEW_DESC, VIEW_ASC, DATE_DESC, DATE_ASC
 const PostListPage = () => {
