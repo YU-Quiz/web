@@ -51,10 +51,15 @@ export const QuizSolve = () => {
   // 드롭다운 메뉴 렌더링 함수
   const renderDropdownMenu = () => (
     <div className="dropdown-menu">
-      <button className="dropdown-item">좋아요</button>
-      <button className="dropdown-item">즐겨찾기</button>
-      <button className="dropdown-item">신고하기</button>
-      {quizData.isWriter && <button className="dropdown-item">삭제하기</button>}
+      <button className="dropdown-item">👍좋아요</button>
+      <button className="dropdown-item">⭐즐겨찾기</button>
+      <button className="dropdown-item">🚨신고하기</button>
+      {quizData.isWriter && (
+        <button className="dropdown-item">📝수정하기</button>
+      )}
+      {quizData.isWriter && (
+        <button className="dropdown-item">🗑️삭제하기</button>
+      )}
     </div>
   );
 

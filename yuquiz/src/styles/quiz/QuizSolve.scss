@@ -19,12 +19,14 @@
     }
   }
 
-  
-
+  // 설정 버튼과 드롭다운 메뉴를 감싸는 컨테이너
   .dropdown-container {
-    position: absolute; /* 드롭다운 메뉴를 버튼 아래에 표시 */
-    top: 20px; /* 설정 버튼 아래로 60px 위치 */
-    right: 0; /* 우측 정렬 */
+    position: absolute; /* 절대 위치로 설정하여 quiz-body 내 고정 */
+    top: 20px; /* 상단에서 20px 아래 */
+    right: 20px; /* 우측에서 20px 왼쪽 */
+    display: flex; /* 컨테이너 내 요소 수평 정렬 */
+    align-items: center; /* 버튼을 수직 정렬 */
+
     .setting-button {
       background: none;
       border: none;
@@ -35,38 +37,35 @@
         border-radius: 20px;
       }
     }
+
     .dropdown-menu {
+      position: absolute; /* 드롭다운 메뉴 위치를 설정 버튼 기준으로 조정 */
+      top: 60px; /* 설정 버튼 아래에 위치 */
+      right: 0; /* 설정 버튼과 우측 맞춤 */
       background-color: #fff; /* 흰색 배경 */
-      border: 1px solid #ddd; /* 경계선 */
+      border: 2px solid #ddd; /* 경계선 */
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
-      border-radius: 8px; /* 모서리 둥글게 */
       overflow: hidden; /* 내부 요소가 넘치지 않도록 */
       z-index: 1000; /* 다른 요소 위에 표시 */
       min-width: 150px; /* 최소 너비 설정 */
       display: flex;
       flex-direction: column; /* 세로 정렬 */
-      .dropdown-item {
-        padding: 10px 15px; /* 내부 여백 설정 */
-        cursor: pointer; /* 클릭 가능하게 커서 변경 */
-        font-size: 16px; /* 폰트 크기 */
-        color: #333; /* 텍스트 색상 */
-        background-color: #fff; /* 배경 흰색 */
-        border-bottom: 1px solid #ddd; /* 항목 사이에 경계선 추가 */
-        
-        &:hover {
-          background-color: #f2f2f2; /* 마우스 오버 시 배경 색상 변경 */
-        }
-    
-        &:last-child {
-          border-bottom: none; /* 마지막 항목의 경계선 제거 */
-        }
+    }
+
+    .dropdown-item {
+      padding: 10px 15px; /* 내부 여백 설정 */
+      cursor: pointer; /* 클릭 가능하게 커서 변경 */
+      font-size: 16px; /* 폰트 크기 */
+      color: #333; /* 텍스트 색상 */
+      background-color: #fff; /* 배경 흰색 */
+      border-bottom: 1px solid #ddd; /* 항목 사이에 경계선 추가 */
+      
+      &:hover {
+        background-color: #f2f2f2; /* 마우스 오버 시 배경 색상 변경 */
       }
+
     }
   }
-
-  
-
-  
 
   .quiz-solve-page {
     display: flex;
