@@ -59,4 +59,19 @@ const getQuiz = async (quizID) => {
     }
   }
 };
-export { getQuizList, SORT_OPTIONS, getQuiz };
+const fixQuiz = async (quizData) => {
+  try {
+    const response = await api.put(
+      `${SERVER_API}/quizzes/${quizData.quizId}`,
+      quizData
+    );
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("퀴즈 수정 중 문제가 발생했습니다. 다시 시도해주세요.");
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+export { getQuizList, SORT_OPTIONS, getQuiz, fixQuiz };

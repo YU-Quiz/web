@@ -52,17 +52,23 @@
       flex-direction: column; /* 세로 정렬 */
     }
 
-    .dropdown-item {
-      padding: 10px 15px; /* 내부 여백 설정 */
-      cursor: pointer; /* 클릭 가능하게 커서 변경 */
-      font-size: 16px; /* 폰트 크기 */
-      color: #333; /* 텍스트 색상 */
-      background-color: #fff; /* 배경 흰색 */
-      border-bottom: 1px solid #ddd; /* 항목 사이에 경계선 추가 */
-      
+    .dropdown-item,
+    .dropdown-link {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: left; // 좌측 정렬
+      border: none;
+      background: none;
+      color: #333;
+      text-decoration: none; // 밑줄 제거
+      display: block; // 전체 영역 클릭 가능하게 설정
+      width: 100%; // 전체 너비 사용
       &:hover {
-        background-color: #f2f2f2; /* 마우스 오버 시 배경 색상 변경 */
+        background-color: #f2f2f2; // Hover 효과
       }
+    }
+  
 
     }
   }
@@ -82,4 +88,4 @@
       color: #333;
     }
   }
-}
+

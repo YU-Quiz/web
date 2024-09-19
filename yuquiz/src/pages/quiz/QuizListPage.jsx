@@ -1,5 +1,4 @@
 // src/pages/QuizListPage.jsx
-
 import React, { useState, useEffect } from "react";
 import "../../styles/quiz_list_page/QuizListPage.scss";
 import QuizList from "../../components/quizlist/QuizList";

@@ -55,7 +55,9 @@ export const QuizSolve = () => {
       <button className="dropdown-item">⭐즐겨찾기</button>
       <button className="dropdown-item">🚨신고하기</button>
       {quizData.isWriter && (
-        <button className="dropdown-item">📝수정하기</button>
+        <Link to={`/quiz/edit/${quizId}`} className="dropdown-link">
+          📝수정하기
+        </Link>
       )}
       {quizData.isWriter && (
         <button className="dropdown-item">🗑️삭제하기</button>
