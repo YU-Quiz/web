@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getQuiz } from "../../services/quiz/QuizManage";
 import "../../styles/quiztype/MultipleChoose.scss";
 
-export const MultipleChoose = () => {
+export const MultipleChoose = ({ quizID }) => {
+  const [quizData, setQuizData] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
-  const [score, setScore] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(null);
 
-  const questions = [
-    {
-      title: "테스트 퀴즈입니당~",
-      question: "이중에서 정답은?",
-      quizImg: null,
-      quizType: "MULTIPLE_CHOICE",
-      likeCount: 0,
-      choices: ["1.뭐요", "2.뭘봐요", "3.아닌데", ""],
-      subject: "마이크로프로세서",
-      writer: "테스터입니다",
-      createdAt: "2024-08-10T16:33:00",
-    },
-  ];
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      const data = await getQuiz(quizID);
+      setQuizData(data);
+    };
+    fetchQuizData();
+  }, [quizID]);
+
+  if (!quizData) {
+    return <div>로딩 중...</div>;
+  }
 
   const handleAnswerClick = (answer) => {
     setSelectedAnswers((prevAnswers) =>
@@ -29,38 +29,56 @@ export const MultipleChoose = () => {
   };
 
   const handleSubmit = () => {
-    const correctAnswers = questions[currentQuestion].correctAnswer;
     if (
-      selectedAnswers.length === correctAnswers.length &&
-      selectedAnswers.every((answer) => correctAnswers.includes(answer))
+      !quizData ||
+      !quizData.correctAnswer ||
+      !Array.isArray(quizData.correctAnswer)
     ) {
-      setScore(score + 1);
+      console.error("correctAnswer가 정의되지 않았거나 배열이 아닙니다.");
+      return;
     }
-    setSelectedAnswers([]);
-    setCurrentQuestion(currentQuestion + 1);
+
+    const correctAnswers = quizData.correctAnswer;
+
+    const isAllCorrect =
+      selectedAnswers.length === correctAnswers.length &&
+      selectedAnswers.every((answer) => correctAnswers.includes(answer));
+
+    setIsCorrect(isAllCorrect ? "맞았습니다!" : "틀렸습니다.");
+    setHasSubmitted(true);
   };
+
+  if (hasSubmitted) {
+    return (
+      <div className="quiz-container">
+        <h2>{quizData.title}</h2>
+        <p>{isCorrect}</p>
+        <button className="gotolist-button">목록으로</button>
+      </div>
+    );
+  }
 
   return (
     <div className="quiz-container">
-      <h2 className="quiz-header">{questions[currentQuestion].title}</h2>
-      <p className="quiz-question">
-        {currentQuestion + 1}/{questions.length}:{" "}
-        {questions[currentQuestion].question}
-      </p>
+      <p className="quiz-question">{quizData.question}</p>
       <div className="quiz-options">
-        {questions[currentQuestion].choices.map((choice, index) => (
-          <div key={index} className="quiz-option">
-            <input
-              type="checkbox"
-              id={`choice-${index}`}
-              name="quiz-choice"
-              value={choice}
-              checked={selectedAnswers.includes(choice)}
-              onChange={() => handleAnswerClick(choice)}
-            />
-            <label htmlFor={`choice-${index}`}>{choice}</label>
-          </div>
-        ))}
+        {quizData.choices.map(
+          (choice, index) =>
+            choice && (
+              <div key={index} className="quiz-option">
+                <input
+                  type="checkbox"
+                  className="choose-list"
+                  id={`choice-${index}`}
+                  name="quiz-choice"
+                  value={choice}
+                  checked={selectedAnswers.includes(choice)}
+                  onChange={() => handleAnswerClick(choice)}
+                />
+                <label htmlFor={`choice-${index}`}>{choice}</label>
+              </div>
+            )
+        )}
       </div>
       <div className="submit-box">
         <button
