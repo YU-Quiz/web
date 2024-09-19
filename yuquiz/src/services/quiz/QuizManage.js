@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import api from "../apiService";
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
@@ -74,4 +75,19 @@ const fixQuiz = async (quizData) => {
     }
   }
 };
-export { getQuizList, SORT_OPTIONS, getQuiz, fixQuiz };
+const deleteQuiz = async (quizId) => {
+  try {
+    const response = await api.delete(`${SERVER_API}/quizzes/${quizId}`);
+    if (response.status === HttpStatusCode.NoContent) {
+      alert("삭제 성공");
+    }
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("퀴즈 삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+export { getQuizList, SORT_OPTIONS, getQuiz, fixQuiz, deleteQuiz };

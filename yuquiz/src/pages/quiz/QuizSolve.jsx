@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"; // useParams로 URL에서 quizId 가져오기
-import { getQuiz } from "../../services/quiz/QuizManage";
+import { deleteQuiz, getQuiz } from "../../services/quiz/QuizManage";
 import "../../styles/quiz/QuizSolve.scss";
 import { MultipleChoose } from "../../components/solveQuiz/MultipleChoose";
 import { OXQuiz } from "../../components/solveQuiz/OXQuiz";
@@ -47,6 +47,12 @@ export const QuizSolve = () => {
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const handleDelete = async () => {
+    const wellDone = await deleteQuiz(quizId);
+    if (wellDone) {
+      navigate(-1);
+    }
+  };
 
   // 드롭다운 메뉴 렌더링 함수
   const renderDropdownMenu = () => (
@@ -60,7 +66,9 @@ export const QuizSolve = () => {
         </Link>
       )}
       {quizData.isWriter && (
-        <button className="dropdown-item">🗑️삭제하기</button>
+        <button className="dropdown-item" onClick={handleDelete}>
+          🗑️삭제하기
+        </button>
       )}
     </div>
   );
