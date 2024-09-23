@@ -23,11 +23,11 @@ const getAnswer = async (quizId) => {
     quizId: quizId,
   };
   try {
-    const res = await api.get(`${SERVER_API}/quizzes/${quizId}/grade`, {
+    const res = await api.get(`${SERVER_API}/quizzes/${quizId}/answer`, {
       params,
     });
-    if (res.code === HttpStatusCode.Accepted) {
-      return res.reponse;
+    if (res.status === HttpStatusCode.Ok) {
+      return res.data.response;
     }
   } catch (error) {
     if (error.response) {

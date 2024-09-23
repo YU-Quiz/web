@@ -47,7 +47,7 @@ export const MultipleChoose = ({ quizID }) => {
     try {
       // 서버로 정답을 전송하여 채점
       const result = await getGrade(quizID, { answer: answerString });
-      setIsCorrect(result ? "맞았습니다!" : "틀렸습니다.");
+      setIsCorrect(result ? "맞았습니다!🙆‍♂️" : "틀렸습니다.🙅‍♂️");
     } catch (error) {
       console.error("채점 중 오류 발생:", error);
       setIsCorrect("서버 오류로 채점할 수 없습니다.");

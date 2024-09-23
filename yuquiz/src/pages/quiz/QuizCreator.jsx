@@ -67,12 +67,13 @@ export const QuizCreator = () => {
     // True/False: 정답이 True면 "1", False면 "0"으로 저장
     if (questionType === "TRUE_FALSE") {
       const correctAnswer = answers.find((answer) => answer.correct);
-      answer = correctAnswer ? "1" : "0"; // True이면 "1", False이면 "0"
+      answer = correctAnswer && correctAnswer.text === "True" ? "1" : "0";
+      // correctAnswer가 존재하고, 그 값이 "True"일 때만 "1", 아니면 "0"으로 설정
     }
 
     // Short Answer: 단답형은 단일 정답이므로 정답 번호는 "1"로 고정
     if (questionType === "SHORT_ANSWER") {
-      answer = "1"; // 단답형의 경우 정답은 하나뿐이므로 "1"로 고정
+      answer = "1";
     }
 
     // 사용자가 입력한 답안 내용은 choices에 배열로 저장
