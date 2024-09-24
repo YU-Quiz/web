@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getQuiz } from "../../services/quiz/QuizManage";
 import { getAnswer, getGrade } from "../../services/quiz/QuizSolve"; // 서버와 통신하기 위해 추가
 import "../../styles/quiztype/OXQuiz.scss";
+import { useNavigate } from "react-router-dom";
 
 export const OXQuiz = ({ quizID }) => {
   const [quizData, setQuizData] = useState(null);
@@ -9,6 +10,8 @@ export const OXQuiz = ({ quizID }) => {
   const [score, setScore] = useState(0); // 점수
   const [hasSubmitted, setHasSubmitted] = useState(false); // 제출 여부
   const [isCorrect, setIsCorrect] = useState(""); // 정답 여부 메시지
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 퀴즈 데이터 가져오기
@@ -58,7 +61,12 @@ export const OXQuiz = ({ quizID }) => {
       <div className="quiz-container">
         <h2>퀴즈가 완료되었습니다!</h2>
         <p>{isCorrect}</p>
-        <button className="gotolist-button">목록으로</button>
+        <button
+          className="gotolist-button"
+          onClick={() => navigate("/quiz/list")}
+        >
+          목록으로
+        </button>
       </div>
     );
   }

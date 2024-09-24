@@ -3,6 +3,7 @@ import { IoMdArrowBack } from "react-icons/io";
 import "../../styles/quiz/QuizCreator.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { handlerSubmitQuiz } from "../../services/quiz/quizCreator";
+
 export const QuizCreator = () => {
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionContent, setQuestionContent] = useState("");
@@ -34,7 +35,7 @@ export const QuizCreator = () => {
         { num: 2, text: "False", correct: false },
       ]);
     } else if (questionType === "SHORT_ANSWER") {
-      setAnswers([{ num: 1, text: "", correct: true }]); // 단답식은 하나의 정답만 존재
+      setAnswers([{ num: 1, text: "", correct: true }]); // 단답형에 하나의 정답 객체로 설정
     } else {
       setAnswers([
         { num: 1, text: "", correct: false },
@@ -47,37 +48,38 @@ export const QuizCreator = () => {
 
   const handleAnswerChange = (index, field, value) => {
     const newAnswers = [...answers];
-    newAnswers[index][field] = value;
+    if (questionType === "SHORT_ANSWER") {
+      newAnswers[0][field] = value; // 단답형은 항상 첫 번째 객체를 수정
+    } else {
+      newAnswers[index][field] = value; // 그 외의 유형에서는 해당 인덱스의 답변을 수정
+    }
     setAnswers(newAnswers);
   };
 
   const handleSubmitQuiz = () => {
-    // Multiple Choice: 정답 번호를 문자열로 저장
     let answer = "";
 
     if (questionType === "MULTIPLE_CHOICE") {
       const correctAnswers = answers
-        .filter((answer) => answer.correct) // correct가 true인 답안만 필터링
-        .map((answer) => answer.num) // 정답 번호 추출
-        .sort((a, b) => a - b); // 오름차순 정렬
-
-      answer = correctAnswers.join(""); // 번호를 문자열로 합침 (예: "13")
+        .filter((answer) => answer.correct)
+        .map((answer) => answer.num)
+        .sort((a, b) => a - b);
+      answer = correctAnswers.join(""); // 정답 번호를 문자열로 합침
     }
 
-    // True/False: 정답이 True면 "1", False면 "0"으로 저장
     if (questionType === "TRUE_FALSE") {
       const correctAnswer = answers.find((answer) => answer.correct);
       answer = correctAnswer && correctAnswer.text === "True" ? "1" : "0";
-      // correctAnswer가 존재하고, 그 값이 "True"일 때만 "1", 아니면 "0"으로 설정
     }
 
-    // Short Answer: 단답형은 단일 정답이므로 정답 번호는 "1"로 고정
     if (questionType === "SHORT_ANSWER") {
-      answer = "1";
+      answer = answers[0].text; // 단답형에서는 하나의 정답만 보내기 위해
     }
 
-    // 사용자가 입력한 답안 내용은 choices에 배열로 저장
-    const choices = answers.map((answer) => answer.text);
+    const choices =
+      questionType !== "SHORT_ANSWER"
+        ? answers.map((answer) => answer.text)
+        : []; // 단답형에서는 choices가 비어 있게 설정
 
     const data = {
       title: questionTitle,

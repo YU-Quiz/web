@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { getQuiz } from "../../services/quiz/QuizManage";
 import { getGrade } from "../../services/quiz/QuizSolve"; // 서버와 통신하기 위해 추가
 import "../../styles/quiztype/MultipleChoose.scss";
+import { useNavigate } from "react-router-dom";
 
 export const MultipleChoose = ({ quizID }) => {
   const [quizData, setQuizData] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState([]); // 선택한 답의 인덱스를 저장하도록 변경
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -61,7 +63,12 @@ export const MultipleChoose = ({ quizID }) => {
       <div className="quiz-container">
         <h2>{quizData.title}</h2>
         <p>{isCorrect}</p>
-        <button className="gotolist-button">목록으로</button>
+        <button
+          className="gotolist-button"
+          onClick={() => navigate("/quiz/list")}
+        >
+          목록으로
+        </button>
       </div>
     );
   }
