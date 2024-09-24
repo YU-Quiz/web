@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/post/PostFix.scss';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { editPost, getCategories, showPost } from '../../services/post/postService';
+import { editPost, showPost } from '../../services/post/postService';
+import { getCategories } from '../../services/post/postMetaService';
 
 const PostFix = () => {
   const { postId } = useParams(); // URL에서 
@@ -16,14 +17,14 @@ const PostFix = () => {
     const fetchPostData = async () => {
       try {
         const postData = await showPost(postId); // 서버에서 게시글 데이터 불러오기
-        console.log(postData);
-        setCategory(postData.category || '');
-        setTitle(postData.title || '');
-        setContent(postData.content || '');
+        // console.log(postData);
+        setCategory(postData.post.category || '');
+        setTitle(postData.post.title || '');
+        setContent(postData.post.content || '');
 
         const categoriesData = await getCategories();
         setCategories(categoriesData);
-        console.log(categoriesData);
+        // console.log(categoriesData);
         setLoading(false); // 로딩 완료
       } catch (error) {
         console.error('게시글 데이터를 불러오는 중 오류 발생:', error);

@@ -3,156 +3,165 @@
   align-content: center;
   justify-content: center;
 
-  .postview-box {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 80vw;
-    height: 100vh;
-    overflow-y: auto;
+  flex-direction: column;
 
-    .post-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    
-    .post-category {
-      font-size: 14px;
-      color: #888;
-      margin-bottom: 10px;
-    }
-    
-    .post-nickname {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 5px;
-    }
+  // .postview-box {
+  //   background-color: #fff;
+  //   padding: 30px;
+  //   border-radius: 10px;
+  //   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  //   width: 80vw;
+  //   height: 100vh;
+  //   overflow-y: auto;
 
-    .post-date {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 20px;
-    }
+  //   .post-title {
+  //     font-size: 24px;
+  //     font-weight: bold;
+  //     margin-bottom: 10px;
+  //   }
+    
+  //   .post-category {
+  //     font-size: 14px;
+  //     color: #888;
+  //     margin-bottom: 10px;
+  //   }
+    
+  //   .post-nickname {
+  //     font-size: 14px;
+  //     color: #555;
+  //     margin-bottom: 5px;
+  //   }
 
-    .post-content {
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
+  //   .post-date {
+  //     font-size: 12px;
+  //     color: #888;
+  //     margin-bottom: 20px;
+  //   }
 
-    .post-info {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
+  //   .post-content {
+  //     font-size: 16px;
+  //     line-height: 1.6;
+  //     margin-bottom: 30px;
+  //   }
 
-      .post-likes,
-      .post-views,
-      .post-modified {
-        font-size: 14px;
-        color: #666;
-      }
+  //   .post-info {
+  //     display: flex;
+  //     justify-content: space-between;
+  //     margin-bottom: 30px;
 
-      .post-modified {
-        font-style: italic;
-      }
-    }
+  //     .post-likes,
+  //     .post-views,
+  //     .post-modified {
+  //       font-size: 14px;
+  //       color: #666;
+  //     }
 
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
-    }
-    
-    .edit-btn,
-    .delete-btn,
-    .back-btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .edit-btn {
-      background-color: #000000;
-      color: #fff;
-    }
-    
-    .edit-btn:hover {
-      background-color: #777777;
-    }
+  //     .post-modified {
+  //       font-style: italic;
+  //     }
 
-    .delete-btn {
-      background-color: #000000;
-      color: #fff;
-    }
+  //     .like-btn {
+  //       background: none;
+  //       border: none;
+  //       color: red;
+  //       font-size: 20px;
+  //     }
+  //   }
+
+  //   .button-container {
+  //     display: flex;
+  //     justify-content: space-between;
+  //     margin-bottom: 30px;
+  //   }
     
-    .delete-btn:hover {
-      background-color: #777777;
-    }
+  //   .edit-btn,
+  //   .delete-btn,
+  //   .back-btn {
+  //     padding: 10px 20px;
+  //     font-size: 16px;
+  //     font-weight: bold;
+  //     border: none;
+  //     border-radius: 5px;
+  //     cursor: pointer;
+  //     transition: background-color 0.3s;
+  //   }
     
-    .back-btn {
-      background-color: #ddd;
-      color: #333;
-    }
+  //   .edit-btn {
+  //     background-color: #000000;
+  //     color: #fff;
+  //   }
     
-    .back-btn:hover {
-      background-color: #bbb;
-    }
+  //   .edit-btn:hover {
+  //     background-color: #777777;
+  //   }
+
+  //   .delete-btn {
+  //     background-color: #000000;
+  //     color: #fff;
+  //   }
     
-    /* 댓글 섹션 스타일링 */
-    .comments-section {
-      margin-top: 30px;
-    }
+  //   .delete-btn:hover {
+  //     background-color: #777777;
+  //   }
     
-    .comments-list {
-      list-style: none;
-      padding: 0;
-      margin-bottom: 20px;
-    }
+  //   .back-btn {
+  //     background-color: #ddd;
+  //     color: #333;
+  //   }
     
-    .comment-item {
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      background-color: #f9f9f9;
-    }
+  //   .back-btn:hover {
+  //     background-color: #bbb;
+  //   }
     
-    .comment-form {
-      display: flex;
-      flex-direction: column;
-    }
+  //   /* 댓글 섹션 스타일링 */
+  //   .comments-section {
+  //     margin-top: 30px;
+  //   }
     
-    .comment-input {
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      resize: none;
-      height: 100px;
-      font-size: 14px;
-    }
+  //   .comments-list {
+  //     list-style: none;
+  //     padding: 0;
+  //     margin-bottom: 20px;
+  //   }
     
-    .submit-comment-btn {
-      align-self: flex-end;
-      padding: 10px 20px;
-      background-color: #000000;
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+  //   .comment-item {
+  //     padding: 10px;
+  //     border: 1px solid #ddd;
+  //     border-radius: 5px;
+  //     margin-bottom: 10px;
+  //     background-color: #f9f9f9;
+  //   }
     
-    .submit-comment-btn:hover {
-      background-color: #787878;
-    }
-  }
+  //   .comment-form {
+  //     display: flex;
+  //     flex-direction: column;
+  //   }
+    
+  //   .comment-input {
+  //     padding: 10px;
+  //     border: 1px solid #ddd;
+  //     border-radius: 5px;
+  //     margin-bottom: 10px;
+  //     resize: none;
+  //     height: 100px;
+  //     font-size: 14px;
+  //   }
+    
+  //   .submit-comment-btn {
+  //     align-self: flex-end;
+  //     padding: 10px 20px;
+  //     background-color: #000000;
+  //     color: #fff;
+  //     font-size: 16px;
+  //     font-weight: bold;
+  //     border: none;
+  //     border-radius: 5px;
+  //     cursor: pointer;
+  //     transition: background-color 0.3s;
+  //   }
+    
+  //   .submit-comment-btn:hover {
+  //     background-color: #787878;
+  //   }
+  // }
 }

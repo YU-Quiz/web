@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/post/PostCreator.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { createPost, getCategories } from '../../services/post/postService';
+import { createPost } from '../../services/post/postService';
+import { getCategories } from '../../services/post/postMetaService';
 
 const PostCreator = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const PostCreator = () => {
       try {
         const categoriesData = await getCategories();
         setCategories(categoriesData);
-        console.log(categoriesData);
+        // console.log(categoriesData);
       } catch (error) {
         console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
       }
