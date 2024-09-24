@@ -64,11 +64,12 @@
     font-weight: bold;
   }
   
-  .solved {
-    color: green;
+  .correct {
+    color: blue;
+    font-weight: 500;
   }
   
-  .unsolved {
+  .wrong {
     color: red;
   }
   

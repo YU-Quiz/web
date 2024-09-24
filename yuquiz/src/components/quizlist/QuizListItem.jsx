@@ -2,7 +2,6 @@
 import React from "react";
 import "../../styles/quiz_list_page/QuizListItem.scss";
 import { Link } from "react-router-dom";
-
 const QuizListItem = ({ quiz }) => {
   const {
     quizId,
@@ -39,14 +38,18 @@ const QuizListItem = ({ quiz }) => {
         <p className="quiz-type">{getQuizTypeLabel(quizType)}</p>{" "}
         {/* 퀴즈 유형 표시 */}
         <p className="quiz-type">{subject || "과목"}</p> {/* 퀴즈 과목 표시 */}
+        <p
+          className={`quiz-solved ${
+            isSolved === null ? "unsolved" : isSolved ? "correct" : "wrong"
+          }`}
+        >
+          {isSolved === null ? "" : isSolved ? "🙆‍♂️" : "🙅"}
+        </p>
       </div>
       <div className="quiz-info-container">
         <div className="quiz-stats">
           <p className="quiz-likes">👍 {likeCount}</p>
           <p className="quiz-views">조회수: {viewCount}</p>
-          <p className={`quiz-solved ${isSolved ? "solved" : "unsolved"}`}>
-            {isSolved ? "풀이 완료" : ""}
-          </p>
         </div>
         <div className="quiz-meta">
           <p className="quiz-author">작성자: {nickname}</p>
