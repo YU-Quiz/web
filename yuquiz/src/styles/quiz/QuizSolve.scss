@@ -1,91 +1,103 @@
+/* QuizSolve.scss */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* quiz-body 스타일 */
 .quiz-body {
   display: flex;
-  justify-content: center; // 수직 중앙 정렬
-  align-items: center; // 수평 중앙 정렬
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
   width: 100%;
-  height: 100vh; // 화면 전체 높이 사용
+  min-height: 100vh; /* 전체 화면 높이 */
+  position: relative;
+  overflow: hidden; /* 내부 스크롤바 제거 */
+}
 
-  .back-button {
-    position: absolute; /* 버튼을 절대 위치로 설정 */
-    top: 20px; /* 상단에서 20px 아래 */
-    left: 20px; /* 좌측에서 20px 오른쪽 */
-    background: none;
-    border: none;
-    font-size: 50px;
-    cursor: pointer;
-    &:hover {
-      background-color: silver;
-      border-radius: 20px;
-    }
+.back-button {
+  position: absolute; /* 절대 위치 */
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 50px;
+  cursor: pointer;
+  &:hover {
+    background-color: silver;
+    border-radius: 20px;
   }
+}
 
-  // 설정 버튼과 드롭다운 메뉴를 감싸는 컨테이너
-  .dropdown-container {
-    position: absolute; /* 절대 위치로 설정하여 quiz-body 내 고정 */
-    top: 20px; /* 상단에서 20px 아래 */
-    right: 20px; /* 우측에서 20px 왼쪽 */
-    display: flex; /* 컨테이너 내 요소 수평 정렬 */
-    align-items: center; /* 버튼을 수직 정렬 */
+.dropdown-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+}
 
-    .setting-button {
-      background: none;
-      border: none;
-      font-size: 50px;
-      cursor: pointer;
-      &:hover {
-        background-color: silver;
-        border-radius: 20px;
-      }
-    }
-
-    .dropdown-menu {
-      position: absolute; /* 드롭다운 메뉴 위치를 설정 버튼 기준으로 조정 */
-      top: 60px; /* 설정 버튼 아래에 위치 */
-      right: 0; /* 설정 버튼과 우측 맞춤 */
-      background-color: #fff; /* 흰색 배경 */
-      border: 2px solid #ddd; /* 경계선 */
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
-      overflow: hidden; /* 내부 요소가 넘치지 않도록 */
-      z-index: 1000; /* 다른 요소 위에 표시 */
-      min-width: 150px; /* 최소 너비 설정 */
-      display: flex;
-      flex-direction: column; /* 세로 정렬 */
-    }
-
-    .dropdown-item,
-    .dropdown-link {
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-      text-align: left; // 좌측 정렬
-      border: none;
-      background: none;
-      color: #333;
-      text-decoration: none; // 밑줄 제거
-      display: block; // 전체 영역 클릭 가능하게 설정
-      width: 100%; // 전체 너비 사용
-      &:hover {
-        background-color: #f2f2f2; // Hover 효과
-      }
-    }
-  
-
-    }
+.setting-button {
+  background: none;
+  border: none;
+  font-size: 50px;
+  cursor: pointer;
+  &:hover {
+    background-color: silver;
+    border-radius: 20px;
   }
+}
 
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-item,
+.dropdown-link {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: left;
+  background: none;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  &:hover {
+    background-color: #f2f2f2;
+  }
+}
+
+.quiz-solve-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 70vh;
+  max-width: 600px;
+  padding: 20px;
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
   .quiz-solve-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 70vh;
-    max-width: 600px; // 최대 너비 설정
+    max-width: 90%;
     padding: 20px;
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      color: #333;
-    }
   }
-
+}
