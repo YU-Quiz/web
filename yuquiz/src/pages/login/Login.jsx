@@ -19,9 +19,6 @@ export const Login = () => {
     try {
       // 로그인 요청
       await login(username, password);
-
-      // 로그인 성공 시 alert 및 홈 페이지로 이동
-      alert("로그인 성공!");
       navigate("/");
     } catch (error) {
       // 에러 처리: 상태 코드에 따라 다른 메시지 표시
