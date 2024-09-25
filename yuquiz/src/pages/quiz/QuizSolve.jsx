@@ -56,16 +56,18 @@ export const QuizSolve = () => {
 
   const renderDropdownMenu = () => (
     <div className="dropdown-menu">
-      <button className="dropdown-item">🚨신고하기</button>
+      <Link to={`/quiz/edit/${quizId}`} className="dropdown-link">
+        🚨신고하기
+      </Link>
       {quizData.isWriter && (
         <Link to={`/quiz/edit/${quizId}`} className="dropdown-link">
           📝수정하기
         </Link>
       )}
       {quizData.isWriter && (
-        <button className="dropdown-item" onClick={handleDelete}>
+        <Link className="dropdown-link" onClick={handleDelete}>
           🗑️삭제하기
-        </button>
+        </Link>
       )}
     </div>
   );
