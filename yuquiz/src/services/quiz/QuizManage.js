@@ -90,4 +90,49 @@ const deleteQuiz = async (quizId) => {
     }
   }
 };
-export { getQuizList, SORT_OPTIONS, getQuiz, fixQuiz, deleteQuiz };
+const pinQuiz = async (quizId, starred) => {
+  try {
+    //만약에 true로 날라오면 즐찾을 눌렀다는 것 반대는 삭제하면됨
+    const response =
+      starred === true
+        ? await api.post(`${SERVER_API}/quizzes/${quizId}/pin`)
+        : await api.delete(`${SERVER_API}/quizzes/${quizId}/pin`);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(
+        "퀴즈 즐겨찾기 과정 중에서 문제가 발생했습니다. 다시 시도해주세요."
+      );
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+const likeQuiz = async (quizId, liked) => {
+  try {
+    //만약에 true로 날라오면 좋아요를 눌렀다는 것 반대는 삭제하면됨
+    const response =
+      liked === true
+        ? await api.post(`${SERVER_API}/quizzes/${quizId}/likes`)
+        : await api.delete(`${SERVER_API}/quizzes/${quizId}/likes`);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(
+        "퀴즈 좋아요 과정 중에서 문제가 발생했습니다. 다시 시도해주세요."
+      );
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+
+export {
+  getQuizList,
+  SORT_OPTIONS,
+  getQuiz,
+  fixQuiz,
+  deleteQuiz,
+  pinQuiz,
+  likeQuiz,
+};
