@@ -110,9 +110,13 @@ export const QuizSolve = () => {
   };
   const renderLikedStarred = () => {
     return (
-      <div>
-        <button onClick={handleStarred}>{starred ? "🌟" : "⭐"}</button>
-        <button onClick={handleLiked}>{liked ? "👍" : "🖒"}</button>
+      <div className="like-pin-container">
+        <button onClick={handleStarred} className="like-pin-button">
+          {starred ? "❤️" : "🤍"}
+        </button>
+        <button onClick={handleLiked} className="like-pin-button">
+          {liked ? "👍" : "✊"}
+        </button>
       </div>
     );
   };

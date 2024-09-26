@@ -37,6 +37,18 @@
   right: 20px;
   display: flex;
   align-items: center;
+  .like-pin-container{
+    display: flex;
+    flex-direction: row;
+    .like-pin-button{
+      background-color: transparent;
+      border-radius: 8px;
+      border: none;
+      font-size: 20px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
 }
 
 .setting-button {
