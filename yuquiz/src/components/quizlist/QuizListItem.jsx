@@ -32,19 +32,16 @@ const QuizListItem = ({ quiz }) => {
   return (
     <div className="quiz-list-item">
       <div className="quiz-header">
-        <h2 className="quiz-title">
+        <h2
+          className={`quiz-title ${
+            isSolved === null ? "unsolved" : isSolved ? "correct" : "wrong"
+          }`}
+        >
           <Link to={`/quiz/play/${quizId}`}>{quizTitle}</Link>
         </h2>
         <p className="quiz-type">{getQuizTypeLabel(quizType)}</p>{" "}
         {/* 퀴즈 유형 표시 */}
         <p className="quiz-type">{subject || "과목"}</p> {/* 퀴즈 과목 표시 */}
-        <p
-          className={`quiz-solved ${
-            isSolved === null ? "unsolved" : isSolved ? "correct" : "wrong"
-          }`}
-        >
-          {isSolved === null ? "" : isSolved ? "🙆‍♂️" : "🙅"}
-        </p>
       </div>
       <div className="quiz-info-container">
         <div className="quiz-stats">
