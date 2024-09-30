@@ -15,7 +15,7 @@ const PostView = () => {
   const [comments, setComments] = useState([]); // 댓글 리스트
   const [newComment, setNewComment] = useState(""); // 새로 작성할 댓글
   const [editingCommentId, setEditingCommentId] = useState(null); // 현재 수정중인 댓글 id
-  const [editedContent, setEditedContent] = useState(""); // 수정된 댓글
+  const [editedComment, setEditedComment] = useState(""); // 수정된 댓글
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -29,7 +29,7 @@ const PostView = () => {
     };
 
     fetchPost();
-  }, [postId]);
+  }, []);
 
   // 좋아요 토글
   const handleLikeToggle = async () => {
@@ -80,19 +80,21 @@ const PostView = () => {
   // 댓글 수정 감지 및 변화
   const handleEditComment = (commentId, content) => {
     setEditingCommentId(commentId);
-    setEditedContent(content);
+    setEditedComment(content); // 기존 댓글 내용을 상태에 설정
   };
 
   // 댓글 수정 제출
   const handleUpdateComment = async (commentId) => {
     try {
-      const updatedComment = await editComment(commentId, editedContent);
-      setComments(
-        comments.map((comment) =>
-          comment.id === commentId ? { ...comment, content: updatedComment.content, modified: true } : comment
+      await editComment(commentId, editedComment);
+      
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === commentId ? { ...comment, content: editedComment, modified: true } : comment
         )
       );
       setEditingCommentId(null);
+      setEditedComment(""); // 수정 완료 후 텍스트 초기화
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
     }
@@ -113,7 +115,7 @@ const PostView = () => {
   return (
     <div className="postview-container">
       {post && (
-        <PostContent post={post} postId = {postId} onLikeToggle={handleLikeToggle} onDelete={handleDelete} />
+        <PostContent post={post} postId={postId} onLikeToggle={handleLikeToggle} onDelete={handleDelete} />
       )}
 
       <PostComment
@@ -121,10 +123,13 @@ const PostView = () => {
         newComment={newComment}
         setNewComment={setNewComment}
         handleCommentSubmit={handleCommentSubmit}
+
         editingCommentId={editingCommentId}
-        setEditedContent={setEditedContent}
+        editedComment={editedComment}
+        setEditedComment={setEditedComment}
         handleUpdateComment={handleUpdateComment}
         handleEditComment={handleEditComment}
+
         handleDeleteComment={handleDeleteComment}
       />
       <Link to="/posts/list" className="back-btn">목록으로</Link>

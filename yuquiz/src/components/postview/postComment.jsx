@@ -7,28 +7,48 @@ const PostComment = ({
   setNewComment,
   handleCommentSubmit,
   editingCommentId,
-  setEditedContent,
+  editedComment,
+  setEditedComment,
   handleUpdateComment,
   handleEditComment,
   handleDeleteComment,
 }) => {
+  // 새 댓글 변화 감지
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
+  };
+
+  const handleEditingCommentChange = (e) => {
+    setEditedComment(e.target.value);
   };
 
   return (
     <div className="comments-section">
       <h3>댓글</h3>
+      <form className="comment-form" onSubmit={handleCommentSubmit}>
+        <textarea
+          className="comment-input"
+          placeholder="댓글을 작성하세요..."
+          value={newComment}
+          onChange={handleCommentChange}
+          required
+        ></textarea>
+        <button type="submit" className="submit-comment-btn">
+          댓글 남기기
+        </button>
+      </form>
+      
       <ul className="comments-list">
         {comments.length > 0 ? (
           comments.map((comment) => (
             <li key={comment.id} className="comment-item">
               <p className="comment-writer">작성자: {comment.writerName}</p>
+              
               {editingCommentId === comment.id ? (
                 <>
                   <textarea
-                    value={comment.content}
-                    onChange={(e) => setEditedContent(e.target.value)}
+                    value={editedComment}  // 수정된 댓글 상태로 연결
+                    onChange={handleEditingCommentChange}
                   />
                   <button onClick={() => handleUpdateComment(comment.id)}>
                     수정 완료
@@ -53,19 +73,6 @@ const PostComment = ({
           <li>댓글이 없습니다.</li>
         )}
       </ul>
-
-      <form className="comment-form" onSubmit={handleCommentSubmit}>
-        <textarea
-          className="comment-input"
-          placeholder="댓글을 작성하세요..."
-          value={newComment}
-          onChange={handleCommentChange}
-          required
-        ></textarea>
-        <button type="submit" className="submit-comment-btn">
-          댓글 남기기
-        </button>
-      </form>
     </div>
   );
 };

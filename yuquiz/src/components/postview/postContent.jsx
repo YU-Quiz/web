@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/post/postview/postContent.scss";
 
 const PostContent = ({ post, postId , onLikeToggle, onDelete }) => {
-    console.log(post);
-  const navigate = useNavigate();
+    // console.log(post);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const toggleDropdown = () => {
@@ -19,16 +18,12 @@ const PostContent = ({ post, postId , onLikeToggle, onDelete }) => {
         <FaEllipsisV className="dropdown-icon" onClick={toggleDropdown} />
         {dropdownOpen && (
           <div className="dropdown-menu">
-            {/* {quizData.isWriter && (
-                <Link to={`/quiz/edit/${quizId}`} className="dropdown-link">
-                📝수정하기
-                </Link>
-            )} */}
-            {post.nickname && (
+            {post.isWriter && (
                 <Link to={`/posts/edit/${postId}`} className="edit-btn">게시글 수정</Link>
             )}
-            
-            <button onClick={onDelete}>게시글 삭제</button>
+            {post.isWriter && (
+                <button onClick={onDelete}>게시글 삭제</button>
+            )}
             <button onClick={onLikeToggle}>
               {post.isLiked ? "좋아요 취소" : "좋아요"}
             </button>
