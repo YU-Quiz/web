@@ -112,7 +112,7 @@ export const QuizSolve = () => {
     return (
       <div className="like-pin-container">
         <button onClick={handleStarred} className="like-pin-button">
-          {starred ? "❤️" : "🤍"}
+          {starred ? "★" : "☆"}
         </button>
         <button onClick={handleLiked} className="like-pin-button">
           {liked ? "👍" : "✊"}
