@@ -198,7 +198,7 @@ export const QuizSolve = () => {
             <input
               type="radio"
               value="음란물 및 부적절한 내용"
-              checked={reportReason === ""}
+              checked={reportReason === "음란물 및 부적절한 내용"}
               onChange={(e) => setReportReason(e.target.value)}
             />
             음란물 및 부적절한 내용
