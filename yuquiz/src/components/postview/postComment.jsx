@@ -37,7 +37,7 @@ const PostComment = ({
           댓글 남기기
         </button>
       </form>
-      
+
       <ul className="comments-list">
         {comments.length > 0 ? (
           comments.map((comment) => (
@@ -57,10 +57,15 @@ const PostComment = ({
               ) : (
                 <>
                   <p className="comment-content">{comment.content}</p>
-                  <button onClick={() => handleEditComment(comment.id, comment.content)}>
-                    수정
-                  </button>
-                  <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
+                  {/* 현재 사용자가 작성한 댓글만 수정, 삭제 버튼 표시 */}
+                  {comment.isWriter && (
+                    <>
+                      <button onClick={() => handleEditComment(comment.id, comment.content)}>
+                        수정
+                      </button>
+                      <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
+                    </>
+                  )}
                 </>
               )}
               <p className="comment-date">
