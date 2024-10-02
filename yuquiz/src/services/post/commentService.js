@@ -25,6 +25,7 @@ const createComment = async(postId, content) =>{
 // 댓글 수정
 const editComment = async (commentId, content) =>{
     try {
+        console.log(commentId);
         const response = await api.put(`/posts/comments/${commentId}`,{
             content
         });
