@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/post_list_page/PostListPage.scss';
 import SearchBar from '../../components/postlist/SearchBar';
-import SubjectDropdown from '../../components/postlist/SubjectDropdown';
+import CategoryDropdown from '../../components/postlist/CategoryDropdown';
 import PostList from '../../components/postlist/PostList';
 import { Link } from 'react-router-dom';
 import { getPostsList } from '../../services/post/postService';
 import { getCategories } from '../../services/post/postMetaService';
+import SortDropdown from '../../components/postlist/SortDropdown';
 
 // sort: LIKE_DESC, LIKE_ASC, VIEW_DESC, VIEW_ASC, DATE_DESC, DATE_ASC
 const PostListPage = () => {
   const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [categoryId, setCategoryId] = useState(null);
+  const [sortOption, setSortOption] = useState("DATE_DESC");
   const [postsList, setPostsList] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 번호
   const [totalPages, setTotalPages] = useState(1);   // 전체 페이지 수
-  // const [pageSize, setPageSize] = useState(20);                   // 페이지당 게시글 수 (고정값)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,11 +27,10 @@ const PostListPage = () => {
         setCategories(categoriesData);
 
         // 게시글 리스트 정보 받아오기
-        const postsListData = await getPostsList("","","DATE_DESC", currentPage);
+        const postsListData = await getPostsList(keyword,categoryId,sortOption, currentPage);
         setPostsList(postsListData.content);
 
         setTotalPages(postsListData.totalPages);
-        // setPageSize(postsListData.pageable.pageSize)
         // console.log(postsListData);
         
       } catch (error) {
@@ -39,15 +40,20 @@ const PostListPage = () => {
 
     // console.log(currentPage);
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, categoryId, keyword, sortOption]);
 
-  const handleSearch = (query) => {
-    // 검색 로직 작성
+  const handleSearch = (keyword) => {
+    setKeyword(keyword);
   };
 
-  const handleSelectCategory = (category) => {
-    // 과목 선택 로직 작성
+  const handleSelectCategory = (categoryId) => {
+    setCategoryId(categoryId);
   };
+
+  const handleSelectSort = (sortOption) =>{
+    setSortOption(sortOption);
+    console.log(sortOption);
+  }
 
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
@@ -60,10 +66,13 @@ const PostListPage = () => {
         <Link to='/' className="nav-button">홈으로</Link>
         <Link to='/my' className="nav-button">마이페이지</Link>
       </nav>
+
       <div className='controls-container'>
         <SearchBar onSearch={handleSearch} />
-        <SubjectDropdown categories={categories} onSelectCategory={handleSelectCategory} />
+        <CategoryDropdown categories={categories} onSelectCategory={handleSelectCategory} />
+        <SortDropdown onSelectSortOption={handleSelectSort} />
       </div>
+
       <PostList posts={postsList} />
       <div className="pagination">
         {Array.from({ length: totalPages }, (_, index) => (

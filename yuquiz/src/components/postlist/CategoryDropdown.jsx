@@ -1,7 +1,7 @@
 import React from 'react';
-import '../../styles/post_list_page/SubjectDropdown.scss';
+import '../../styles/post_list_page/CategoryDropdown.scss';
 
-const SubjectDropdown = ({ categories, onSelectCategory }) => {
+const CategoryDropdown = ({ categories, onSelectCategory }) => {
   const handleChange = (event) => {
     onSelectCategory(event.target.value);
   };
@@ -20,4 +20,4 @@ const SubjectDropdown = ({ categories, onSelectCategory }) => {
   );
 };
 
-export default SubjectDropdown;
+export default CategoryDropdown;
