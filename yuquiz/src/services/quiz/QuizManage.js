@@ -127,6 +127,23 @@ const likeQuiz = async (quizId, liked) => {
   }
 };
 
+const sendReport = async (data, quizID) => {
+  console.log(data);
+  try {
+    const response = await api.post(
+      `${SERVER_API}/quizzes/${quizID}/report`,
+      data
+    );
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error("신고 과정 중 문제가 발생했습니다. 다시 시도해주세요.");
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
+    }
+  }
+};
+
 export {
   getQuizList,
   SORT_OPTIONS,
@@ -135,4 +152,5 @@ export {
   deleteQuiz,
   pinQuiz,
   likeQuiz,
+  sendReport,
 };
