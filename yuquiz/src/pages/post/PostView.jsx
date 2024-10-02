@@ -23,6 +23,8 @@ const PostView = () => {
         const postData = await showPost(postId);
         setPost(postData.post);
         setComments(postData.comments || []);
+
+        console.log(postData);
       } catch (error) {
         console.error("게시물을 불러오는 중 오류가 발생했습니다:", error);
       }
@@ -65,11 +67,10 @@ const PostView = () => {
 
   // 댓글 제출
   const handleCommentSubmit = async (e) => {
-    e.preventDefault();
     if (newComment.trim()) {
       try {
-        const addedComment = await createComment(postId, newComment);
-        setComments([...comments, addedComment]);
+        await createComment(postId, newComment);
+
         setNewComment("");
       } catch (error) {
         console.error("댓글 작성 중 오류 발생:", error);
@@ -91,7 +92,7 @@ const PostView = () => {
       setComments((prevComments) =>
         prevComments.map((comment) =>
           comment.id === commentId ? { ...comment, content: editedComment, modified: true } : comment
-        )
+        ) 
       );
       setEditingCommentId(null);
       setEditedComment(""); // 수정 완료 후 텍스트 초기화
@@ -117,7 +118,7 @@ const PostView = () => {
       {post && (
         <PostContent post={post} postId={postId} onLikeToggle={handleLikeToggle} onDelete={handleDelete} />
       )}
-
+      <Link to="/posts/list" className="back-btn">목록으로</Link>
       <PostComment
         comments={comments}
         newComment={newComment}
@@ -132,7 +133,7 @@ const PostView = () => {
 
         handleDeleteComment={handleDeleteComment}
       />
-      <Link to="/posts/list" className="back-btn">목록으로</Link>
+      
     </div>
   );
 };

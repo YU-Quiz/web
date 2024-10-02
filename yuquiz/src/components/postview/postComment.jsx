@@ -22,6 +22,8 @@ const PostComment = ({
     setEditedComment(e.target.value);
   };
 
+  // console.log(comments);
+
   return (
     <div className="comments-section">
       <h3>댓글</h3>
