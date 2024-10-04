@@ -5,6 +5,7 @@ import SearchBar from "../../components/quizlist/SearchBar";
 import SubjectDropdown from "../../components/quizlist/SubjectDropdown";
 import { Link } from "react-router-dom";
 import { getQuizList, SORT_OPTIONS } from "../../services/quiz/QuizManage";
+import SortDropdown from "../../components/postlist/SortDropdown";
 
 const QuizListPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -15,6 +16,7 @@ const QuizListPage = () => {
   const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
+  const [sortOption, setSortOption] = useState("DATE_DESC");
 
   const subjects = ["All", "Geography", "History", "Chemistry"];
 
@@ -26,7 +28,7 @@ const QuizListPage = () => {
         const quizData = await getQuizList(
           searchQuery,
           null, //subject인데 아직 서버에 데이터 無
-          SORT_OPTIONS,
+          sortOption,
           currentPage
         ); // 1 기반 페이지 전송
         setQuizzes(quizData.content);
@@ -40,10 +42,14 @@ const QuizListPage = () => {
       }
     };
     fetchQuizzes();
-  }, [currentPage, searchQuery, selectedSubject, SORT_OPTIONS]);
+  }, [currentPage, searchQuery, selectedSubject, sortOption]);
+
   const handleSearch = (query) => {
     setSearchQuery(query);
     setCurrentPage(0); // 검색 시 페이지 초기화
+  };
+  const handleSelectSort = (sortOption) => {
+    setSortOption(sortOption);
   };
 
   const handleSelectSubject = (subject) => {
@@ -68,6 +74,7 @@ const QuizListPage = () => {
           subjects={subjects}
           onSelectSubject={handleSelectSubject}
         />
+        <SortDropdown onSelectSortOption={handleSelectSort} />
       </div>
 
       {isLoading && <p>로딩 중...</p>}
