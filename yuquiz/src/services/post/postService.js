@@ -77,17 +77,35 @@ import api from "../apiService";
   }
 */
 
-// sort: LIKE_DESC, LIKE_ASC, VIEW_DESC, VIEW_ASC, DATE_DESC, DATE_ASC
+const SORT_OPTIONS = {
+    LIKE_DESC: "LIKE_DESC",
+    LIKE_ASC: "LIKE_ASC",
+    VIEW_DESC: "VIEW_DESC",
+    VIEW_ASC: "VIEW_ASC",
+    DATE_DESC: "DATE_DESC",
+    DATE_ASC: "DATE_ASC",
+  };
 // 게시글 리스트 조회
-const getPostsList = async (keyword, categoryId, sort, page)=>{
+const getPostsList = async (
+    keyword="",
+    categoryId=null,
+    sort=SORT_OPTIONS.DATE_DESC,
+    page=0
+)=>{
     try{
+        const params = {};
+
+        if(keyword) params.keyword = keyword;
+        if(categoryId) params.categoryId = categoryId;
+        if (sort && Object.values(SORT_OPTIONS).includes(sort)) {
+            params.sort = sort;
+          } else {
+            params.sort = SORT_OPTIONS.DATE_DESC; // 기본값 설정
+          }
+          if (page >= 0) params.page = page;
+
         const response = await api.get(`/posts`, {  
-            params: {
-                keyword: keyword,
-                categoryId: categoryId,
-                sort: sort,
-                page: page,
-            }
+            params: params
         });
         // console.log(response.data);
 

@@ -1,6 +1,8 @@
 /* src/styles/post_list_page/PostList.scss */
 
 .post-list {
+  margin: 0 20px;
+
     display: flex;
     flex-direction: column;
     gap: 15px; /* 각 포스트 아이템 간의 간격 */
