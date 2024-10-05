@@ -105,7 +105,7 @@ const EditProfile = () => {
           </tbody>
         </table>
         <div className="submit-section">
-          <Link to="/mypage" className="home-btn">
+          <Link to="/my" className="home-btn">
             마이페이지로
           </Link>
           <button type="button" onClick={handleSubmit}>
