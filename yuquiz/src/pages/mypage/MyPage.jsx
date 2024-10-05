@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import ListBox from "../../components/mypage/ListBox";
 import "../../styles/mypage/MyPage.scss";
-import useAuthStore from "../../stores/auth/authStore";
 const MyPage = () => {
   // 샘플 데이터
-  const userInfo = useAuthStore((state) => state.userInfo);
   const data = {
     alerts: [
       "새로운 알림 1",
@@ -25,7 +23,6 @@ const MyPage = () => {
     solvedProblems: [],
     favorites: [],
   };
-  console.log(userInfo);
 
   return (
     <div className="dashboard-container">
