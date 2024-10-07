@@ -1,0 +1,23 @@
+/* src/styles/quizlist/SubjectDropdown.scss */
+
+.category-dropdown-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.category-dropdown {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: #bbb;
+  }
+}
