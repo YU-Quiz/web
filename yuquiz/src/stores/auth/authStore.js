@@ -5,7 +5,7 @@ import api from "../../services/apiService";
 
 const useAuthStore = create(
   persist(
-    (set, get) => ({
+    (set) => ({
       accessToken: null,
       isAuthenticated: false,
       userInfo: {
@@ -50,7 +50,17 @@ const useAuthStore = create(
           },
         });
       },
+      // Access Token 갱신
+      setAccessToken: (newToken) => {
+        set({ accessToken: newToken });
+      },
+
+      // 사용자 정보 갱신
+      setUserInfo: (newUserInfo) => {
+        set({ userInfo: newUserInfo });
+      },
     }),
+
     {
       name: "auth",
       getStorage: () => sessionStorage,
