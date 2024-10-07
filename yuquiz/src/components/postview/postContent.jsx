@@ -1,11 +1,9 @@
 import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../styles/post/postview/postContent.scss";
 
-const PostContent = ({ post, postId , onLikeToggle, onDelete }) => {
-    console.log(post);
-  const navigate = useNavigate();
+const PostContent = ({ post, postId, onLikeToggle, onDelete }) => {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const toggleDropdown = () => {
@@ -14,30 +12,42 @@ const PostContent = ({ post, postId , onLikeToggle, onDelete }) => {
 
   return (
     <div className="post-header">
-      <h2 className="post-title">{post.title}</h2>
-      <div className="dropdown-container">
-        <FaEllipsisV className="dropdown-icon" onClick={toggleDropdown} />
-        {dropdownOpen && (
-          <div className="dropdown-menu">
-            {/* {quizData.isWriter && (
-                <Link to={`/quiz/edit/${quizId}`} className="dropdown-link">
-                📝수정하기
-                </Link>
-            )} */}
-            {post.nickname && (
-                <Link to={`/posts/edit/${postId}`} className="edit-btn">게시글 수정</Link>
+      <div className="header-top">
+        <h2 className="post-title">{post.title}</h2>
+        <div className="right-actions">
+          <button className="like-btn" onClick={onLikeToggle}>
+            {post.isLiked ? "👍" : "✊"}
+          </button>
+          <div className="post-dropdown-container">
+            <FaEllipsisV className="dropdown-icon" onClick={toggleDropdown} />
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                {post.isWriter && (
+                  <Link
+                    to={`/posts/edit/${postId}`}
+                    className="dropdown-menu-item"
+                  >
+                    게시글 수정
+                  </Link>
+                )}
+                {post.isWriter && (
+                  <button
+                    className="dropdown-menu-item"
+                    onClick={onDelete}
+                  >
+                    게시글 삭제
+                  </button>
+                )}
+              </div>
             )}
-            
-            <button onClick={onDelete}>게시글 삭제</button>
-            <button onClick={onLikeToggle}>
-              {post.isLiked ? "좋아요 취소" : "좋아요"}
-            </button>
           </div>
-        )}
+        </div>
       </div>
       <p className="post-category">카테고리: {post.categoryName}</p>
       <p className="post-nickname">작성자: {post.nickname}</p>
-      <p className="post-date">작성일: {new Date(post.createdAt).toLocaleString()}</p>
+      <p className="post-date">
+        작성일: {new Date(post.createdAt).toLocaleString()}
+      </p>
       <div className="post-content">{post.content}</div>
 
       <div className="post-info">
