@@ -2,17 +2,22 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/mypage/ProfileCard.scss";
 import { logout } from "../../services/auth/login/authService";
 import useAuthStore from "../../stores/auth/authStore";
-
 const ProfileCard = () => {
   const navigate = useNavigate();
-
   const userInfo = useAuthStore((state) => state.userInfo);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  // 로그인 상태가 완전히 로드될 때까지 렌더링을 지연
+  if (!isAuthenticated || !userInfo || !userInfo.nickname) {
+    return <div>Loading...</div>;
+  }
+
   const handleLogout = async () => {
     try {
-      await logout(); // API 로그아웃 호출
-      navigate("/");
+      await logout();
+      navigate("/"); // 홈으로 이동
     } catch (error) {
-      alert(error.message); // 에러 처리 (필요에 따라 수정 가능)
+      alert(error.message); // 에러 처리
     }
   };
 

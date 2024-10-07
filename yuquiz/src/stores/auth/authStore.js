@@ -5,43 +5,51 @@ import api from "../../services/apiService";
 
 const useAuthStore = create(
   persist(
-    (set, get) => ({
-      accessToken: null, // Access Token만 상태로 관리
-      isAuthenticated: false, // 로그인 여부
-      userInfo: null,
+    (set) => ({
+      accessToken: null,
+      isAuthenticated: false,
+      userInfo: {
+        username: "로딩 중",
+        nickname: "로딩 중",
+        email: "loading@loading.com",
+        agreeEmail: false,
+        majorName: "로딩학과",
+        role: "USER",
+      },
 
-      // 로그인 함수 (Access Token을 먼저 상태에 저장하고, 이후 API 요청)
+      // 로그인 함수
       login: async (accessToken) => {
         try {
-          // 먼저 accessToken을 상태에 저장
-          set({
-            accessToken,
-            isAuthenticated: true,
-          });
+          // AccessToken 설정
+          set({ accessToken, isAuthenticated: true });
 
-          // accessToken 저장 후 API 호출하여 userInfo 가져오기
+          // userInfo를 동기적으로 가져오기
           const userInfo = await api.get(`users/my`);
-          console.log(userInfo);
-
-          // userInfo를 상태에 저장
-          set({
-            userInfo: userInfo.data, // 가져온 userInfo 저장
-          });
+          if (userInfo && userInfo.data) {
+            // 상태 동기적으로 설정 후 렌더링 진행
+            set({
+              userInfo: userInfo.data,
+            });
+          }
         } catch (error) {
           console.error("Failed to fetch user info:", error);
-          // 에러 처리 로직을 추가할 수 있습니다
         }
       },
 
-      // 로그아웃 함수
       logout: () => {
         set({
           accessToken: null,
           isAuthenticated: false,
-          userInfo: null, // 로그아웃 시 userInfo 초기화
+          userInfo: {
+            username: "",
+            nickname: "",
+            email: "",
+            agreeEmail: false,
+            majorName: "",
+            role: "USER",
+          },
         });
       },
-
       // Access Token 갱신
       setAccessToken: (newToken) => {
         set({ accessToken: newToken });
@@ -52,9 +60,10 @@ const useAuthStore = create(
         set({ userInfo: newUserInfo });
       },
     }),
+
     {
-      name: "auth", // sessionStorage에 저장할 키 이름
-      getStorage: () => sessionStorage, // sessionStorage에 저장
+      name: "auth",
+      getStorage: () => sessionStorage,
     }
   )
 );
