@@ -21,10 +21,10 @@ const EditProfile = () => {
 
     // 서버로 보낼 데이터
     const updatedData = {
-      nickname,
-      email,
+      nickname: nickname,
+      email: email,
       majorName: major,
-      agreeEmail,
+      agreeEmail: agreeEmail,
     };
 
     // 사용자 정보 수정 요청
