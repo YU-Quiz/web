@@ -1,4 +1,3 @@
-import { HttpStatusCode } from "axios";
 import api from "../apiService";
 
 const SORT_OPTIONS = {
@@ -105,4 +104,42 @@ const getMyLikedQuizList = async (sort=SORT_OPTIONS.LIKED_DATE_DESC, page=0) =>{
   }
 }
 
-export { getMyLikedPostList, getMyPinnedQuizList, getMyQuizList, getMyLikedQuizList };
+// 틀린 퀴즈목록 불러오기
+const getMyIncorrectQuizList = async (page=0) =>{
+  try {
+    const params = {};
+
+    if (page >= 0) params.page = page;
+
+    const response = await api.get("quizzes/incorrect", {params: params});
+
+    return response.data;
+  } catch (error) {
+    if(error.response){
+        throw new Error('틀린 퀴즈 목록 불러오는 중 문제 발생. 다시 시도해주세요.');
+    }else{
+        throw new Error('서버와 연결할 수 없습니다.');
+    }
+  }
+}
+
+// 맞은 퀴즈목록 불러오기
+const getMyCorrectQuizList = async (page=0) =>{
+  try {
+    const params = {};
+
+    if (page >= 0) params.page = page;
+
+    const response = await api.get("quizzes/correct", {params: params});
+
+    return response.data;
+  } catch (error) {
+    if(error.response){
+        throw new Error('맞은 퀴즈 목록 불러오는 중 문제 발생. 다시 시도해주세요.');
+    }else{
+        throw new Error('서버와 연결할 수 없습니다.');
+    }
+  }
+}
+
+export { getMyLikedPostList, getMyPinnedQuizList, getMyQuizList, getMyLikedQuizList, getMyIncorrectQuizList, getMyCorrectQuizList };
