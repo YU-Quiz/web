@@ -48,7 +48,7 @@ const updateUser = async (nickname, email, majorName, agreeEmail) =>{
 
 const withdrawUser = async () =>{
     try{
-        const response = await api.get(`/users/my`);
+        const response = await api.delete(`/users/my`);
 
         return response.data;
     }catch(error){
