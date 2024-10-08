@@ -1,7 +1,7 @@
 import "../../styles/mypage/ListBox.scss";
 
-const ListBox = ({ title, items }) => {
-  console.log(items);
+const QuizListBox = ({ title, items }) => {
+//   console.log(items);
     return (
       <div className="list-box">
         <h3>{title} <span>더보기</span></h3>
@@ -14,4 +14,4 @@ const ListBox = ({ title, items }) => {
     );
   };
 
-export default ListBox;
+export default QuizListBox;

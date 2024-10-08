@@ -40,7 +40,7 @@ const getMyPinnedQuizList = async (sort=SORT_OPTIONS.LIKED_DATE_DESC, page=0) =>
     if (sort && Object.values(SORT_OPTIONS).includes(sort)) {
       params.sort = sort;
     } else {
-      params.sort = SORT_OPTIONS.DATE_DESC; // 기본값 설정
+      params.sort = SORT_OPTIONS.QUIZ_DATE_DESC; // 기본값 설정
     }
     if (page >= 0) params.page = page;
 
