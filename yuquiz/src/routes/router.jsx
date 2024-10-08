@@ -6,7 +6,7 @@ import { QuizSolve } from "../pages/quiz/QuizSolve"; // 퀴즈 풀기 컴포넌�
 import { QuizCreator } from "../pages/quiz/QuizCreator";
 import { QuizFix } from "../pages/quiz/QuizFix";
 import MyPageLayout from "../pages/mypage/MyPageLayout";
-import MyPage from "../pages/mypage/MyPage";
+import MyPage, { MyPageLoader } from "../pages/mypage/MyPage";
 import EditProfile from "../pages/mypage/EditProfile";
 import { Login } from "../pages/login/Login";
 import { Register } from "../pages/register/Register";
@@ -43,6 +43,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <MyPage />,
+            loader: MyPageLoader,
           },
           {
             path: "edit",
