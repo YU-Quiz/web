@@ -2,14 +2,14 @@ import React from "react";
 import "../../styles/mypage/DetailList.scss";
 import { Link } from "react-router-dom";
 
-const DetailList = ({ listData }) => {
+const DetailList = ({ listData, title }) => {
   if (!listData || listData.content.length === 0) {
     return <p>표시할 리스트가 없습니다.</p>;
   }
 
   return (
     <div className="detail-list-container">
-      <h2>리스트 더보기</h2>
+      <h2>{title}</h2>
       <ul>
         {listData.content.map((item) => (
           <li key={item.quizId}>
