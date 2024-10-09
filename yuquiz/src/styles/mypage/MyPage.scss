@@ -27,4 +27,29 @@
       gap: 20px;  /* 각 ListBox 컴포넌트 사이의 간격 */
       margin-bottom: 20px;  /* 각 row 사이의 간격 */
   }
+
+}
+
+.detail-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 배경을 어둡게 */
+  z-index: 999; /* 모달을 화면의 앞쪽에 배치 */
+}
+
+/* 모달창 스타일 */
+.detail-report-modal {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
