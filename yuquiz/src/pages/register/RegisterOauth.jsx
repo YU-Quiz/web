@@ -81,8 +81,7 @@ const RegisterOauth = () => {
     try {
       // 서버로 데이터 전송
       const response = await registerOauth(formData);
-      if (response.status === HttpStatusCode.Ok) {
-        console.log("회원가입 성공:", response.data);
+      if (response === true) {
         navigate("/"); // 회원가입 성공 후 홈으로 이동
         return;
       }

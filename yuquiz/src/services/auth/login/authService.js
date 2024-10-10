@@ -41,7 +41,8 @@ const kakaoLogin = async (code) => {
     const { accessToken } = response.data;
     setAccessToken(accessToken); // sessionStorage에 Access Token 저장
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
-    return response.data;
+    console.log(response.data);
+    return response.data.isRegistered;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
       throw new Error(error.response.data.message);
