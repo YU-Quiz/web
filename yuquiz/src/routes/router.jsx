@@ -15,6 +15,7 @@ import PostCreator from "../pages/post/PostCreator";
 import PostFix from "../pages/post/PostFix";
 import PostView from "../pages/post/PostView";
 import KakaoLoginCallback from "../pages/login/kakao/kakaoLoginCallBack";
+import RegisterOauth from "../pages/register/RegisterOauth";
 
 const router = createBrowserRouter([
   {

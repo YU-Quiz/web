@@ -38,6 +38,9 @@ const login = async (username, password) => {
 const kakaoLogin = async (code) => {
   try {
     const response = await api.post("/auth/sign-in/kakao", { code });
+    const { accessToken } = response.data;
+    setAccessToken(accessToken); // sessionStorage에 Access Token 저장
+    useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
     return response.data;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
