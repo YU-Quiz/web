@@ -2,7 +2,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import Root from "../pages/Root";
 import QuizListPage from "../pages/quiz/QuizListPage";
-import { QuizSolve } from "../pages/quiz/QuizSolve"; // 퀴즈 풀기 컴포넌트 추가
+import { QuizSolve } from "../pages/quiz/QuizSolve";
 import { QuizCreator } from "../pages/quiz/QuizCreator";
 import { QuizFix } from "../pages/quiz/QuizFix";
 import MyPageLayout from "../pages/mypage/MyPageLayout";
@@ -14,6 +14,7 @@ import PostListPage from "../pages/post/PostListPage";
 import PostCreator from "../pages/post/PostCreator";
 import PostFix from "../pages/post/PostFix";
 import PostView from "../pages/post/PostView";
+import KakaoLoginCallback from "../pages/login/kakao/kakaoLoginCallBack";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "register/oauth",
+        element: <RegisterOauth />,
       },
       {
         path: "my",
@@ -71,9 +76,8 @@ const router = createBrowserRouter([
             element: <QuizFix />,
           },
           {
-            // 퀴즈 풀기 페이지 라우트 추가
             path: "play/:quizId",
-            element: <QuizSolve />, // 퀴즈 풀기 컴포넌트 연결
+            element: <QuizSolve />,
           },
         ],
       },
@@ -112,6 +116,10 @@ const router = createBrowserRouter([
             element: <MyPage />,
           },
         ],
+      },
+      {
+        path: "login/oauth2/code/kakao",
+        element: <KakaoLoginCallback />,
       },
     ],
   },
