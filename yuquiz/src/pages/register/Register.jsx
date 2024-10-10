@@ -107,7 +107,7 @@ export const Register = () => {
   return (
     <div className="register-body">
       <div className="register-container">
-        <Link to="/" className="back-button">
+        <Link to="/login" className="back-button">
           <IoMdArrowBack />
         </Link>
         <div>

@@ -21,6 +21,7 @@ const KakaoLoginCallback = () => {
           // 백엔드로 인가 코드를 전송하여 로그인 처리
           const response = await kakaoLogin(code);
           console.log("카카오 로그인 성공:", response);
+
           if (response.isRegistered === true) {
             onclose();
             navigate("/");
@@ -53,7 +54,7 @@ const KakaoLoginCallback = () => {
           </button>
         </div>
       ) : firstLogin ? (
-        "hi"
+        "로그인하기"
       ) : (
         <div>카카오 로그인 처리 중...</div>
       )}
