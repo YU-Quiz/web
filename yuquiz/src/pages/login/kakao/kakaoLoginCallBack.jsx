@@ -6,7 +6,6 @@ const KakaoLoginCallback = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [firstLogin, setFirstLogin] = useState(false);
 
   useEffect(() => {
     const handleKakaoLogin = async () => {
@@ -51,8 +50,6 @@ const KakaoLoginCallback = () => {
             로그인 페이지로 돌아가기
           </button>
         </div>
-      ) : firstLogin ? (
-        "로그인하기"
       ) : (
         <div>카카오 로그인 처리 중...</div>
       )}

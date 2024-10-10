@@ -17,7 +17,7 @@ const SocialKakao = ({ isOpen, onClose }) => {
         <button className="modal-close-button" onClick={onClose}>
           ×
         </button>
-        <Link to={kakaoLoginUrl}>hi </Link>
+        <Link to={kakaoLoginUrl}> 로그인 하기 </Link>
       </div>
     </div>
   );
