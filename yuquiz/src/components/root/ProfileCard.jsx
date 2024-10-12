@@ -14,7 +14,11 @@ const ProfileCard = () => {
       alert(error.message); // 에러 처리 (필요에 따라 수정 가능)
     }
   };
-
+  // username이 10글자 이상일 경우, 뒷부분을 '...'으로 처리
+  const displayUsername =
+    userInfo.username.length > 10
+      ? `${userInfo.username.slice(0, 10)}...`
+      : userInfo.username;
   return (
     <div className="root-profile-container">
       <div className="profile-picture"></div>
@@ -24,7 +28,7 @@ const ProfileCard = () => {
             <Link to="/my">
               <h2>{userInfo.nickname}</h2>
               <br></br>
-              <p>@{userInfo.username}</p>
+              <p>@{displayUsername}</p>
             </Link>
 
             <div className="profile-stats">
