@@ -4,7 +4,6 @@ import { IoMdArrowBack } from "react-icons/io";
 import { useState } from "react";
 import { login } from "../../services/auth/login/authService"; // 로그인 서비스 함수
 import Modal from "react-modal";
-import SocialKakao from "../../components/login/SocialKakao";
 
 // 모달의 루트 요소 설정
 Modal.setAppElement("#root");
@@ -15,7 +14,11 @@ export const Login = () => {
   const [password, setPassword] = useState(""); // 비밀번호 입력 상태
   const [error, setError] = useState(null); // 에러 메시지 상태
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
-  const [isKakaoModalOpen, setIsKakaoModalOpen] = useState(false); // 카카오 모달 상태
+  const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
+  const kakaoRedirectUri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+  const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${kakaoClientId}&redirect_uri=${encodeURIComponent(
+    kakaoRedirectUri
+  )}&state=random_state_value`;
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null); // 이전 에러 초기화
@@ -37,6 +40,9 @@ export const Login = () => {
     } finally {
       setIsLoading(false); // 로딩 종료
     }
+  };
+  const handleLoginKakao = () => {
+    window.location.href = kakaoLoginUrl;
   };
 
   return (
@@ -79,10 +85,7 @@ export const Login = () => {
           {error && <p className="error-message">{error}</p>}{" "}
           {/* 에러 메시지 표시 */}
           <div>
-            <button
-              onClick={() => setIsKakaoModalOpen(true)}
-              className="button-login-social"
-            >
+            <button onClick={handleLoginKakao} className="button-login-social">
               <img
                 src={`${process.env.PUBLIC_URL}/images/kakao_login_img.png`}
                 alt="Kakao Login"
@@ -103,19 +106,6 @@ export const Login = () => {
         </Link>
         <button className="button-others">비밀번호 찾기</button>
       </div>
-      {/* 카카오 로그인 모달 */}
-      <Modal
-        isOpen={isKakaoModalOpen}
-        onRequestClose={() => setIsKakaoModalOpen(false)}
-        contentLabel="Kakao Login Modal"
-        className="custom-modal-content"
-        overlayClassName="custom-modal-overlay"
-      >
-        <SocialKakao
-          isOpen={isKakaoModalOpen}
-          onClose={() => setIsKakaoModalOpen(false)}
-        />
-      </Modal>
     </div>
   );
 };
