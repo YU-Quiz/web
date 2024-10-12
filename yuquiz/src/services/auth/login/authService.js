@@ -51,7 +51,22 @@ const kakaoLogin = async (code) => {
     }
   }
 };
-
+const naverLogin = async (code) => {
+  try {
+    const response = await api.post("/auth/sign-in/naver", { code });
+    const { accessToken } = response.data;
+    setAccessToken(accessToken); // sessionStorage에 Access Token 저장
+    useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
+    console.log(response.data);
+    return response.data.isRegistered;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("네이버 로그인 중 문제가 발생했습니다.");
+    }
+  }
+};
 // 로그아웃 함수
 const logout = async () => {
   try {
@@ -72,4 +87,4 @@ const logout = async () => {
   }
 };
 
-export { login, kakaoLogin, logout };
+export { login, kakaoLogin, naverLogin, logout };
