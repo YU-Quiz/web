@@ -14,8 +14,9 @@ import PostListPage from "../pages/post/PostListPage";
 import PostCreator from "../pages/post/PostCreator";
 import PostFix from "../pages/post/PostFix";
 import PostView from "../pages/post/PostView";
-import KakaoLoginCallback from "../pages/login/kakao/kakaoLoginCallBack";
+import KakaoLoginCallback from "../pages/login/social/kakaoLoginCallBack";
 import RegisterOauth from "../pages/register/RegisterOauth";
+import NaverLoginCallback from "../pages/login/social/naverLoginCallBack";
 
 const router = createBrowserRouter([
   {
@@ -122,6 +123,10 @@ const router = createBrowserRouter([
       {
         path: "login/oauth2/code/kakao",
         element: <KakaoLoginCallback />,
+      },
+      {
+        path: "login/oauth2/code/naver",
+        element: <NaverLoginCallback />,
       },
     ],
   },

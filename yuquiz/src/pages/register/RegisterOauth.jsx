@@ -6,8 +6,8 @@ import {
   handlerCheckDupNick,
   registerOauth,
 } from "../../services/auth/register/Register";
-import { HttpStatusCode } from "axios";
 import { IoMdArrowBack } from "react-icons/io";
+import api from "../../services/apiService";
 
 const RegisterOauth = () => {
   const [formData, setFormData] = useState({
@@ -82,6 +82,9 @@ const RegisterOauth = () => {
       // 서버로 데이터 전송
       const response = await registerOauth(formData);
       if (response === true) {
+        //회원가입시 user 정보 상태 저장
+        const userInfo = await api.get(`users/my`);
+
         navigate("/"); // 회원가입 성공 후 홈으로 이동
         return;
       }
