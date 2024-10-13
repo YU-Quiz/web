@@ -1,6 +1,5 @@
 // src/services/authService.js
 import api from "../../apiService";
-import { setAccessToken } from "../../../utils/token";
 import useAuthStore from "../../../stores/auth/authStore";
 import axios, { HttpStatusCode } from "axios";
 
@@ -178,9 +177,6 @@ const handlerSubmit = async (registerData, validations) => {
     const response = await api.post(`/auth/sign-up`, registerData);
     if (response && response.status === HttpStatusCode.Ok) {
       const { accessToken } = response.data;
-
-      // 회원가입 성공 후 토큰 저장
-      setAccessToken(accessToken);
       useAuthStore.getState().login(accessToken); // Zustand 상태에 저장
 
       alert("회원가입 성공!");

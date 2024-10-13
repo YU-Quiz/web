@@ -1,5 +1,4 @@
 import api from "../../apiService";
-import { setAccessToken, removeAccessToken } from "../../../utils/token";
 import useAuthStore from "../../../stores/auth/authStore";
 
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
@@ -27,7 +26,6 @@ const login = async (username, password) => {
     });
     const { accessToken } = response.data;
 
-    setAccessToken(accessToken); // sessionStorage에 Access Token 저장
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
 
     return response.data;
@@ -39,7 +37,6 @@ const kakaoLogin = async (code) => {
   try {
     const response = await api.post("/auth/sign-in/kakao", { code });
     const { accessToken } = response.data;
-    setAccessToken(accessToken); // sessionStorage에 Access Token 저장
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
     console.log(response.data);
     return response.data.isRegistered;
@@ -55,7 +52,6 @@ const naverLogin = async (code) => {
   try {
     const response = await api.post("/auth/sign-in/naver", { code });
     const { accessToken } = response.data;
-    setAccessToken(accessToken); // sessionStorage에 Access Token 저장
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
     console.log(response.data);
     return response.data.isRegistered;
@@ -79,7 +75,6 @@ const logout = async () => {
     });
 
     useAuthStore.getState().logout(); // Zustand 상태에서 로그아웃 처리
-    removeAccessToken(); // sessionStorage에서 Access Token 삭제
 
     return response.data;
   } catch (error) {
