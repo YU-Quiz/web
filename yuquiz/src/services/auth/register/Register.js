@@ -177,8 +177,7 @@ const handlerSubmit = async (registerData, validations) => {
     const response = await api.post(`/auth/sign-up`, registerData);
     if (response && response.status === HttpStatusCode.Ok) {
       const { accessToken } = response.data;
-      useAuthStore.getState().login(accessToken); // Zustand 상태에 저장
-
+      await useAuthStore.getState().login(accessToken); // Zustand 상태에 저장
       alert("회원가입 성공!");
       return true;
     } else if (response.status === HttpStatusCode.BadRequest) {

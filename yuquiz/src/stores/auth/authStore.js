@@ -26,7 +26,6 @@ const useAuthStore = create(
           const userInfo = await api.get(`users/my`);
           console.log("유저정보: ", userInfo);
           if (userInfo && userInfo.data) {
-            // 상태 동기적으로 설정 후 렌더링 진행
             set({
               userInfo: userInfo.data,
             });

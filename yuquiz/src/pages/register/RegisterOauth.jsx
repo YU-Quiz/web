@@ -7,7 +7,8 @@ import {
   registerOauth,
 } from "../../services/auth/register/Register";
 import { IoMdArrowBack } from "react-icons/io";
-import api from "../../services/apiService";
+import useAuthStore from "../../stores/auth/authStore";
+import "../../styles/register/Register.scss"; // 스타일 파일 유지
 
 const RegisterOauth = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,8 @@ const RegisterOauth = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const { setUserInfo } = useAuthStore(); // 사용자 정보 저장 함수
 
   // 입력값 변경 핸들러
   const handleChange = (e) => {
@@ -40,11 +43,7 @@ const RegisterOauth = () => {
   // 닉네임 중복 체크
   const handleCheckDupNickname = async () => {
     const result = await handlerCheckDupNick(formData.nickname);
-    if (result) {
-      setNicknameChecked(true);
-    } else {
-      setNicknameChecked(false);
-    }
+    setNicknameChecked(result);
   };
 
   // 이메일 인증 요청
@@ -58,17 +57,13 @@ const RegisterOauth = () => {
       formData.email,
       verificationCode
     );
-    if (result) {
-      setEmailVerified(true);
-    } else {
-      setEmailVerified(false);
-    }
+    setEmailVerified(result);
   };
 
   // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 닉네임 중복 체크와 이메일 인증 여부 확인
+
     if (!nicknameChecked) {
       setError("닉네임 중복 확인을 완료해주세요.");
       return;
@@ -79,18 +74,19 @@ const RegisterOauth = () => {
     }
 
     try {
-      // 서버로 데이터 전송
       const response = await registerOauth(formData);
       if (response === true) {
-        //회원가입시 user 정보 상태 저장
-        const userInfo = await api.get(`users/my`);
-
-        navigate("/"); // 회원가입 성공 후 홈으로 이동
-        return;
+        // 회원가입 성공 후 사용자 정보 저장
+        setUserInfo({
+          nickname: formData.nickname,
+          email: formData.email,
+          majorName: formData.majorName,
+          agreeEmail: formData.agreeEmail,
+        });
+        navigate("/"); // 홈으로 이동
       }
     } catch (error) {
-      console.error("회원가입 중 오류 발생:", error);
-      setError("회원가입에 실패했습니다. 다시 시도해주세요.");
+      setError("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 

@@ -33,6 +33,8 @@ const login = async (username, password) => {
     handleError(error, "로그인 중 문제가 발생했습니다. 다시 시도해주세요.");
   }
 };
+
+// 카카오 로그인 함수
 const kakaoLogin = async (code) => {
   try {
     const response = await api.post("/auth/sign-in/kakao", { code });
@@ -48,6 +50,8 @@ const kakaoLogin = async (code) => {
     }
   }
 };
+
+// 네이버 로그인 함수
 const naverLogin = async (code) => {
   try {
     const response = await api.post("/auth/sign-in/naver", { code });
@@ -63,6 +67,7 @@ const naverLogin = async (code) => {
     }
   }
 };
+
 // 로그아웃 함수
 const logout = async () => {
   try {
