@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/mypage/ProfileCard.scss";
 import { logout } from "../../services/auth/login/authService";
 import useAuthStore from "../../stores/auth/authStore";
+
 const ProfileCard = () => {
   const navigate = useNavigate();
   const userInfo = useAuthStore((state) => state.userInfo);
@@ -21,12 +22,18 @@ const ProfileCard = () => {
     }
   };
 
+  // username이 10글자 이상일 경우, 뒷부분을 '...'으로 처리
+  const displayUsername =
+    userInfo.username.length > 10
+      ? `${userInfo.username.slice(0, 10)}...`
+      : userInfo.username;
+
   return (
     <div className="profile-container">
       <div className="profile-picture"></div>
       <div className="profile-details">
         <h2>{userInfo.nickname}</h2>
-        <p>@{userInfo.username}</p>
+        <p>@{displayUsername}</p>
         <div className="profile-stats">
           <p>100 Quizzes</p>
           <p>50 Badges</p>

@@ -7,6 +7,7 @@ import { logout } from "../../services/auth/login/authService";
 const ProfileCard = () => {
   const { isAuthenticated } = useAuthStore(); // 상태와 Zustand의 로그아웃 함수 가져오기
   const userInfo = useAuthStore((state) => state.userInfo);
+
   const handleLogout = async () => {
     try {
       await logout(); // API 로그아웃 호출
@@ -15,6 +16,13 @@ const ProfileCard = () => {
     }
   };
 
+  // username이 undefined가 아닐 때만 처리, 아니면 빈 문자열로 처리
+  const displayUsername = userInfo.username
+    ? userInfo.username.length > 10
+      ? `${userInfo.username.slice(0, 10)}...`
+      : userInfo.username
+    : "";
+
   return (
     <div className="root-profile-container">
       <div className="profile-picture"></div>
@@ -22,9 +30,13 @@ const ProfileCard = () => {
         {isAuthenticated ? (
           <>
             <Link to="/my">
-              <h2>{userInfo.nickname}</h2>
-              <br></br>
-              <p>@{userInfo.username}</p>
+              <h2>{userInfo.nickname || "닉네임 없음"}</h2>
+              <br />
+              <p>
+                {displayUsername
+                  ? `@` + displayUsername
+                  : "🎉최초 로그인을 환영합니다🥳"}
+              </p>
             </Link>
 
             <div className="profile-stats">

@@ -1,5 +1,4 @@
 import api from "../../apiService";
-import { setAccessToken, removeAccessToken } from "../../../utils/token";
 import useAuthStore from "../../../stores/auth/authStore";
 
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
@@ -27,7 +26,6 @@ const login = async (username, password) => {
     });
     const { accessToken } = response.data;
 
-    setAccessToken(accessToken); // sessionStorage에 Access Token 저장
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
 
     return response.data;
@@ -35,11 +33,12 @@ const login = async (username, password) => {
     handleError(error, "로그인 중 문제가 발생했습니다. 다시 시도해주세요.");
   }
 };
+
+// 카카오 로그인 함수
 const kakaoLogin = async (code) => {
   try {
     const response = await api.post("/auth/sign-in/kakao", { code });
     const { accessToken } = response.data;
-    setAccessToken(accessToken); // sessionStorage에 Access Token 저장
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
     console.log(response.data);
     return response.data.isRegistered;
@@ -48,6 +47,23 @@ const kakaoLogin = async (code) => {
       throw new Error(error.response.data.message);
     } else {
       throw new Error("카카오 로그인 중 문제가 발생했습니다.");
+    }
+  }
+};
+
+// 네이버 로그인 함수
+const naverLogin = async (code) => {
+  try {
+    const response = await api.post("/auth/sign-in/naver", { code });
+    const { accessToken } = response.data;
+    useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
+    console.log(response.data);
+    return response.data.isRegistered;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("네이버 로그인 중 문제가 발생했습니다.");
     }
   }
 };
@@ -64,7 +80,6 @@ const logout = async () => {
     });
 
     useAuthStore.getState().logout(); // Zustand 상태에서 로그아웃 처리
-    removeAccessToken(); // sessionStorage에서 Access Token 삭제
 
     return response.data;
   } catch (error) {
@@ -72,4 +87,4 @@ const logout = async () => {
   }
 };
 
-export { login, kakaoLogin, logout };
+export { login, kakaoLogin, naverLogin, logout };

@@ -19,6 +19,12 @@ export const Login = () => {
   const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${kakaoClientId}&redirect_uri=${encodeURIComponent(
     kakaoRedirectUri
   )}&state=random_state_value`;
+  const naverClientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+  const naverRedirectUri = process.env.REACT_APP_NAVER_REDIRECT_URI;
+  const naverLoginUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&redirect_uri=${encodeURIComponent(
+    naverRedirectUri
+  )}`;
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null); // 이전 에러 초기화
@@ -43,6 +49,9 @@ export const Login = () => {
   };
   const handleLoginKakao = () => {
     window.location.href = kakaoLoginUrl;
+  };
+  const handleLoginNaver = () => {
+    window.location.href = naverLoginUrl;
   };
 
   return (
@@ -91,7 +100,7 @@ export const Login = () => {
                 alt="Kakao Login"
               />
             </button>
-            <button className="button-login-social">
+            <button onClick={handleLoginNaver} className="button-login-social">
               <img
                 src={`${process.env.PUBLIC_URL}/images/naver_login_img.png`}
                 alt="Naver Login"
