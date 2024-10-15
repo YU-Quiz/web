@@ -13,6 +13,7 @@ const SORT_OPTIONS = {
   QUIZ_DATE_ASC: "QUIZ_DATE_ASC",
 };
 
+// 작성한게시글 목록 불러오기
 const getMyPostList = async(sort=SORT_OPTIONS.DATE_DESC,page=0)=>{
   try {
     const params = {};
@@ -25,6 +26,7 @@ const getMyPostList = async(sort=SORT_OPTIONS.DATE_DESC,page=0)=>{
     if (page >= 0) params.page = page;
     const response = await api.get("posts/my", {params: params});
 
+    return response.data;
   } catch (error) {
     if(error.response){
         throw new Error('작성한 게시글 목록 불러오는 중 문제 발생. 다시 시도해주세요.');
@@ -42,7 +44,7 @@ const getMyLikedPostList = async (page=0) => {
     if (page >= 0) params.page = page;
 
     const response = await api.get("posts/liked", {params: params});
-
+    // console.log("service: ", response.data);
     return response.data;
   } catch (error) {
     if(error.response){
