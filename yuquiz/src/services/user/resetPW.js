@@ -1,9 +1,10 @@
 import axios, { HttpStatusCode } from "axios";
+import api from "../apiService";
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 const confirmResetPW = async (username, email) => {
   try {
     const response = await axios.post(
-      `${SERVER_API}/api/v1/auth/reset-password/verify-user`,
+      `${SERVER_API}/auth/reset-password/verify-user`,
       {
         username,
         email,
@@ -30,14 +31,11 @@ const confirmResetPW = async (username, email) => {
 
 const doResetPW = async (username, password, code) => {
   try {
-    const response = await axios.post(
-      `${SERVER_API}/api/v1/auth/reset-password`,
-      {
-        username,
-        password,
-        code,
-      }
-    );
+    const response = await axios.post(`${SERVER_API}/auth/reset-password`, {
+      username,
+      password,
+      code,
+    });
     if (response.status === HttpStatusCode.Ok) {
       return {
         success: true,
@@ -45,7 +43,7 @@ const doResetPW = async (username, password, code) => {
       };
     }
   } catch (error) {
-    if (error.response && error.response.status === HttpStatusCode.BadRequest) {
+    if (error.response && error.response.status === HttpStatusCode) {
       return {
         success: false,
         message:
