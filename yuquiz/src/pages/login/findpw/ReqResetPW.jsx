@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ResetPW } from "../../../services/user/resetPW";
+import { confirmResetPW } from "../../../services/user/resetPW";
 import { IoMdArrowBack } from "react-icons/io";
 import "../../../styles/register/Register.scss"; // 스타일 파일 유지
 
@@ -22,7 +22,7 @@ const ReqResetPW = () => {
   // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await ResetPW(formData.username, formData.email);
+    const result = await confirmResetPW(formData.username, formData.email);
     if (result.success) {
       alert(result.message);
       navigate(-1);
