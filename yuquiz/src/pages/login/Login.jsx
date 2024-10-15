@@ -113,7 +113,9 @@ export const Login = () => {
         <Link to="/register" className="button-others">
           회원가입
         </Link>
-        <button className="button-others">비밀번호 찾기</button>
+        <Link to="/resetPW" className="button-others">
+          비밀번호 재설정
+        </Link>
       </div>
     </div>
   );
