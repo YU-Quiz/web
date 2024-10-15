@@ -110,8 +110,8 @@ export const Login = () => {
         </div>
       </form>
       <div className="other-container">
-        <Link to="/register" className="button-others">
-          회원가입
+        <Link to="/findID" className="button-others">
+          아이디찾기
         </Link>
         <button className="button-others">비밀번호 찾기</button>
       </div>

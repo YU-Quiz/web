@@ -17,6 +17,7 @@ import PostView from "../pages/post/PostView";
 import KakaoLoginCallback from "../pages/login/social/kakaoLoginCallBack";
 import RegisterOauth from "../pages/register/RegisterOauth";
 import NaverLoginCallback from "../pages/login/social/naverLoginCallBack";
+import { FindID } from "../pages/login/findID/FindID";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "findID",
+        element: <FindID />,
       },
       {
         path: "register",
