@@ -33,6 +33,16 @@ const QUIZ_SORT_OPTIONS = {
     QUIZ_DATE_DESC: "최신순",
     QUIZ_DATE_ASC: "오래된 순",
   };
+ const PINNED_QUIZ_SORT_OPTIONS = {
+    LIKE_DESC: "좋아요 많은 순",
+    LIKE_ASC: "좋아요 적은 순",
+    VIEW_DESC: "조회수 많은 순",
+    VIEW_ASC: "조회수 적은 순",
+    PINNED_DATE_DESC: "즐겨찾기 최신 순",
+    PINNED_DATE_ASC: "즐겨찾기 오래된 순",
+    QUIZ_DATE_DESC: "최신순",
+    QUIZ_DATE_ASC: "오래된 순",
+  };
 
 const DetailSortDropdown = ({ onSelectSortOption, title }) => {
     let SORT_OPTIONS;
@@ -47,6 +57,8 @@ const DetailSortDropdown = ({ onSelectSortOption, title }) => {
       SORT_OPTIONS = POST_SORT_OPTIONS;  // 작성한 퀴즈 목록
       break;
     case QuizListTitles.MY_PINNED_LIST:
+        SORT_OPTIONS = PINNED_QUIZ_SORT_OPTIONS;
+        break;
     case QuizListTitles.MY_LIKED_LIST:
       SORT_OPTIONS = QUIZ_SORT_OPTIONS;  // 좋아요한 퀴즈 목록
       break;
