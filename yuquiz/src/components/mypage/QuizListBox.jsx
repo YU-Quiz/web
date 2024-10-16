@@ -3,7 +3,7 @@ import "../../styles/mypage/ListBox.scss";
 
 const QuizListBox = ({ title, items, handleModalOpen }) => {
   const openModal =  ()=>{
-    handleModalOpen(items, title, "quiz");
+    handleModalOpen(title);
   };
 
   // console.log(items);

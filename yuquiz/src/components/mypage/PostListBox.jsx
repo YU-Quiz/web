@@ -3,7 +3,7 @@ import "../../styles/mypage/ListBox.scss";
 
 const PostListBox = ({ title, items, handleModalOpen }) => {
   const openModal =  ()=>{
-    handleModalOpen(items, title, "post");
+    handleModalOpen(title);
   };
 
 //   console.log(items.content);

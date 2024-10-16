@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import ListBox from "../../components/mypage/ListBox";
 import "../../styles/mypage/MyPage.scss";
 import { getMyCorrectQuizList, getMyIncorrectQuizList, getMyLikedPostList, getMyLikedQuizList, getMyPinnedQuizList, getMyPostList, getMyQuizList } from "../../services/mypage/myList";
 import QuizListBox from "../../components/mypage/QuizListBox";
@@ -55,14 +54,14 @@ export async function MyPageLoader() {
 const MyPage = () => {
   const data = useLoaderData();
   const [modalOpen, setModalOpen] = useState(false);
-  const [listData, setListData] = useState(null);
+  // const [listData, setListData] = useState(null);
   const [modalTitle, setModalTitle] = useState("");
-  const [listType, setListType] = useState("");
+  // const [listType, setListType] = useState("");
 
-  const handleModalOpen = (listData, title, listType)=>{
-    setListData(listData);
+  const handleModalOpen = (title)=>{
+
     setModalTitle(title);
-    setListType(listType);
+
     setModalOpen(true);
   };
 
@@ -76,11 +75,7 @@ const MyPage = () => {
           className="detail-report-modal"
           overlayClassName="detail-modal-overlay" /* 배경 어둡게 */
       >
-        {listData ? (
-          <DetailList listData={listData} title={modalTitle} listType={listType}/>
-        ) : (
-          <p>리스트가 없습니다.</p>
-        )}
+        <DetailList title={modalTitle} />
       </Modal>
     );
   }
@@ -90,7 +85,7 @@ const MyPage = () => {
       <Link to="/" className="my-home-btn">
         홈으로
       </Link>
-      <DetailModal listData={listData}></DetailModal>
+      <DetailModal></DetailModal>
       <div className="row">
         <PostListBox title={PostListTitles.MY_POST_LIST} items={data.myPostList} handleModalOpen={handleModalOpen} />
         <PostListBox title={PostListTitles.MY_LIKED_LIST} items={data.myLikedPostList} handleModalOpen={handleModalOpen} />
