@@ -52,7 +52,6 @@ const PostListPage = () => {
 
   const handleSelectSort = (sortOption) =>{
     setSortOption(sortOption);
-    console.log(sortOption);
   }
 
   // 페이지 변경 핸들러

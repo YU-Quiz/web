@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../styles/mypage/DetailList.scss";
 import { Link } from "react-router-dom";
 import { getMyCorrectQuizList, getMyIncorrectQuizList, getMyLikedPostList, getMyLikedQuizList, getMyPinnedQuizList, getMyPostList, getMyQuizList } from "../../services/mypage/myList";
+import DetailSortDropdown from "./DetailSortDropdown";
 
 // Post와 Quiz 타이틀
 const PostListTitles = {
@@ -21,10 +22,14 @@ const DetailList = ({ title }) => {
   const [listData, setListData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [listType, setListType] = useState("post");
+  const [sortOption, setSortOption] = useState("");
+
+  const handleSelectSort = (sortOption) =>{
+    setSortOption(sortOption);
+  }
 
   // title을 기준으로 listType 결정
   useEffect(() => {
-    console.log(title);
     if (Object.values(QuizListTitles).includes(title)) {
       setListType("quiz");
     } else if (Object.values(PostListTitles).includes(title)) {
@@ -35,15 +40,15 @@ const DetailList = ({ title }) => {
         let data = null;
 
         if (title === PostListTitles.MY_POST_LIST) {
-          data = await getMyPostList(undefined, currentPage);
+          data = await getMyPostList(sortOption, currentPage);
         } else if (title === PostListTitles.MY_LIKED_LIST) {
           data = await getMyLikedPostList(currentPage);
         } else if (title === QuizListTitles.MY_QUIZ_LIST) {
-          data = await getMyQuizList(undefined, currentPage);
+          data = await getMyQuizList(sortOption, currentPage);
         } else if (title === QuizListTitles.MY_PINNED_LIST) {
-          data = await getMyPinnedQuizList(undefined, currentPage);
+          data = await getMyPinnedQuizList(sortOption, currentPage);
         } else if (title === QuizListTitles.MY_LIKED_LIST) {
-          data = await getMyLikedQuizList(undefined, currentPage);
+          data = await getMyLikedQuizList(sortOption, currentPage);
         } else if (title === QuizListTitles.MY_CORRECT_LIST) {
           data = await getMyCorrectQuizList(currentPage);
         } else if (title === QuizListTitles.MY_INCORRECT_LIST) {
@@ -59,7 +64,7 @@ const DetailList = ({ title }) => {
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, sortOption]);
 
   if (!listData || listData.content.length === 0) {
     return <p>표시할 리스트가 없습니다.</p>;
@@ -73,6 +78,7 @@ const DetailList = ({ title }) => {
   return (
     <div className="detail-list-container">
       <h2>{title}</h2>
+      <DetailSortDropdown onSelectSortOption={handleSelectSort} title={title}/>
       <ul>
         {listType === "quiz" ? (
           listData.content.map((item) => (
