@@ -18,6 +18,9 @@ import KakaoLoginCallback from "../pages/login/social/kakaoLoginCallBack";
 import RegisterOauth from "../pages/register/RegisterOauth";
 import NaverLoginCallback from "../pages/login/social/naverLoginCallBack";
 import { FindID } from "../pages/login/findID/FindID";
+import AdminPageLayout from "../pages/admin/AdminPageLayout";
+import ContentTemplate from "../components/admin/ContentTemplate";
+import AdminUsersControl from "../pages/admin/AdminUsersControl";
 
 const router = createBrowserRouter([
   {
@@ -117,11 +120,32 @@ const router = createBrowserRouter([
       },
       {
         path: "admin",
-        element: <MyPageLayout />,
+        element: <AdminPageLayout />,
         children: [
           {
             index: true,
-            element: <MyPage />,
+            element: <ContentTemplate />,
+            // loader: MyPageLoader,
+          },
+          {
+            path: "users-control",
+            element: <AdminUsersControl />,
+          },
+          {
+            path: "posts-control",
+            element: <ContentTemplate />,
+          },
+          {
+            path: "quizzes-control",
+            element: <ContentTemplate />,
+          },
+          {
+            path: "reports-control",
+            element: <ContentTemplate />,
+          },
+          {
+            path: "others",
+            element: <ContentTemplate />,
           },
         ],
       },

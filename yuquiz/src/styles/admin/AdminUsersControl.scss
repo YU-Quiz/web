@@ -1,0 +1,67 @@
+.admin-users-control {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
+    .user-list {
+      margin-bottom: 20px;
+  
+      ul {
+        list-style: none;
+        padding: 0;
+        
+        li {
+          margin-bottom: 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          
+          button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+            &:hover {
+              background-color: #2980b9;
+            }
+          }
+        }
+      }
+    }
+  
+    .user-actions {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      
+      button {
+        margin-right: 10px;
+        padding: 5px 10px;
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        
+        &:hover {
+          background-color: #c0392b;
+        }
+      }
+      
+      .close-button {
+        background-color: #95a5a6;
+        
+        &:hover {
+          background-color: #7f8c8d;
+        }
+      }
+    }
+  }
+  
