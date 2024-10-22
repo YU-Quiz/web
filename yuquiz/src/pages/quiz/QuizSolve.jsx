@@ -91,6 +91,9 @@ export const QuizSolve = () => {
     if (reportReason === "OTHER" && !customReason) {
       alert("기타는 사유를 작성해주세요.");
       return;
+    } else if (!reportReason) {
+      alert("신고 유형은 필수 입력입니다.");
+      return;
     }
     await sendReport(
       {

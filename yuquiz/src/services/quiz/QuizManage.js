@@ -139,10 +139,10 @@ const sendReport = async (data, quizID) => {
     }
     return response;
   } catch (error) {
-    if (error.response) {
-      throw new Error("신고 과정 중 문제가 발생했습니다. 다시 시도해주세요.");
+    if (error.response.status === HttpStatusCode.Conflict) {
+      alert(error.response.message || "이미 신고한 퀴즈입니다.");
     } else {
-      throw new Error("서버와 연결할 수 없습니다.");
+      alert("존재하지 않는 퀴즈거나 서버와 연결할 수 없습니다.");
     }
   }
 };
