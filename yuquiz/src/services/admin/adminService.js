@@ -39,4 +39,24 @@ const getUsersInfo = async(sort=SORT_OPTIONS.DATE_DESC, page=0) =>{
       }
 }
 
+const suspendUser = async(status, userId)=>{
+  try {
+    const params ={
+      status: status,
+    };
+
+    const response = await api.patch(`/admin/users/${userId}`, {params: params});
+  } catch (error) {
+    if(error.response){
+      if(error.response.status === HttpStatusCode.NotFound){
+        throw new Error(`${error.response.data.message}`);
+      }else{
+        throw new Error('회원 정지 중 문제 발생. 다시 시도해주세요.');  
+      };
+    }else{
+        throw new Error('서버와 연결할 수 없습니다.');
+    }
+  }
+}
+
 export default getUsersInfo;
