@@ -1,45 +1,40 @@
 .users-info-list {
-    padding: 10px; /* padding을 줄여 전체적인 여백 감소 */
-    overflow-y: auto; /* 스크롤 추가 */
-  
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0; /* 추가적인 리스트 내부 여백 제거 */
-  
-      .user-item {
-        background-color: white;
-        padding: 8px; /* padding을 줄여 항목 크기 감소 */
-        border-radius: 8px;
-        margin-bottom: 8px; /* 항목 간의 간격을 줄임 */
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  
-        &:hover {
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse; // Removes spacing between table cells
+  font-size: 0.9rem;
+
+  table {
+    width: 100%;
+    border: 1px solid #ccc;
+
+    thead {
+      background-color: #86c232; // Green background for the header
+      color: white;
+
+      th {
+        padding: 10px;
+        border-bottom: 2px solid #2e7d32;
+        text-align: left;
+        font-weight: bold;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: #f9f9f9; // Light background for alternating rows
         }
-  
-        .user-details {
-          display: flex;
-          flex-direction: column;
-  
-          .user-name {
-            font-weight: bold;
-            font-size: 14px; /* 글씨 크기를 줄여서 높이 감소 */
-          }
-  
-          .user-nickname,
-          .user-email,
-          .user-created {
-            margin-top: 2px; /* 항목들 사이 간격 줄임 */
-            font-size: 12px; /* 글씨 크기를 줄여서 높이 감소 */
-            color: #555;
-          }
-  
-          .user-created {
-            font-style: italic;
-          }
+
+        &:hover {
+          background-color: #e2f0e2; // Light hover effect on rows
+        }
+
+        td {
+          padding: 8px 10px;
+          border-bottom: 1px solid #ccc;
         }
       }
     }
   }
-  
+}
