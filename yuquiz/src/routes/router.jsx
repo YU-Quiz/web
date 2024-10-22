@@ -130,6 +130,7 @@ const router = createBrowserRouter([
           {
             path: "users-control",
             element: <AdminUsersControl />,
+            // loader: AdminUsersLoader,
           },
           {
             path: "posts-control",
