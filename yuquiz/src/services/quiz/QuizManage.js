@@ -134,6 +134,9 @@ const sendReport = async (data, quizID) => {
       `${SERVER_API}/quizzes/${quizID}/report`,
       data
     );
+    if (response) {
+      alert("신고 성공!");
+    }
     return response;
   } catch (error) {
     if (error.response) {
