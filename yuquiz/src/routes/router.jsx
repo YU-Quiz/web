@@ -42,6 +42,7 @@ const router = createBrowserRouter([
         path: "resetPW",
         element: <ReqResetPW />,
       },
+      {
         path: "findID",
         element: <FindID />,
       },
