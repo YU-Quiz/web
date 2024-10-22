@@ -126,6 +126,16 @@
   top: 50%;
   transform: translateY(-50%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  .report-title-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .report-quit-button{
+      border: none;
+      background-color: transparent;
+      size: 10px;
+    }
+  }
 }
 
 /* 신고 내용 입력 칸 */

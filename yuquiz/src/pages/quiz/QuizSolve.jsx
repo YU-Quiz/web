@@ -84,13 +84,18 @@ export const QuizSolve = () => {
       setIsLiked(liked);
     }
   };
-
+  const handleReportMordalClose = () => {
+    setIsReportModalOpen(false);
+  };
   const handleReportSubmit = async () => {
-    const reason = reportReason === "기타" ? customReason : reportReason;
+    if (reportReason === "OTHER" && !customReason) {
+      alert("기타는 사유를 작성해주세요.");
+      return;
+    }
     await sendReport(
       {
-        reason: reason,
-        type: "REPORT",
+        reason: customReason,
+        type: reportReason,
       },
       quizId
     );
@@ -165,13 +170,22 @@ export const QuizSolve = () => {
         className="report-modal"
         overlayClassName="modal-overlay" /* 배경 어둡게 */
       >
-        <h2>🚨 신고하기</h2>
+        <div className="report-title-container">
+          <h2>🚨 신고하기</h2>
+          <button
+            className="report-quit-button"
+            onClick={handleReportMordalClose}
+          >
+            ❌
+          </button>
+        </div>
+        {/*INAPPROPRIATE_CONTENT, COPYRIGHT_VIOLATION, FRAUDULENT_INFORMATION, EXPLICIT_CONTENT, ISSUE_ERROR, OTHER*/}
         <div className="report-options">
           <label>
             <input
               type="radio"
-              value="부적절한 콘텐츠"
-              checked={reportReason === "부적절한 콘텐츠"}
+              value="INAPPROPRIATE_CONTENT"
+              checked={reportReason === "INAPPROPRIATE_CONTENT"}
               onChange={(e) => setReportReason(e.target.value)}
             />
             부적절한 콘텐츠
@@ -179,8 +193,8 @@ export const QuizSolve = () => {
           <label>
             <input
               type="radio"
-              value="저작권 침해"
-              checked={reportReason === "저작권 침해"}
+              value="COPYRIGHT_VIOLATION"
+              checked={reportReason === "COPYRIGHT_VIOLATION"}
               onChange={(e) => setReportReason(e.target.value)}
             />
             저작권 침해
@@ -188,8 +202,8 @@ export const QuizSolve = () => {
           <label>
             <input
               type="radio"
-              value="사기성 정보"
-              checked={reportReason === "사기성 정보"}
+              value="FRAUDULENT_INFORMATION"
+              checked={reportReason === "FRAUDULENT_INFORMATION"}
               onChange={(e) => setReportReason(e.target.value)}
             />
             사기성 정보
@@ -197,8 +211,8 @@ export const QuizSolve = () => {
           <label>
             <input
               type="radio"
-              value="음란물 및 부적절한 내용"
-              checked={reportReason === "음란물 및 부적절한 내용"}
+              value="EXPLICIT_CONTENT"
+              checked={reportReason === "EXPLICIT_CONTENT"}
               onChange={(e) => setReportReason(e.target.value)}
             />
             음란물 및 부적절한 내용
@@ -206,15 +220,24 @@ export const QuizSolve = () => {
           <label>
             <input
               type="radio"
-              value="기타"
-              checked={reportReason === "기타"}
+              value="ISSUE_ERROR"
+              checked={reportReason === "ISSUE_ERROR"}
+              onChange={(e) => setReportReason(e.target.value)}
+            />
+            문제 오류
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="OTHER"
+              checked={reportReason === "OTHER"}
               onChange={(e) => setReportReason(e.target.value)}
             />
             기타
           </label>
-          {reportReason === "기타" && (
+          {reportReason && (
             <textarea
-              placeholder="기타 신고 사유를 입력하세요"
+              placeholder="신고 사유를 입력해주세요!! (기타는 필수)"
               value={customReason}
               onChange={(e) => setCustomReason(e.target.value)}
               className="custom-reason-input"
