@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../../../styles/admin/UsersInfoList.scss";
 import UserItem from './UserItem';
 
-const UsersInfoList = ({ users }) => {
+const UsersInfoList = ({ users, onSuspend, onBan }) => {
   const [openDropdownId, setOpenDropdownId] = useState(null); // State to track the open dropdown by user ID
 
   // Function to handle dropdown toggle
@@ -34,6 +34,8 @@ const UsersInfoList = ({ users }) => {
               user={user} 
               isDropdownOpen={openDropdownId === user.id} // Pass the open status
               toggleDropdown={() => toggleDropdown(user.id)} // Pass toggle function
+              onSuspend={onSuspend}
+              onBan = {onBan}
             />
           ))}
         </tbody>

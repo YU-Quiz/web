@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/admin/AdminUsersControl.scss";
-import getUsersInfo from '../../services/admin/adminService';
+import {forceDeleteUser, getUsersInfo, suspendUser} from '../../services/admin/adminService';
 import UsersInfoList from '../../components/admin/users/UsersInfoList';
 import UsersSortDropdown from '../../components/admin/users/UsersSortDropdown';
 
@@ -21,7 +21,7 @@ const AdminUsersControl = () => {
       }
     };
     fetchUsers();
-  }, [currentPage, sortOption]);  // currentPage가 변경될 때마다 사용자 정보 다시 로드
+  }, [currentPage, sortOption, usersList]);  // currentPage가 변경될 때마다 사용자 정보 다시 로드
 
   const handleSelectSort = (sortOption) =>{
     setSortOption(sortOption);
@@ -30,6 +30,28 @@ const AdminUsersControl = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);  // 페이지 번호 변경
     console.log("pagenumber",pageNumber);
+  };
+
+  // Handle suspension of user
+  const handleSuspend = async (userId) => {
+    try {
+      await suspendUser('SUSPEND',userId); // 임시로 정지
+      alert("회원이 정지되었습니다."); // Show success message
+    } catch (error) {
+      console.error("정지 중 오류 발생:", error);
+      alert("회원 정지에 실패했습니다."); // Show error message
+    }
+  };
+
+  // Handle banning of user
+  const handleBan = async (userId) => {
+    try {
+      await forceDeleteUser(userId);
+      alert("회원이 추방되었습니다."); // Show success message
+    } catch (error) {
+      console.error("추방 중 오류 발생:", error);
+      alert("회원 추방에 실패했습니다."); // Show error message
+    }
   };
 
   return (
@@ -42,7 +64,7 @@ const AdminUsersControl = () => {
           <UsersSortDropdown onSelectSortOption={handleSelectSort} />
         </div>
 
-        <UsersInfoList users={usersList} /> 
+        <UsersInfoList users={usersList} onSuspend={handleSuspend} onBan={handleBan}/> 
         <div className="pagination">
           {Array.from({ length: totalPages }, (_, index) => (
             <button

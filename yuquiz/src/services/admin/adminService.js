@@ -44,8 +44,9 @@ const suspendUser = async(status, userId)=>{
     const params ={
       status: status,
     };
-
-    const response = await api.patch(`/admin/users/${userId}`, {params: params});
+    console.log(status, userId);
+    const response = await api.patch(`/admin/users/${userId}`, null,{params: params});
+    console.log(response);
   } catch (error) {
     if(error.response){
       if(error.response.status === HttpStatusCode.NotFound){
@@ -59,4 +60,16 @@ const suspendUser = async(status, userId)=>{
   }
 }
 
-export default getUsersInfo;
+const forceDeleteUser = async(userId)=>{
+  try {
+    const response = await api.delete(`/admin/users/${userId}`);
+  } catch (error) {
+    if(error.response){
+      throw new Error(`회원 강제탈퇴중 문제 발생. 다시 시도해주세요.`);
+    }else{
+      throw new Error('서버와 연결할 수 없습니다.');
+    }
+  }
+}
+
+export {getUsersInfo, suspendUser, forceDeleteUser};
