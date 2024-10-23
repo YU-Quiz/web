@@ -14,6 +14,10 @@ import { ShortAnswer } from "../../components/solveQuiz/ShortAnswer";
 import { IoMdArrowBack } from "react-icons/io";
 import { IoEllipsisVertical } from "react-icons/io5";
 import Modal from "react-modal";
+import { REPORT_TYPES } from "../../constants/report/reportType";
+
+// 신고 유형 상수 분리 및 표시 문자열 포함
+const reportType = REPORT_TYPES;
 
 export const QuizSolve = () => {
   const { quizId } = useParams();
@@ -85,12 +89,22 @@ export const QuizSolve = () => {
     }
   };
 
+  const handleReportMordalClose = () => {
+    setIsReportModalOpen(false);
+  };
+
   const handleReportSubmit = async () => {
-    const reason = reportReason === "기타" ? customReason : reportReason;
+    if (reportReason === reportType.OTHER.value && !customReason) {
+      alert("기타는 사유를 작성해주세요.");
+      return;
+    } else if (!reportReason) {
+      alert("신고 유형은 필수 입력입니다.");
+      return;
+    }
     await sendReport(
       {
-        reason: reason,
-        type: "REPORT",
+        reason: customReason,
+        type: reportReason,
       },
       quizId
     );
@@ -165,56 +179,31 @@ export const QuizSolve = () => {
         className="report-modal"
         overlayClassName="modal-overlay" /* 배경 어둡게 */
       >
-        <h2>🚨 신고하기</h2>
+        <div className="report-title-container">
+          <h2>🚨 신고하기</h2>
+          <button
+            className="report-quit-button"
+            onClick={handleReportMordalClose}
+          >
+            ❌
+          </button>
+        </div>
+
         <div className="report-options">
-          <label>
-            <input
-              type="radio"
-              value="부적절한 콘텐츠"
-              checked={reportReason === "부적절한 콘텐츠"}
-              onChange={(e) => setReportReason(e.target.value)}
-            />
-            부적절한 콘텐츠
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="저작권 침해"
-              checked={reportReason === "저작권 침해"}
-              onChange={(e) => setReportReason(e.target.value)}
-            />
-            저작권 침해
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="사기성 정보"
-              checked={reportReason === "사기성 정보"}
-              onChange={(e) => setReportReason(e.target.value)}
-            />
-            사기성 정보
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="음란물 및 부적절한 내용"
-              checked={reportReason === "음란물 및 부적절한 내용"}
-              onChange={(e) => setReportReason(e.target.value)}
-            />
-            음란물 및 부적절한 내용
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="기타"
-              checked={reportReason === "기타"}
-              onChange={(e) => setReportReason(e.target.value)}
-            />
-            기타
-          </label>
-          {reportReason === "기타" && (
+          {Object.values(reportType).map((type) => (
+            <label key={type.value}>
+              <input
+                type="radio"
+                value={type.value}
+                checked={reportReason === type.value}
+                onChange={(e) => setReportReason(e.target.value)}
+              />
+              {type.label}
+            </label>
+          ))}
+          {reportReason && (
             <textarea
-              placeholder="기타 신고 사유를 입력하세요"
+              placeholder="신고 사유를 입력해주세요!! (기타는 필수)"
               value={customReason}
               onChange={(e) => setCustomReason(e.target.value)}
               className="custom-reason-input"
