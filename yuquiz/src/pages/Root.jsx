@@ -5,11 +5,12 @@ import QuizCard from "../components/root/QuizCard";
 import "../styles/root/Root.scss";
 
 const Root = () => {
+
   return (
     <div className="root-container">
         <div className="sidebar">
             <ProfileCard />
-            <Link to='/admin/users-control'>관리자 페이지</Link>
+            
         </div>
         <div className="dashboard-container">
             <nav className="navbar">

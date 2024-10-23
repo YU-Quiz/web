@@ -3,6 +3,7 @@ import "../../styles/admin/AdminUsersControl.scss";
 import {forceDeleteUser, getUsersInfo, suspendUser} from '../../services/admin/adminService';
 import UsersInfoList from '../../components/admin/users/UsersInfoList';
 import UsersSortDropdown from '../../components/admin/users/UsersSortDropdown';
+import { getUser } from '../../services/user/userService';
 
 const AdminUsersControl = () => {
   const [sortOption, setSortOption] = useState("DATE_DESC");
@@ -16,6 +17,9 @@ const AdminUsersControl = () => {
         const usersInfo = await getUsersInfo(sortOption,currentPage); // 현재 페이지로 사용자 정보 요청
         setUsersList(usersInfo.content);
         setTotalPages(usersInfo.totalPages);  // 전체 페이지 수 업데이트
+
+        const admin = await getUser();
+        // console.log(admin);
       } catch (error) {
         console.error('회원 목록 데이터를 불러오는 중 오류 발생:', error); 
       }

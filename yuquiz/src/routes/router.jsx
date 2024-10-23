@@ -1,6 +1,6 @@
 // src/router/index.js
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import Root from "../pages/Root";
+import Root, { UserInfoLoader } from "../pages/Root";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import { QuizSolve } from "../pages/quiz/QuizSolve";
 import { QuizCreator } from "../pages/quiz/QuizCreator";
