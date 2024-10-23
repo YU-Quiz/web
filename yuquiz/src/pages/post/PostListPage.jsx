@@ -31,14 +31,10 @@ const PostListPage = () => {
         setPostsList(postsListData.content);
 
         setTotalPages(postsListData.totalPages);
-        // console.log(postsListData);
-        
       } catch (error) {
         console.error('게시글 목록 데이터를 불러오는 중 오류 발생:', error);
       }
     };
-
-    // console.log(currentPage);
     fetchData();
   }, [currentPage, categoryId, keyword, sortOption]);
 
