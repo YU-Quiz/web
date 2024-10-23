@@ -23,6 +23,7 @@ import { FindID } from "../pages/login/findID/FindID";
 import AdminPageLayout from "../pages/admin/AdminPageLayout";
 import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
+import AdminPostsControl from "../pages/admin/AdminPostsControl";
 
 const router = createBrowserRouter([
   {
@@ -140,7 +141,7 @@ const router = createBrowserRouter([
           },
           {
             path: "posts-control",
-            element: <ContentTemplate />,
+            element: <AdminPostsControl />,
           },
           {
             path: "quizzes-control",
