@@ -71,6 +71,11 @@ const ProfileCard = () => {
           )}
         </div>
       </div>
+      {isAuthenticated&&userInfo.role==="ADMIN" ? (
+        <Link to='/admin/users-control'>관리자 페이지</Link>
+      ):(
+        <></>
+      )}
     </div>
   );
 };
