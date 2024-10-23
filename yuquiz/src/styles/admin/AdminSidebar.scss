@@ -1,21 +1,25 @@
 .admin-sidebar {
-    width: 200px;
-    background-color: #2c3e50; /* 사이드바 배경색 설정 */
-    color: white;
-    padding: 20px;
-    height: 100vh;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  background-color: #2c3e50; /* 사이드바 배경색 설정 */
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: relative; /* 자식 요소의 absolute 위치를 기준으로 하기 위해 relative 추가 */
 
-     & ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      
-     & li {
-        margin-bottom: 20px;
-        cursor: pointer;
-      }
+  & ul {
+      list-style-type: none;
+      padding: 0;
   }
   
-  
-  
+  & li {
+      margin-bottom: 20px;
+      cursor: pointer;
+  }
+
+  .gohome {
+      position: absolute;
+      bottom: 20px; /* 사이드바 하단으로부터 20px 위에 위치 */
+      left: 20px;   /* 좌측 패딩과 맞추기 위해 20px */
+  }
+}
