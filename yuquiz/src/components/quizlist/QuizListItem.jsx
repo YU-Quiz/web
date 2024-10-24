@@ -2,6 +2,7 @@
 import React from "react";
 import "../../styles/quiz_list_page/QuizListItem.scss";
 import { Link } from "react-router-dom";
+import { QUIZ_TYPE } from "../../constants/quiz/quizType";
 const QuizListItem = ({ quiz }) => {
   const {
     quizId,
@@ -15,20 +16,7 @@ const QuizListItem = ({ quiz }) => {
     subject,
   } = quiz;
 
-  // 퀴즈 유형 변환 함수
-  const getQuizTypeLabel = (quizType) => {
-    switch (quizType) {
-      case "MULTIPLE_CHOICE":
-        return "객관식";
-      case "TRUE_FALSE":
-        return "O/X";
-      case "SHORT_ANSWER":
-        return "단답식";
-      default:
-        return "일반"; // 기본값
-    }
-  };
-
+  const quizTypeLabel = QUIZ_TYPE[quizType]?.label || "유형 없음";
   return (
     <div className="quiz-list-item">
       <div className="quiz-header">
@@ -39,8 +27,7 @@ const QuizListItem = ({ quiz }) => {
         >
           <Link to={`/quiz/play/${quizId}`}>{quizTitle}</Link>
         </h2>
-        <p className="quiz-type">{getQuizTypeLabel(quizType)}</p>{" "}
-        {/* 퀴즈 유형 표시 */}
+        <p className="quiz-type">{quizTypeLabel}</p> {/* 퀴즈 유형 표시 */}
         <p className="quiz-type">{subject || "과목"}</p> {/* 퀴즈 과목 표시 */}
       </div>
       <div className="quiz-info-container">
