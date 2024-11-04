@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
-import { SORT_QUIZ_POST } from "../../constants/sort/SortType";
+import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
 const SORT_OPTIONS = SORT_QUIZ_POST;

@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
-import { SORT_QUIZ_POST } from "../../constants/sort/SortType";
+import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
 
 const SORT_OPTIONS = SORT_QUIZ_POST;
 // 게시글 리스트 조회
