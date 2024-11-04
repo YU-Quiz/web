@@ -7,7 +7,6 @@ import {
 } from "../../services/admin/adminService";
 import UsersInfoList from "../../components/admin/users/UsersInfoList";
 import UsersSortDropdown from "../../components/admin/users/UsersSortDropdown";
-import { getUser } from "../../services/user/userService";
 
 const AdminUsersControl = () => {
   const [sortOption, setSortOption] = useState("DATE_DESC");
