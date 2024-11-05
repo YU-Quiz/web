@@ -16,7 +16,8 @@ const Root = () => {
             <Link to="/quiz/list">Quizzes</Link>
             <Link to="/posts/list">Posts</Link>
             <Link to="/leaderboard">LeaderBoard</Link>
-            <Link to="/quizseries/list">문제집</Link>
+            <Link to="/quizseries/list">Quiz Series</Link>
+            <Link to="/study/list">Study</Link>
           </div>
           <Link to="/quiz/create" className="create-btn">
             Create Quiz

@@ -60,7 +60,35 @@ const router = createBrowserRouter([
         element: <RegisterOauth />,
       },
       {
+        //수정필요 현재 프로토타입임
         path: "quizseries",
+        element: (
+          <>
+            <Outlet />
+          </>
+        ),
+        children: [
+          {
+            path: "list",
+            element: <QuizSeriesPage />,
+          },
+          {
+            path: "create",
+            element: <QuizCreator />,
+          },
+          {
+            path: ":seriesId",
+            element: <QuizSeriesDetail />,
+          },
+          {
+            path: "play/:quizId",
+            element: <QuizSolve />,
+          },
+        ],
+      },
+      {
+        //현재 임시
+        path: "study",
         element: (
           <>
             <Outlet />
