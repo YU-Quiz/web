@@ -1,0 +1,44 @@
+.quiz-series-page-container {
+    background-color: #f9f9f9;
+  
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      background-color: #333;
+      padding: 10px 20px;
+  
+      .nav-button {
+        color: white;
+        font-size: 16px;
+      }
+    }
+  
+    .controls-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+  
+    .series-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+      .series-item {
+        margin: 10px 0;
+        padding: 15px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+  }
+  

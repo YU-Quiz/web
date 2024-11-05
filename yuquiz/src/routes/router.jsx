@@ -23,6 +23,7 @@ import { FindID } from "../pages/login/findID/FindID";
 import AdminPageLayout from "../pages/admin/AdminPageLayout";
 import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
+import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,32 @@ const router = createBrowserRouter([
       {
         path: "register/oauth",
         element: <RegisterOauth />,
+      },
+      {
+        path: "quizseries",
+        element: (
+          <>
+            <Outlet />
+          </>
+        ),
+        children: [
+          {
+            path: "list",
+            element: <QuizSeriesPage />,
+          },
+          {
+            path: "create",
+            element: <QuizCreator />,
+          },
+          {
+            path: "edit/:quizId",
+            element: <QuizFix />,
+          },
+          {
+            path: "play/:quizId",
+            element: <QuizSolve />,
+          },
+        ],
       },
       {
         path: "my",
