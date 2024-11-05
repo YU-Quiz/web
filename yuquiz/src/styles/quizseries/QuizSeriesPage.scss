@@ -1,44 +1,81 @@
-.quiz-series-page-container {
-    background-color: #f9f9f9;
-  
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      background-color: #333;
-      padding: 10px 20px;
-  
-      .nav-button {
-        color: white;
-        font-size: 16px;
+.study-group-list-page-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px 20px;
+
+    .nav-button {
+      color: white;
+      font-size: 16px;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
       }
-    }
-  
-    .controls-container {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0;
-    }
-  
-    .series-list {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-  
-      .series-item {
-        margin: 10px 0;
-        padding: 15px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        width: 80%;
-        display: flex;
-        justify-content: space-between;
-      }
-    }
-  
-    .pagination-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
     }
   }
-  
+
+  .controls-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .study-group-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .study-group-item {
+      margin: 10px 0;
+      padding: 15px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .study-group-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #007bff;
+        text-decoration: none;
+
+        &:hover {
+          color: #0056b3;
+        }
+      }
+    }
+  }
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    .page-button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      margin: 0 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+
+      &.active {
+        background-color: #0056b3;
+      }
+
+      &:disabled {
+        background-color: #ccc;
+      }
+    }
+  }
+}

@@ -89,6 +89,7 @@ const QuizSeriesPage = () => {
       <div className="controls-container">
         <SearchBar onSearch={handleSearch} />
         <SortDropdown onSelectSortOption={handleSortChange} />
+        <button>+ 문제집 생성</button>
       </div>
 
       {isLoading && <p>로딩 중...</p>}
