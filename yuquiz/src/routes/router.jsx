@@ -25,6 +25,8 @@ import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
 import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
 import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
+import StudyGroupList from "../pages/study/StudyGroupList";
+import StudyGroupDetail from "../pages/study/StudyGroupDetail";
 
 const router = createBrowserRouter([
   {
@@ -97,15 +99,15 @@ const router = createBrowserRouter([
         children: [
           {
             path: "list",
-            element: <QuizSeriesPage />,
+            element: <StudyGroupList />,
           },
           {
             path: "create",
             element: <QuizCreator />,
           },
           {
-            path: ":seriesId",
-            element: <QuizSeriesDetail />,
+            path: ":studyId",
+            element: <StudyGroupDetail />,
           },
           {
             path: "play/:quizId",
