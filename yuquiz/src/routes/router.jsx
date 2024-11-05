@@ -24,6 +24,7 @@ import AdminPageLayout from "../pages/admin/AdminPageLayout";
 import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
 import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
+import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
 
 const router = createBrowserRouter([
   {
@@ -75,8 +76,8 @@ const router = createBrowserRouter([
             element: <QuizCreator />,
           },
           {
-            path: "edit/:quizId",
-            element: <QuizFix />,
+            path: ":seriesId",
+            element: <QuizSeriesDetail />,
           },
           {
             path: "play/:quizId",

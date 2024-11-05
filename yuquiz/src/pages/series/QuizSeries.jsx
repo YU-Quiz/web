@@ -52,7 +52,7 @@ const QuizSeriesPage = () => {
   const handleCreateSeries = async (newSeriesName) => {
     try {
       await createSeries({ name: newSeriesName });
-      setSearchQuery(""); // Reset search to show all after creation
+      setSearchQuery("");
     } catch (error) {
       console.error("문제집 생성에 실패했습니다.");
     }
@@ -100,7 +100,9 @@ const QuizSeriesPage = () => {
       <div className="series-list">
         {seriesList.map((series) => (
           <div key={series.id} className="series-item">
-            <h3>{series.name}</h3>
+            <Link to={`/quizseries/${series.id}`} className="series-name">
+              <h3>{series.name}</h3>
+            </Link>
             <button
               onClick={() =>
                 handleEditSeries(series.id, prompt("새 이름을 입력하세요:"))

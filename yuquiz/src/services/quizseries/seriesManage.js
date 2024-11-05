@@ -55,3 +55,13 @@ export const deleteSeries = async (seriesId) => {
     throw error;
   }
 };
+// 문제집 상세 정보 조회
+export const getSeriesDetail = async (seriesId) => {
+  try {
+    const response = await api.get(`${API_BASE_URL}/${seriesId}`);
+    return response.data;
+  } catch (error) {
+    console.error("문제집 상세 정보 조회 실패:", error);
+    throw error;
+  }
+};
