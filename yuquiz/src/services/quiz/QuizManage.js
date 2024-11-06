@@ -1,21 +1,14 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
+import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
-// sort 값을 위한 enum (API에서 허용하는 값들)
-const SORT_OPTIONS = {
-  LIKE_DESC: "LIKE_DESC",
-  LIKE_ASC: "LIKE_ASC",
-  VIEW_DESC: "VIEW_DESC",
-  VIEW_ASC: "VIEW_ASC",
-  DATE_DESC: "DATE_DESC",
-  DATE_ASC: "DATE_ASC",
-};
+const SORT_OPTIONS = SORT_QUIZ_POST;
 
 const getQuizList = async (
   keyword = "",
   subject = null,
-  sort = SORT_OPTIONS.DATE_DESC,
+  sort = "DATE_DESC",
   page = 0
 ) => {
   try {
