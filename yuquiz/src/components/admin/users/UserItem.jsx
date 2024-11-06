@@ -3,10 +3,11 @@ import { FaEllipsisV } from 'react-icons/fa';
 import "../../../styles/admin/UserItem.scss";
 
 const UserItem = ({ user, isDropdownOpen, toggleDropdown, onSuspend, onBan }) => {
-  const { username, id, nickname, email, createdAt } = user;
+  const { username, id, nickname, email, createdAt, isSuspended } = user;
 
   const handleSuspendClick = () => {
-    onSuspend(id); // Call the parent handler with the user ID
+    onSuspend(isSuspended, id)
+
     toggleDropdown();
   };
 
@@ -28,7 +29,9 @@ const UserItem = ({ user, isDropdownOpen, toggleDropdown, onSuspend, onBan }) =>
 
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <button onClick={handleSuspendClick} className="dropdown-item">회원 정지</button>
+              <button onClick={handleSuspendClick} className="dropdown-item">
+                {isSuspended ? "회원 정지 해제" : "회원 정지"}
+              </button>
               <button onClick={handleBanClick} className="dropdown-item">회원 탈퇴</button>
             </div>
           )}

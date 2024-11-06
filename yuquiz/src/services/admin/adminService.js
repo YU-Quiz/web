@@ -39,14 +39,15 @@ const getUsersInfo = async(sort=SORT_OPTIONS.DATE_DESC, page=0) =>{
       }
 }
 
+// 회원 정지 토글
 const suspendUser = async(status, userId)=>{
   try {
     const params ={
       status: status,
     };
-    console.log(status, userId);
+
     const response = await api.patch(`/admin/users/${userId}`, null,{params: params});
-    console.log(response);
+
   } catch (error) {
     if(error.response){
       if(error.response.status === HttpStatusCode.NotFound){
@@ -60,6 +61,7 @@ const suspendUser = async(status, userId)=>{
   }
 }
 
+// 회원 강제 탈퇴
 const forceDeleteUser = async(userId)=>{
   try {
     const response = await api.delete(`/admin/users/${userId}`);
@@ -68,6 +70,30 @@ const forceDeleteUser = async(userId)=>{
       throw new Error(`회원 강제탈퇴중 문제 발생. 다시 시도해주세요.`);
     }else{
       throw new Error('서버와 연결할 수 없습니다.');
+    }
+  }
+}
+
+const getPosts = async(sort=SORT_OPTIONS.DATE_ASC, page=0)=>{
+  try {
+    const params = {};
+
+    if (sort && Object.values(SORT_OPTIONS).includes(sort)) {
+      params.sort = sort;
+    } else {
+      params.sort = SORT_OPTIONS.DATE_DESC; // 기본값 설정
+    }
+    if (page >= 0) params.page = page;
+    const response = await api.get("/admin/users", {params: params});
+    
+    return response.data;
+  } catch (error) {
+    if(error.response){
+        console.log(error.response);
+        throw new Error('회원 목록 불러오는 중 문제 발생. 다시 시도해주세요.');
+        
+    }else{
+        throw new Error('서버와 연결할 수 없습니다.');
     }
   }
 }

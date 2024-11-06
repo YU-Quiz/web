@@ -16,6 +16,8 @@ const AdminUsersControl = () => {
         const usersInfo = await getUsersInfo(sortOption,currentPage); // 현재 페이지로 사용자 정보 요청
         setUsersList(usersInfo.content);
         setTotalPages(usersInfo.totalPages);  // 전체 페이지 수 업데이트
+
+        console.log(usersInfo);
       } catch (error) {
         console.error('회원 목록 데이터를 불러오는 중 오류 발생:', error); 
       }
@@ -33,14 +35,22 @@ const AdminUsersControl = () => {
   };
 
   // Handle suspension of user
-  const handleSuspend = async (userId) => {
+  const handleSuspend = async (status, userId) => {
     try {
-      await suspendUser('SUSPEND',userId); // 임시로 정지
-      alert("회원이 정지되었습니다."); // Show success message
+      if(status){
+        await suspendUser('UNSUSPEND',userId);
+        alert("회원이 정지해제되었습니다.");
+      }else{
+        await suspendUser('SUSPEND',userId);
+        alert("회원이 정지되었습니다.");
+      }
+      
     } catch (error) {
       console.error("정지 중 오류 발생:", error);
       alert("회원 정지에 실패했습니다."); // Show error message
     }
+
+    window.location.reload();
   };
 
   // Handle banning of user
