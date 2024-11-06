@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getAdminPosts } from '../../services/admin/adminPostService';
 
 const AdminPostsControl = () => {
     const [sortOption, setSortOption] = useState("DATE_DESC");
@@ -9,9 +10,9 @@ const AdminPostsControl = () => {
     useEffect(() => {
         const fetchData = async () => {
         try {
-            // const usersInfo = await getUsersInfo(sortOption,currentPage); // 현재 페이지로 사용자 정보 요청
-            // setUsersList(usersInfo.content);
-            // setTotalPages(usersInfo.totalPages);  // 전체 페이지 수 업데이트
+            const postlist = await getAdminPosts(sortOption, currentPage); // 현재 페이지로 사용자 정보 요청
+            setPostList(postList.content);
+            setTotalPages(postList.totalPages);  // 전체 페이지 수 업데이트
         } catch (error) {
             console.error('회원 목록 데이터를 불러오는 중 오류 발생:', error); 
         }
@@ -30,18 +31,18 @@ const AdminPostsControl = () => {
                 </div>
 
                 {/* <UsersInfoList users={usersList} onSuspend={handleSuspend} onBan={handleBan}/>  */}
-                {/* <div className="pagination">
+                <div className="pagination">
                 {Array.from({ length: totalPages }, (_, index) => (
                     <button
                     key={index}
                     className={`page-button ${index === currentPage ? 'active' : ''}`}
-                    onClick={() => handlePageChange(index)}
+                    // onClick={() => handlePageChange(index)}
                     disabled={index === currentPage} // 현재 페이지는 비활성화
                     >
                     {index + 1}
                     </button>
                 ))}
-                </div> */}
+                </div>
             </div>
         </div>
     );

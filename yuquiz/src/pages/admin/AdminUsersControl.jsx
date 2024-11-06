@@ -17,7 +17,6 @@ const AdminUsersControl = () => {
         setUsersList(usersInfo.content);
         setTotalPages(usersInfo.totalPages);  // 전체 페이지 수 업데이트
 
-        console.log(usersInfo);
       } catch (error) {
         console.error('회원 목록 데이터를 불러오는 중 오류 발생:', error); 
       }
