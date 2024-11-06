@@ -37,10 +37,16 @@ const AdminUsersControl = () => {
   };
 
   // Handle suspension of user
-  const handleSuspend = async (userId) => {
+  const handleSuspend = async (isSuspended, userId) => {
     try {
-      await suspendUser("SUSPEND", userId); // 임시로 정지
-      alert("회원이 정지되었습니다."); // Show success message
+      if(isSuspended){ // 정지되어있는 상태라면
+        await suspendUser("UNSUSPEND", userId); // 임시로 정지
+        alert("회원 정지를 해제하였습니다."); // Show success message
+      }else{ // 정지되어 있지 않다면
+        await suspendUser("SUSPEND", userId); // 임시로 정지
+        alert("회원이 정지되었습니다."); // Show success message
+      }
+     
     } catch (error) {
       console.error("정지 중 오류 발생:", error);
       alert("회원 정지에 실패했습니다."); // Show error message

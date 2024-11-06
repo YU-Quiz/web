@@ -9,11 +9,11 @@ const UserItem = ({
   onSuspend,
   onBan,
 }) => {
-  const { username, id, nickname, email, createdAt } = user;
+  const { username, id, nickname, email, createdAt, isSuspended } = user;
   const dropdownRef = useRef(null);
 
   const handleSuspendClick = () => {
-    onSuspend(id);
+    onSuspend(isSuspended,id);
     toggleDropdown();
   };
 
@@ -51,7 +51,7 @@ const UserItem = ({
         {isDropdownOpen && (
           <div className="dropdown-menu">
             <button onClick={handleSuspendClick} className="dropdown-item">
-              회원 정지
+              {isSuspended ? "회원 정지 해제" : "회원 정지"}
             </button>
             <button onClick={handleBanClick} className="dropdown-item">
               회원 탈퇴
