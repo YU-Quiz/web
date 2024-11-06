@@ -1,0 +1,100 @@
+.study-group-detail-page {
+  .back-button {
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 30px; // 여백을 더 크게 조정하여 겹침 방지
+    display: inline-block;
+
+    &:hover {
+      color: #0056b3;
+    }
+  }
+
+  h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .study-group-info {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+
+    .info-item {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 8px;
+
+      .label {
+        font-weight: bold;
+        color: #333;
+      }
+    }
+  }
+
+  .study-group-menu {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &.create-notice {
+        background-color: #007bff;
+        color: white;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+
+      &.delete-notice,
+      &.delete-study {
+        background-color: #dc3545;
+        color: white;
+
+        &:hover {
+          background-color: #c82333;
+        }
+      }
+
+      &.join-study,
+      &.view-members,
+      &.view-requests,
+      &.view-series-list {
+        background-color: #28a745;
+        color: white;
+
+        &:hover {
+          background-color: #218838;
+        }
+      }
+
+      &.edit-study {
+        background-color: #ffc107;
+        color: white;
+
+        &:hover {
+          background-color: #e0a800;
+        }
+      }
+    }
+  }
+
+  .error-message {
+    color: red;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+}

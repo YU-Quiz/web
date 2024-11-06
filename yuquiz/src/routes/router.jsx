@@ -23,6 +23,10 @@ import { FindID } from "../pages/login/findID/FindID";
 import AdminPageLayout from "../pages/admin/AdminPageLayout";
 import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
+import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
+import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
+import StudyGroupList from "../pages/study/StudyGroupList";
+import StudyGroupDetail from "../pages/study/StudyGroupDetail";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +60,60 @@ const router = createBrowserRouter([
       {
         path: "register/oauth",
         element: <RegisterOauth />,
+      },
+      {
+        //수정필요 현재 프로토타입임
+        path: "quizseries",
+        element: (
+          <>
+            <Outlet />
+          </>
+        ),
+        children: [
+          {
+            path: "list",
+            element: <QuizSeriesPage />,
+          },
+          {
+            path: "create",
+            element: <QuizCreator />,
+          },
+          {
+            path: ":seriesId",
+            element: <QuizSeriesDetail />,
+          },
+          {
+            path: "play/:quizId",
+            element: <QuizSolve />,
+          },
+        ],
+      },
+      {
+        //현재 임시
+        path: "study",
+        element: (
+          <>
+            <Outlet />
+          </>
+        ),
+        children: [
+          {
+            path: "list",
+            element: <StudyGroupList />,
+          },
+          {
+            path: "create",
+            element: <QuizCreator />,
+          },
+          {
+            path: ":studyId",
+            element: <StudyGroupDetail />,
+          },
+          {
+            path: "play/:quizId",
+            element: <QuizSolve />,
+          },
+        ],
       },
       {
         path: "my",
