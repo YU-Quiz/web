@@ -22,7 +22,7 @@ const PostItem = ({
       <td>{likeCount}</td>
       <td>{viewCount}</td>
       <td className="dropdown-cell">
-        <button>회원 정지</button>
+        <button onClick={handleDeleteClick}>삭제</button>
       </td>
     </tr>
   );

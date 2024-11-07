@@ -46,6 +46,7 @@ const AdminUsersControl = () => {
         await suspendUser("SUSPEND", userId); // 임시로 정지
         alert("회원이 정지되었습니다."); // Show success message
       }
+      window.location.reload()
      
     } catch (error) {
       console.error("정지 중 오류 발생:", error);
@@ -58,6 +59,7 @@ const AdminUsersControl = () => {
     try {
       await forceDeleteUser(userId);
       alert("회원이 추방되었습니다."); // Show success message
+      window.location.reload()
     } catch (error) {
       console.error("추방 중 오류 발생:", error);
       alert("회원 추방에 실패했습니다."); // Show error message

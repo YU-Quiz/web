@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAdminPosts } from '../../services/admin/adminPostService';
+import { forceDeletePost, getAdminPosts } from '../../services/admin/adminPostService';
 import PostsList from '../../components/admin/posts/PostsList';
 import PostsSortDropdown from '../../components/admin/posts/PostsSortDropdown';
 
@@ -30,6 +30,17 @@ const AdminPostsControl = () => {
         setCurrentPage(pageNumber); // 페이지 번호 변경
     };
 
+    const handleDeletePost = async (postId) => {
+        try {
+          await forceDeletePost(postId);
+          alert("게시글이 삭제되었습니다."); // Show success message
+          window.location.reload()
+        } catch (error) {
+          console.error("게시글 삭제 중 오류 발생:", postId);
+          alert("게시글 삭제에 실패했습니다."); // Show error message
+        }
+    };
+
     return(
         <div className="admin-users-control">
             <h2>게시글 관리</h2>
@@ -40,7 +51,10 @@ const AdminPostsControl = () => {
                 <PostsSortDropdown onSelectSortOption={handleSelectSort} />
                 </div>
 
-                <PostsList posts={postList}/>
+                <PostsList
+                    posts={postList}
+                    onDelete={handleDeletePost}
+                />
                 <div className="pagination">
                 {Array.from({ length: totalPages }, (_, index) => (
                     <button

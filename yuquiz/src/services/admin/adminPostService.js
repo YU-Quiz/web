@@ -17,7 +17,7 @@ const getAdminPosts = async (sort, page) => {
     if (page >= 0) params.page = page;
 
     const response = await api.get("/admin/posts", { params });
-    
+
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -29,4 +29,17 @@ const getAdminPosts = async (sort, page) => {
   }
 };
 
-export { getAdminPosts };
+// 게시글 삭제
+const forceDeletePost = async(postId)=>{
+  try {
+    const response = await api.delete(`/admin/posts/${postId}`);
+  } catch (error) {
+    if(error.response){
+      throw new Error(`게시글 강제삭제중 문제 발생. 다시 시도해주세요.`);
+    }else{
+      throw new Error('서버와 연결할 수 없습니다.');
+    }
+  }
+}
+
+export { getAdminPosts, forceDeletePost };
