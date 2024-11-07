@@ -25,7 +25,7 @@ const AdminUsersControl = () => {
       }
     };
     fetchUsers();
-  }, [currentPage, sortOption, usersList]); // currentPage가 변경될 때마다 사용자 정보 다시 로드
+  }, [currentPage, sortOption]); // currentPage가 변경될 때마다 사용자 정보 다시 로드
 
   const handleSelectSort = (sortOption) => {
     setSortOption(sortOption);

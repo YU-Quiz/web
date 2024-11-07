@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAdminPosts } from '../../services/admin/adminPostService';
 import PostsList from '../../components/admin/posts/PostsList';
+import PostsSortDropdown from '../../components/admin/posts/PostsSortDropdown';
 
 const AdminPostsControl = () => {
     const [sortOption, setSortOption] = useState("DATE_DESC");
@@ -21,9 +22,12 @@ const AdminPostsControl = () => {
         fetchData();
     }, [currentPage, sortOption]);  // currentPage가 변경될 때마다 사용자 정보 다시 로드
 
+    const handleSelectSort = (sortOption) => {
+        setSortOption(sortOption);
+    };
+
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber); // 페이지 번호 변경
-        console.log("pagenumber", pageNumber);
     };
 
     return(
@@ -33,7 +37,7 @@ const AdminPostsControl = () => {
                 <h3>전체 게시글 조회</h3>
 
                 <div className='controls-container'>  
-                {/* <UsersSortDropdown onSelectSortOption={handleSelectSort} /> */}
+                <PostsSortDropdown onSelectSortOption={handleSelectSort} />
                 </div>
 
                 <PostsList posts={postList}/>
