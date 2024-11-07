@@ -27,6 +27,7 @@ import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
 import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
 import StudyGroupList from "../pages/study/StudyGroupList";
 import StudyGroupDetail from "../pages/study/StudyGroupDetail";
+import AdminPostsControl from "../pages/admin/AdminPostsControl";
 
 const router = createBrowserRouter([
   {
@@ -198,7 +199,7 @@ const router = createBrowserRouter([
           },
           {
             path: "posts-control",
-            element: <ContentTemplate />,
+            element: <AdminPostsControl />,
           },
           {
             path: "quizzes-control",

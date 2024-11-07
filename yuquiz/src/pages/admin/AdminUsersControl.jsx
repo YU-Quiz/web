@@ -25,7 +25,7 @@ const AdminUsersControl = () => {
       }
     };
     fetchUsers();
-  }, [currentPage, sortOption, usersList]); // currentPage가 변경될 때마다 사용자 정보 다시 로드
+  }, [currentPage, sortOption]); // currentPage가 변경될 때마다 사용자 정보 다시 로드
 
   const handleSelectSort = (sortOption) => {
     setSortOption(sortOption);
@@ -37,10 +37,17 @@ const AdminUsersControl = () => {
   };
 
   // Handle suspension of user
-  const handleSuspend = async (userId) => {
+  const handleSuspend = async (isSuspended, userId) => {
     try {
-      await suspendUser("SUSPEND", userId); // 임시로 정지
-      alert("회원이 정지되었습니다."); // Show success message
+      if(isSuspended){ // 정지되어있는 상태라면
+        await suspendUser("UNSUSPEND", userId); // 임시로 정지
+        alert("회원 정지를 해제하였습니다."); // Show success message
+      }else{ // 정지되어 있지 않다면
+        await suspendUser("SUSPEND", userId); // 임시로 정지
+        alert("회원이 정지되었습니다."); // Show success message
+      }
+      window.location.reload()
+     
     } catch (error) {
       console.error("정지 중 오류 발생:", error);
       alert("회원 정지에 실패했습니다."); // Show error message
@@ -52,6 +59,7 @@ const AdminUsersControl = () => {
     try {
       await forceDeleteUser(userId);
       alert("회원이 추방되었습니다."); // Show success message
+      window.location.reload()
     } catch (error) {
       console.error("추방 중 오류 발생:", error);
       alert("회원 추방에 실패했습니다."); // Show error message

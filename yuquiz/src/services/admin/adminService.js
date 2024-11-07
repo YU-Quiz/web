@@ -39,14 +39,15 @@ const getUsersInfo = async(sort=SORT_OPTIONS.DATE_DESC, page=0) =>{
       }
 }
 
+// 회원 정지 토글
 const suspendUser = async(status, userId)=>{
   try {
     const params ={
       status: status,
     };
-    console.log(status, userId);
+
     const response = await api.patch(`/admin/users/${userId}`, null,{params: params});
-    console.log(response);
+
   } catch (error) {
     if(error.response){
       if(error.response.status === HttpStatusCode.NotFound){
@@ -60,6 +61,7 @@ const suspendUser = async(status, userId)=>{
   }
 }
 
+// 회원 강제 탈퇴
 const forceDeleteUser = async(userId)=>{
   try {
     const response = await api.delete(`/admin/users/${userId}`);
@@ -71,5 +73,7 @@ const forceDeleteUser = async(userId)=>{
     }
   }
 }
+
+
 
 export {getUsersInfo, suspendUser, forceDeleteUser};

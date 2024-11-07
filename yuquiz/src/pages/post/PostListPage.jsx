@@ -62,11 +62,7 @@ const PostListPage = () => {
         <Link to='/my' className="nav-button">마이페이지</Link>
       </nav>
 
-      <div className='controls-container'>
-        <SearchBar onSearch={handleSearch} />
-        <CategoryDropdown categories={categories} onSelectCategory={handleSelectCategory} />
-        <SortDropdown onSelectSortOption={handleSelectSort} />
-      </div>
+      
 
       <PostList posts={postsList} />
       <div className="pagination">
