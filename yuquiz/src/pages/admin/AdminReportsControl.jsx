@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { forceDeleteQuiz, getAdminQuizzes } from '../../services/admin/adminQuizSerivce';
 import { getAdminReports } from '../../services/admin/adminReportService';
+import ReportsSortDropdown from '../../components/admin/reports/ReportsSortDropdown';
+import ReportsList from '../../components/admin/reports/ReportsList';
 
 const AdminReportsControl = () => {
     const [sortOption, setSortOption] = useState("TYPE_DESC");
@@ -31,18 +32,17 @@ const AdminReportsControl = () => {
 
     return(
         <div className="admin-users-control">
-            <h2>게시글 관리</h2>
+            <h2>신고 관리</h2>
             <div className="user-list">
-                <h3>전체 게시글 조회</h3>
+                <h3>전체 신고 조회</h3>
 
                 <div className='controls-container'>  
-                {/* <QuizzesSortDropdown onSelectSortOption={handleSelectSort} /> */}
+                    <ReportsSortDropdown onSelectSortOption={handleSelectSort}/>
                 </div>
-{/* 
-                <QuizzesList
-                    quizzes={quizList}
-                    onDelete={handleDeleteQuiz}
-                /> */}
+
+                <ReportsList
+                    reports={reportList}
+                />
                 <div className="pagination">
                 {Array.from({ length: totalPages }, (_, index) => (
                     <button

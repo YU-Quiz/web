@@ -43,9 +43,9 @@ const AdminQuizControl = () => {
 
     return(
         <div className="admin-users-control">
-            <h2>게시글 관리</h2>
+            <h2>퀴즈 관리</h2>
             <div className="user-list">
-                <h3>전체 게시글 조회</h3>
+                <h3>전체 퀴즈 조회</h3>
 
                 <div className='controls-container'>  
                 <QuizzesSortDropdown onSelectSortOption={handleSelectSort} />

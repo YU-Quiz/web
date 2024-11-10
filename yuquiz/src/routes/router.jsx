@@ -29,6 +29,7 @@ import StudyGroupList from "../pages/study/StudyGroupList";
 import StudyGroupDetail from "../pages/study/StudyGroupDetail";
 import AdminPostsControl from "../pages/admin/AdminPostsControl";
 import AdminQuizControl from "../pages/admin/AdminQuizControl";
+import AdminReportsControl from "../pages/admin/AdminReportsControl";
 
 const router = createBrowserRouter([
   {
@@ -208,7 +209,7 @@ const router = createBrowserRouter([
           },
           {
             path: "reports-control",
-            element: <ContentTemplate />,
+            element: <AdminReportsControl />,
           },
           {
             path: "others",
