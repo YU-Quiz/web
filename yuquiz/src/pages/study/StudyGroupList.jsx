@@ -31,14 +31,6 @@ const StudyGroupList = () => {
 
   return (
     <div className="study-group-list-page-container">
-      <nav className="navbar">
-        <Link to="/" className="nav-button">
-          홈으로
-        </Link>
-        <Link to="/my" className="nav-button">
-          마이페이지
-        </Link>
-      </nav>
 
       <div className="controls-container">
         <SearchBar onSearch={handleSearch} />

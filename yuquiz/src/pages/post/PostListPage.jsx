@@ -57,12 +57,6 @@ const PostListPage = () => {
 
   return (
     <div className="post-list-page-container">
-      <nav className="navbar">
-        <Link to='/' className="nav-button">홈으로</Link>
-        <Link to='/my' className="nav-button">마이페이지</Link>
-      </nav>
-
-      
 
       <PostList posts={postsList} />
       <div className="pagination">

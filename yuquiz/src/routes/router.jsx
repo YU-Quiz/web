@@ -30,19 +30,18 @@ import StudyGroupDetail from "../pages/study/StudyGroupDetail";
 import AdminPostsControl from "../pages/admin/AdminPostsControl";
 import AdminQuizControl from "../pages/admin/AdminQuizControl";
 import AdminReportsControl from "../pages/admin/AdminReportsControl";
+import RootLayout from "../pages/RootLayout";
+import Home from "../pages/Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <>
-        <Outlet />
-      </>
-    ),
+    element: <RootLayout />,
     children: [
       {
         index: true,
-        element: <Root />,
+        element: <Home />,
+        // element 요소를 Home 컴포넌트로 바꿀 예정입니다.
       },
       {
         path: "login",
