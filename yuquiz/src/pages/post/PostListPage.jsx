@@ -1,9 +1,10 @@
 import React from 'react';
-import { useLoaderData, useSearchParams } from 'react-router-dom';
+import { useLoaderData, useSearchParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PostList from '../../components/postlist/PostList';
 import Dropdown from '../../components/UI/Dropdown';
 import SearchInput from '../../components/UI/SearchInput';
+import Button from '../../components/UI/Button'; // Import the Button component
 import { getPostsList } from '../../services/post/postService';
 import { getCategories } from '../../services/post/postMetaService';
 import { POST_SORT_OPTIONS } from '../../constants/admin/postSortOption';
@@ -80,6 +81,9 @@ const PostListPage = () => {
             defaultOption={POST_SORT_OPTIONS.DATE_DESC}
           />
         </DropdownContainer>
+        <StyledLink to="/posts/new">
+          <Button>Create Post</Button>
+        </StyledLink>
       </FilterContainer>
 
       <PostList posts={postsList} />
@@ -110,7 +114,7 @@ const PostListContainer = styled.div`
 const FilterContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
@@ -119,6 +123,10 @@ const FilterContainer = styled.div`
 const DropdownContainer = styled.div`
   display: flex;
   gap: 10px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;
 
 const Pagination = styled.div`
