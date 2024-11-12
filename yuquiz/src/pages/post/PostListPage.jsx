@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
-import '../../styles/post_list_page/PostListPage.scss';
+import styled from 'styled-components';
 import PostList from '../../components/postlist/PostList';
 import Dropdown from '../../components/UI/Dropdown';
+import SearchInput from '../../components/UI/SearchInput';
 import { getPostsList } from '../../services/post/postService';
 import { getCategories } from '../../services/post/postMetaService';
 import { POST_SORT_OPTIONS } from '../../constants/admin/postSortOption';
@@ -28,11 +29,10 @@ const PostListPage = () => {
   const { categories, postsList, totalPages } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Add "모두" option to the categories array
   const extendedCategories = [{ id: null, categoryName: '모두' }, ...categories];
 
   const handleSelectCategory = (selectedCategory) => {
-    const categoryId = selectedCategory.id !== null ? selectedCategory.id : 0; // Set to 0 if "모두" is selected
+    const categoryId = selectedCategory.id !== null ? selectedCategory.id : 0;
     updateSearchParams({ categoryId, page: 0 });
   };
 
@@ -40,8 +40,13 @@ const PostListPage = () => {
     updateSearchParams({ sort: selectedSort.value, page: 0 });
   };
 
+  const handleSearch = (keyword) => {
+    updateSearchParams({ keyword, page: 0 });
+  };
+
   const updateSearchParams = (newParams) => {
     const params = new URLSearchParams(searchParams);
+
     if (newParams.page !== undefined) {
       params.set('page', newParams.page);
     }
@@ -51,44 +56,88 @@ const PostListPage = () => {
     if (newParams.sort !== undefined) {
       params.set('sort', newParams.sort);
     }
+    if (newParams.keyword !== undefined) {
+      params.set('keyword', newParams.keyword);
+    }
     setSearchParams(params);
-  };
-
-  const handlePageChange = (page) => {
-    updateSearchParams({ page });
   };
 
   const currentPage = parseInt(searchParams.get("page") || "0", 10);
 
   return (
-    <div className="post-list-page-container">
-      <Dropdown
-        options={extendedCategories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
-        onSelect={handleSelectCategory}
-        defaultOption={{ label: "모두", id: null }}
-      />
-      <Dropdown
-        options={Object.values(POST_SORT_OPTIONS)}
-        onSelect={handleSelectSort}
-        defaultOption={POST_SORT_OPTIONS.DATE_DESC}
-      />
+    <PostListContainer>
+      <SearchInput onSearch={handleSearch} />
+      <DropdownContainer>
+        <Dropdown
+          options={extendedCategories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
+          onSelect={handleSelectCategory}
+          defaultOption={{ label: "모두", id: null }}
+        />
+        <Dropdown
+          options={Object.values(POST_SORT_OPTIONS)}
+          onSelect={handleSelectSort}
+          defaultOption={POST_SORT_OPTIONS.DATE_DESC}
+        />
+      </DropdownContainer>
 
       <PostList posts={postsList} />
 
-      <div className="pagination">
+      <Pagination>
         {Array.from({ length: totalPages }, (_, index) => (
-          <button
+          <PageButton
             key={index}
-            className={`page-button ${index === currentPage ? 'active' : ''}`}
-            onClick={() => handlePageChange(index)}
+            isActive={index === currentPage}
+            onClick={() => updateSearchParams({ page: index })}
             disabled={index === currentPage}
           >
             {index + 1}
-          </button>
+          </PageButton>
         ))}
-      </div>
-    </div>
+      </Pagination>
+    </PostListContainer>
   );
 };
 
 export default PostListPage;
+
+// Styled Components
+const PostListContainer = styled.div`
+  width: 100%;
+  /* margin: 0 auto; */
+  /* padding: 20px; */
+`;
+
+const DropdownContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const PageButton = styled.button`
+  padding: 8px 12px;
+  margin: 0 5px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: ${({ isActive }) => (isActive ? '#007bff' : '#f1f1f1')};
+  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
+
+  &:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  &:disabled {
+    cursor: default;
+    background-color: #007bff;
+    color: #fff;
+  }
+`;
+
