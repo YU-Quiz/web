@@ -41,20 +41,7 @@ const KakaoLoginCallback = () => {
     handleKakaoLogin();
   }, [location, navigate]);
 
-  return (
-    <div>
-      {error ? (
-        <div className="error-message">
-          <p>{error}</p>
-          <button onClick={() => navigate("/login")}>
-            로그인 페이지로 돌아가기
-          </button>
-        </div>
-      ) : (
-        <div>카카오 로그인 처리 중...</div>
-      )}
-    </div>
-  );
+  return <div>카카오 로그인 처리 중...</div>;
 };
 
 export default KakaoLoginCallback;
