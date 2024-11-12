@@ -91,8 +91,6 @@ export default PostCreator;
 // Styled Components
 const FormContainer = styled.div`
   width: 100%;
-  margin: 0 auto;
-  padding: 20px;
   border-radius: 8px;
 `;
 

@@ -13,7 +13,7 @@ import { Register } from "../pages/register/Register";
 import PostListPage, { postListLoader } from "../pages/post/PostListPage";
 import PostCreator from "../pages/post/PostCreator";
 import PostFix from "../pages/post/PostFix";
-import PostView from "../pages/post/PostView";
+import PostView, { postViewLoader } from "../pages/post/PostView";
 import KakaoLoginCallback from "../pages/login/social/kakaoLoginCallBack";
 import RegisterOauth from "../pages/register/RegisterOauth";
 import NaverLoginCallback from "../pages/login/social/naverLoginCallBack";
@@ -178,6 +178,7 @@ const router = createBrowserRouter([
           {
             path: ":postId",
             element: <PostView />,
+            loader: postViewLoader,
           },
         ],
       },

@@ -108,8 +108,6 @@ const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
 `;
 
 const Form = styled.form`

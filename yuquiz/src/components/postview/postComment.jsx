@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/post/postview/postComment.scss";
+import styled from "styled-components";
 
 const PostComment = ({
   comments,
@@ -13,7 +13,6 @@ const PostComment = ({
   handleEditComment,
   handleDeleteComment,
 }) => {
-  // 새 댓글 변화 감지
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
   };
@@ -22,66 +21,169 @@ const PostComment = ({
     setEditedComment(e.target.value);
   };
 
-  // console.log(comments);
-
   return (
-    <div className="comments-section">
-      <h3>댓글</h3>
-      <form className="comment-form" onSubmit={handleCommentSubmit}>
-        <textarea
-          className="comment-input"
+    <CommentsSection>
+      <Title>댓글</Title>
+      <CommentForm onSubmit={handleCommentSubmit}>
+        <CommentInput
           placeholder="댓글을 작성하세요..."
           value={newComment}
           onChange={handleCommentChange}
           required
-        ></textarea>
-        <button type="submit" className="submit-comment-btn">
-          댓글 남기기
-        </button>
-      </form>
+        />
+        <SubmitCommentButton type="submit">댓글 남기기</SubmitCommentButton>
+      </CommentForm>
 
-      <ul className="comments-list">
+      <CommentsList>
         {comments.length > 0 ? (
           comments.map((comment) => (
-            <li key={comment.id} className="comment-item">
-              <p className="comment-writer">작성자: {comment.writerName}</p>
-              
+            <CommentItem key={comment.id}>
+              <CommentWriter>작성자: {comment.writerName}</CommentWriter>
+
               {editingCommentId === comment.id ? (
                 <>
-                  <textarea
-                    value={editedComment}  // 수정된 댓글 상태로 연결
+                  <CommentEditInput
+                    value={editedComment}
                     onChange={handleEditingCommentChange}
                   />
-                  <button onClick={() => handleUpdateComment(comment.id)}>
+                  <CommentActionButton onClick={() => handleUpdateComment(comment.id)}>
                     수정 완료
-                  </button>
+                  </CommentActionButton>
                 </>
               ) : (
                 <>
-                  <p className="comment-content">{comment.content}</p>
-                  {/* 현재 사용자가 작성한 댓글만 수정, 삭제 버튼 표시 */}
+                  <CommentContent>{comment.content}</CommentContent>
                   {comment.isWriter && (
-                    <>
-                      <button onClick={() => handleEditComment(comment.id, comment.content)}>
+                    <ActionButtons>
+                      <CommentActionButton onClick={() => handleEditComment(comment.id, comment.content)}>
                         수정
-                      </button>
-                      <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
-                    </>
+                      </CommentActionButton>
+                      <CommentActionButton onClick={() => handleDeleteComment(comment.id)}>
+                        삭제
+                      </CommentActionButton>
+                    </ActionButtons>
                   )}
                 </>
               )}
-              <p className="comment-date">
+              <CommentDate>
                 작성일: {new Date(comment.createdAt).toLocaleString()}
-              </p>
-              {comment.modified && <p className="comment-modified">(수정됨)</p>}
-            </li>
+              </CommentDate>
+              {comment.modified && <CommentModified>(수정됨)</CommentModified>}
+            </CommentItem>
           ))
         ) : (
-          <li>댓글이 없습니다.</li>
+          <NoComments>댓글이 없습니다.</NoComments>
         )}
-      </ul>
-    </div>
+      </CommentsList>
+    </CommentsSection>
   );
 };
 
 export default PostComment;
+
+// Styled Components
+const CommentsSection = styled.div`
+  width: 100%;
+  margin-top: 20px;
+`;
+
+const Title = styled.h3`
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+`;
+
+const CommentForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+`;
+
+const CommentInput = styled.textarea`
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  resize: vertical;
+`;
+
+const SubmitCommentButton = styled.button`
+  align-self: flex-end;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const CommentsList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+const CommentItem = styled.li`
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+`;
+
+const CommentWriter = styled.p`
+  font-weight: bold;
+  margin: 0 0 5px;
+`;
+
+const CommentContent = styled.p`
+  margin: 5px 0;
+`;
+
+const CommentDate = styled.p`
+  font-size: 0.875rem;
+  color: #666;
+  margin: 5px 0;
+`;
+
+const CommentModified = styled.p`
+  font-size: 0.875rem;
+  color: #888;
+  font-style: italic;
+`;
+
+const CommentEditInput = styled.textarea`
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  resize: vertical;
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const CommentActionButton = styled.button`
+  padding: 5px 10px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+`;
+
+const NoComments = styled.li`
+  color: #888;
+  font-size: 1rem;
+  padding: 10px 0;
+  text-align: center;
+`;
