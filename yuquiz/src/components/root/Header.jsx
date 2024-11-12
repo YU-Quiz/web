@@ -92,7 +92,7 @@ const Header = () => {
           />
         </NavButton>
         <NavButton to="/quiz/list">Quizzes</NavButton>
-        <NavButton to="/posts/list">Community</NavButton>
+        <NavButton to="/posts">Community</NavButton>
         <NavButton to="/leaderboard">LeaderBoard</NavButton>
         <NavButton to="/quizseries/list">Quiz Series</NavButton>
         <NavButton to="/study/list">Study</NavButton>
