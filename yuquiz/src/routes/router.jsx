@@ -10,7 +10,7 @@ import MyPage, { MyPageLoader } from "../pages/mypage/MyPage";
 import EditProfile from "../pages/mypage/EditProfile";
 import { Login } from "../pages/login/Login";
 import { Register } from "../pages/register/Register";
-import PostListPage from "../pages/post/PostListPage";
+import PostListPage, { postListLoader } from "../pages/post/PostListPage";
 import PostCreator from "../pages/post/PostCreator";
 import PostFix from "../pages/post/PostFix";
 import PostView from "../pages/post/PostView";
@@ -161,25 +161,20 @@ const router = createBrowserRouter([
       {
         path: "posts",
         element: (
-          <>
-            <Outlet />
-          </>
+          <PostListPage />
         ),
+        loader: postListLoader,
         children: [
           {
-            path: "list",
-            element: <PostListPage />,
-          },
-          {
-            path: "create",
+            path: "new",
             element: <PostCreator />,
           },
           {
-            path: "edit/:postId",
+            path: ":postId/edit",
             element: <PostFix />,
           },
           {
-            path: "view/:postId",
+            path: ":postId",
             element: <PostView />,
           },
         ],
