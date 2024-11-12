@@ -1,13 +1,12 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
-import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
+import { POST_SORT_OPTIONS } from "../../constants/admin/postSortOption";
 
-const SORT_OPTIONS = SORT_QUIZ_POST;
 // 게시글 리스트 조회
 const getPostsList = async (
   keyword = "",
   categoryId = null,
-  sort = SORT_OPTIONS.DATE_DESC,
+  sort = POST_SORT_OPTIONS.DATE_DESC.value,
   page = 0
 ) => {
   try {
@@ -15,17 +14,14 @@ const getPostsList = async (
 
     if (keyword) params.keyword = keyword;
     if (categoryId) params.categoryId = categoryId;
-    if (sort && Object.values(SORT_OPTIONS).includes(sort)) {
-      params.sort = sort;
-    } else {
-      params.sort = SORT_OPTIONS.DATE_DESC; // 기본값 설정
-    }
+    if (sort) params.sort = sort;
     if (page >= 0) params.page = page;
 
     const response = await api.get(`/posts`, {
       params: params,
     });
-    // console.log(response.data);
+    console.log(params);
+    console.log(response.data);
 
     return response.data;
   } catch (error) {
@@ -36,6 +32,7 @@ const getPostsList = async (
     }
   }
 };
+
 
 // 게시글 생성
 const createPost = async (categoryId, title, content) => {

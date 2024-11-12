@@ -10,10 +10,10 @@ import MyPage, { MyPageLoader } from "../pages/mypage/MyPage";
 import EditProfile from "../pages/mypage/EditProfile";
 import { Login } from "../pages/login/Login";
 import { Register } from "../pages/register/Register";
-import PostListPage from "../pages/post/PostListPage";
+import PostListPage, { postListLoader } from "../pages/post/PostListPage";
 import PostCreator from "../pages/post/PostCreator";
 import PostFix from "../pages/post/PostFix";
-import PostView from "../pages/post/PostView";
+import PostView, { postViewLoader } from "../pages/post/PostView";
 import KakaoLoginCallback from "../pages/login/social/kakaoLoginCallBack";
 import RegisterOauth from "../pages/register/RegisterOauth";
 import NaverLoginCallback from "../pages/login/social/naverLoginCallBack";
@@ -160,27 +160,25 @@ const router = createBrowserRouter([
       },
       {
         path: "posts",
-        element: (
-          <>
-            <Outlet />
-          </>
-        ),
+        element: <Outlet />, // Use Outlet to render child routes only
         children: [
           {
-            path: "list",
+            index: true,
             element: <PostListPage />,
+            loader: postListLoader,
           },
           {
-            path: "create",
+            path: "new",
             element: <PostCreator />,
           },
           {
-            path: "edit/:postId",
+            path: ":postId/edit",
             element: <PostFix />,
           },
           {
-            path: "view/:postId",
+            path: ":postId",
             element: <PostView />,
+            loader: postViewLoader,
           },
         ],
       },

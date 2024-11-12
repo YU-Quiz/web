@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import '../../styles/post/PostFix.scss';
+import styled from 'styled-components';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import Button from '../../components/UI/Button';
+import Dropdown from '../../components/UI/Dropdown';
 import { editPost, showPost } from '../../services/post/postService';
 import { getCategories } from '../../services/post/postMetaService';
 
 const PostFix = () => {
-  const { postId } = useParams(); // URL에서 
+  const { postId } = useParams();
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
@@ -16,16 +18,14 @@ const PostFix = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const postData = await showPost(postId); // 서버에서 게시글 데이터 불러오기
-        // console.log(postData);
+        const postData = await showPost(postId);
         setCategory(postData.post.category || '');
         setTitle(postData.post.title || '');
         setContent(postData.post.content || '');
 
         const categoriesData = await getCategories();
         setCategories(categoriesData);
-        // console.log(categoriesData);
-        setLoading(false); // 로딩 완료
+        setLoading(false);
       } catch (error) {
         console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
         setLoading(false);
@@ -35,8 +35,8 @@ const PostFix = () => {
     fetchPostData();
   }, [postId]);
 
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+  const handleCategoryChange = (selectedOption) => {
+    setCategory(selectedOption.id);
   };
 
   const handleTitleChange = (e) => {
@@ -50,65 +50,116 @@ const PostFix = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await editPost(postId, category, title, content ); // 게시글 수정 API 호출
+      await editPost(postId, category, title, content);
       alert("게시글 수정 성공!");
-      navigate(`/posts/view/${postId}`);
-      
+      navigate(`/posts/${postId}`);
     } catch (error) {
       console.error('게시글 수정 중 오류 발생:', error);
     }
   };
 
   if (loading) {
-    return <p>로딩 중...</p>; // 로딩 중일 때 표시
+    return <p>로딩 중...</p>;
   }
 
   return (
-    <div className="postfix-container">
-      <form className="postfix-form" onSubmit={handleSubmit}>
-        <h2 className="form-title">게시글 수정</h2>
+    <Container>
+      <Form onSubmit={handleSubmit}>
+        <FormTitle>게시글 수정</FormTitle>
 
-        <label htmlFor="category">카테고리</label>
-        <select
-          id="category"
-          value={category}
-          onChange={handleCategoryChange}
-          required
-        >
-          <option value="">카테고리 선택</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.categoryName}
-            </option>
-          ))}
-        </select>
+        <Label>카테고리</Label>
+        <Dropdown
+          options={categories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
+          onSelect={handleCategoryChange}
+          initLabel="카테고리 선택"
+          defaultOption={categories.find((cat) => cat.id === category)}
+        />
 
-        <label htmlFor="title">제목</label>
-        <input
+        <Label>제목</Label>
+        <Input
           type="text"
-          id="title"
           placeholder="제목을 입력하세요"
           value={title}
           onChange={handleTitleChange}
           required
         />
 
-        <label htmlFor="content">내용</label>
-        <textarea
-          id="content"
+        <Label>내용</Label>
+        <Textarea
           placeholder="내용을 입력하세요"
           value={content}
           onChange={handleContentChange}
           required
-        ></textarea>
+        />
 
-        <div className="button-container">
-          <button type="submit" className="submit-btn">게시글 수정</button>
-          <Link to={`/posts/view/${postId}`} className='back-btn'>취소</Link>
-        </div>
-      </form>
-    </div>
+        <ButtonContainer>
+          <Button type="submit">게시글 수정</Button>
+          <StyledLink to={`/posts/${postId}`}>취소</StyledLink>
+        </ButtonContainer>
+      </Form>
+    </Container>
   );
 };
 
 export default PostFix;
+
+// Styled Components
+const Container = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FormTitle = styled.h2`
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  margin-bottom: 8px;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 15px;
+`;
+
+const Textarea = styled.textarea`
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 150px;
+  margin-bottom: 15px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+`;
+
+const StyledLink = styled(Link)`
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  text-align: center;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+`;

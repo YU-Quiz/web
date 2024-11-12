@@ -1,28 +1,41 @@
-import { Link } from "react-router-dom";
-import "../../styles/post_list_page/PostList.scss";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const PostItem = ({ post }) => {
-  const { postId, postTitle, nickname, categoryName, likeCount, viewCount } =
-    post;
+  const { postId, postTitle, nickname, categoryName, likeCount, viewCount } = post;
 
   return (
-    <div className="post-item">
-      {/* 카테고리 */}
-      <div className="post-type">[{categoryName}]</div>
-
-      {/* 게시글 제목 */}
-      <Link to={`/posts/view/${postId}`} className="post-question">
-        {postTitle}
-      </Link>
-
-      {/* 작성자, 작성일, 좋아요, 조회수 */}
-      <div className="post-info">
-        <span className="post-nickname">작성자: {nickname}</span>
-        <span className="post-likes">좋아요: {likeCount}</span>
-        <span className="post-views">조회수: {viewCount}</span>
-      </div>
-    </div>
+    <TableRow>
+      <TableCell>[{categoryName}]</TableCell>
+      <TableCell>
+        <StyledLink to={`/posts/${postId}`}>{postTitle}</StyledLink>
+      </TableCell>
+      <TableCell>{nickname}</TableCell>
+      <TableCell>{likeCount}</TableCell>
+      <TableCell>{viewCount}</TableCell>
+    </TableRow>
   );
 };
-//조회수 반영 오류
+
 export default PostItem;
+
+// Styled-components
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+`;
+
+const TableCell = styled.td`
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+`;
+
+const StyledLink = styled(Link)`
+  color: #007bff;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;

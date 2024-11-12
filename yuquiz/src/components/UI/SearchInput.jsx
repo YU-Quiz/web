@@ -1,33 +1,33 @@
-// src/components/SearchInput.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const InputContainer = styled.div`
-  position: relative;
+  display: flex;
   width: 100%;
   max-width: 400px;
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
-  padding: 10px 15px;
+  flex: 1;
+  height: 40px; /* 높이를 명시적으로 설정 */
+  padding: 0 10px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 16px;
+  box-sizing: border-box;
+  outline: none;
 `;
 
 const SearchButton = styled.button`
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  height: 40px; /* 입력 필드와 동일한 높이 */
+  padding: 0 15px;
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
+  box-sizing: border-box;
 
   &:hover {
     background-color: #0056b3;

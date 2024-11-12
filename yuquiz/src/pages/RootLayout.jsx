@@ -11,6 +11,7 @@ const RootLayoutContainer = styled.div`
 `;
 
 const MainContainer = styled.main`
+  width: 100%;
   flex: 1;
   display: flex;
   justify-content: center;

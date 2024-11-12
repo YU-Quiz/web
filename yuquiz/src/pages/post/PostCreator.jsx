@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/post/PostCreator.scss';
+import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
+import Button from '../../components/UI/Button';
+import Dropdown from '../../components/UI/Dropdown';
 import { createPost } from '../../services/post/postService';
 import { getCategories } from '../../services/post/postMetaService';
 
@@ -16,7 +18,6 @@ const PostCreator = () => {
       try {
         const categoriesData = await getCategories();
         setCategories(categoriesData);
-        // console.log(categoriesData);
       } catch (error) {
         console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
       }
@@ -25,8 +26,8 @@ const PostCreator = () => {
     fetchData();
   }, []);
 
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+  const handleCategoryChange = (selectedOption) => {
+    setCategory(selectedOption.id);
   };
 
   const handleTitleChange = (e) => {
@@ -39,64 +40,110 @@ const PostCreator = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 여기에 게시글 제출 로직을 추가하세요.
-    try{
-      await createPost(category, title,content);
-
+    try {
+      await createPost(category, title, content);
       alert("게시글 생성 성공!");
-      navigate("/posts/list");
-    }catch(error){
+      navigate("/posts");
+    } catch (error) {
       console.log("에러 발생!");
     }
-
   };
 
   return (
-    <div className="new-post-form-container">
-      <form className="new-post-form" onSubmit={handleSubmit}>
-        <h2 className="form-title">새 게시글 작성</h2>
+    <FormContainer>
+      <FormTitle>새 게시글 작성</FormTitle>
+      <Form onSubmit={handleSubmit}>
+        <Label>카테고리</Label>
+        <Dropdown
+          options={categories.map(cat => ({ label: cat.categoryName, id: cat.id }))}
+          onSelect={handleCategoryChange}
+          initLabel="카테고리 선택"
+        />
 
-        <label htmlFor="category">카테고리</label>
-        <select
-          id="category"
-          value={category}
-          onChange={handleCategoryChange}
-          required
-        >
-          <option value="">카테고리 선택</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.categoryName}
-            </option>
-          ))}
-        </select>
-
-        <label htmlFor="title">제목</label>
-        <input
+        <Label>제목</Label>
+        <Input
           type="text"
-          id="title"
           placeholder="제목을 입력하세요"
           value={title}
           onChange={handleTitleChange}
           required
         />
 
-        <label htmlFor="content">내용</label>
-        <textarea
-          id="content"
+        <Label>내용</Label>
+        <Textarea
           placeholder="내용을 입력하세요"
           value={content}
           onChange={handleContentChange}
           required
-        ></textarea>
+        />
 
-        <div className="button-container">
-          <button type="submit" className='submit-btn'>게시글 작성</button>
-          <Link to='/posts/list' className='back-btn'>목록으로</Link>
-        </div>
-      </form>
-    </div>
+        <ButtonContainer>
+          <Button type="submit">게시글 작성</Button>
+          <StyledLink to="/posts">목록으로</StyledLink>
+        </ButtonContainer>
+      </Form>
+    </FormContainer>
   );
 };
 
 export default PostCreator;
+
+// Styled Components
+const FormContainer = styled.div`
+  width: 100%;
+  border-radius: 8px;
+`;
+
+const FormTitle = styled.h2`
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  margin-bottom: 8px;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 15px;
+`;
+
+const Textarea = styled.textarea`
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 150px;
+  margin-bottom: 15px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+`;
+
+const StyledLink = styled(Link)`
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  text-align: center;
+
+  &:hover {
+    background-color: #5a6268;
+  }
+`;

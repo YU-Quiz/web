@@ -1,4 +1,3 @@
-// src/components/Dropdown.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -7,7 +6,7 @@ const DropdownContainer = styled.div`
   display: inline-block;
 `;
 
-const DropdownButton = styled.button`
+const StyledSelect = styled.select`
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
@@ -15,48 +14,35 @@ const DropdownButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-`;
-
-const DropdownMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  appearance: none;
   width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const DropdownItem = styled.div`
-  padding: 10px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f1f1f1;
-  }
+const StyledOption = styled.option`
+  color: black;
 `;
 
-const Dropdown = ({ options, onSelect }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Dropdown = ({ options, onSelect, initLabel, defaultOption }) => {
+  const [selectedOption, setSelectedOption] = useState(defaultOption || null);
 
-  const handleSelect = (option) => {
-    onSelect(option);
-    setIsOpen(false);
+  const handleSelect = (event) => {
+    const selectedOption = options.find(option => option.label === event.target.value);
+    setSelectedOption(selectedOption);
+    onSelect(selectedOption);
   };
 
   return (
     <DropdownContainer>
-      <DropdownButton onClick={() => setIsOpen(!isOpen)}>Select an option</DropdownButton>
-      {isOpen && (
-        <DropdownMenu>
-          {options.map((option, index) => (
-            <DropdownItem key={index} onClick={() => handleSelect(option)}>
-              {option}
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      )}
+      <StyledSelect onChange={handleSelect} value={selectedOption ? selectedOption.label : ""}>
+        {initLabel && !selectedOption && (
+          <StyledOption value="" disabled>{initLabel}</StyledOption>
+        )}
+        {options.map((option, index) => (
+          <StyledOption key={index} value={option.label}>
+            {option.label}
+          </StyledOption>
+        ))}
+      </StyledSelect>
     </DropdownContainer>
   );
 };

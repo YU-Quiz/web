@@ -1,78 +1,158 @@
-import React, { useEffect, useState } from 'react';
-import '../../styles/post_list_page/PostListPage.scss';
-import SearchBar from '../../components/postlist/SearchBar';
-import CategoryDropdown from '../../components/postlist/CategoryDropdown';
+import React from 'react';
+import { useLoaderData, useSearchParams, Link } from 'react-router-dom';
+import styled from 'styled-components';
 import PostList from '../../components/postlist/PostList';
-import { Link } from 'react-router-dom';
+import Dropdown from '../../components/UI/Dropdown';
+import SearchInput from '../../components/UI/SearchInput';
+import Button from '../../components/UI/Button'; // Import the Button component
 import { getPostsList } from '../../services/post/postService';
 import { getCategories } from '../../services/post/postMetaService';
-import SortDropdown from '../../components/postlist/SortDropdown';
+import { POST_SORT_OPTIONS } from '../../constants/admin/postSortOption';
 
-// sort: LIKE_DESC, LIKE_ASC, VIEW_DESC, VIEW_ASC, DATE_DESC, DATE_ASC
+export async function postListLoader({ request }) {
+  const url = new URL(request.url);
+  const currentPage = parseInt(url.searchParams.get("page") || "0", 10);
+  const keyword = url.searchParams.get("keyword") || "";
+  const categoryId = parseInt(url.searchParams.get("categoryId")) || 0;
+  const sortOption = url.searchParams.get("sort") || "DATE_DESC";
+
+  const categoriesData = await getCategories();
+  const postsListData = await getPostsList(keyword, categoryId, sortOption, currentPage);
+
+  return {
+    categories: categoriesData,
+    postsList: postsListData.content,
+    totalPages: postsListData.totalPages,
+  };
+}
+
 const PostListPage = () => {
-  const [categories, setCategories] = useState([]);
-  const [keyword, setKeyword] = useState("");
-  const [categoryId, setCategoryId] = useState(null);
-  const [sortOption, setSortOption] = useState("DATE_DESC");
-  const [postsList, setPostsList] = useState([]);
+  const { categories, postsList, totalPages } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 번호
-  const [totalPages, setTotalPages] = useState(1);   // 전체 페이지 수
+  const extendedCategories = [{ id: null, categoryName: '모두' }, ...categories];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 카테고리리스트 받아오기
-        const categoriesData = await getCategories();
-        setCategories(categoriesData);
+  const handleSelectCategory = (selectedCategory) => {
+    const categoryId = selectedCategory.id !== null ? selectedCategory.id : 0;
+    updateSearchParams({ categoryId, page: 0 });
+  };
 
-        // 게시글 리스트 정보 받아오기
-        const postsListData = await getPostsList(keyword,categoryId,sortOption, currentPage);
-        setPostsList(postsListData.content);
-
-        setTotalPages(postsListData.totalPages);
-      } catch (error) {
-        console.error('게시글 목록 데이터를 불러오는 중 오류 발생:', error);
-      }
-    };
-    fetchData();
-  }, [currentPage, categoryId, keyword, sortOption]);
+  const handleSelectSort = (selectedSort) => {
+    updateSearchParams({ sort: selectedSort.value, page: 0 });
+  };
 
   const handleSearch = (keyword) => {
-    setKeyword(keyword);
+    updateSearchParams({ keyword, page: 0 });
   };
 
-  const handleSelectCategory = (categoryId) => {
-    setCategoryId(categoryId);
+  const updateSearchParams = (newParams) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (newParams.page !== undefined) {
+      params.set('page', newParams.page);
+    }
+    if (newParams.categoryId !== undefined) {
+      params.set('categoryId', newParams.categoryId);
+    }
+    if (newParams.sort !== undefined) {
+      params.set('sort', newParams.sort);
+    }
+    if (newParams.keyword !== undefined) {
+      params.set('keyword', newParams.keyword);
+    }
+    setSearchParams(params);
   };
 
-  const handleSelectSort = (sortOption) =>{
-    setSortOption(sortOption);
-  }
-
-  // 페이지 변경 핸들러
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  const currentPage = parseInt(searchParams.get("page") || "0", 10);
 
   return (
-    <div className="post-list-page-container">
+    <PostListContainer>
+      <FilterContainer>
+        <SearchInput onSearch={handleSearch} />
+        <DropdownContainer>
+          <Dropdown
+            options={extendedCategories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
+            onSelect={handleSelectCategory}
+            defaultOption={{ label: "모두", id: null }}
+          />
+          <Dropdown
+            options={Object.values(POST_SORT_OPTIONS)}
+            onSelect={handleSelectSort}
+            defaultOption={POST_SORT_OPTIONS.DATE_DESC}
+          />
+        </DropdownContainer>
+        <StyledLink to="/posts/new">
+          <Button>Create Post</Button>
+        </StyledLink>
+      </FilterContainer>
 
       <PostList posts={postsList} />
-      <div className="pagination">
+
+      <Pagination>
         {Array.from({ length: totalPages }, (_, index) => (
-          <button
+          <PageButton
             key={index}
-            className={`page-button ${index === currentPage ? 'active' : ''}`}
-            onClick={() => handlePageChange(index)}
-            disabled={index === currentPage} // 현재 페이지는 비활성화
+            isActive={index === currentPage}
+            onClick={() => updateSearchParams({ page: index })}
+            disabled={index === currentPage}
           >
             {index + 1}
-          </button>
+          </PageButton>
         ))}
-      </div>
-    </div>
+      </Pagination>
+    </PostListContainer>
   );
 };
 
 export default PostListPage;
+
+// Styled Components
+const PostListContainer = styled.div`
+  width: 100%;
+`;
+
+const FilterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const DropdownContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const PageButton = styled.button`
+  padding: 8px 12px;
+  margin: 0 5px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: ${({ isActive }) => (isActive ? '#007bff' : '#f1f1f1')};
+  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
+
+  &:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  &:disabled {
+    cursor: default;
+    background-color: #007bff;
+    color: #fff;
+  }
+`;
