@@ -160,11 +160,13 @@ const router = createBrowserRouter([
       },
       {
         path: "posts",
-        element: (
-          <PostListPage />
-        ),
-        loader: postListLoader,
+        element: <Outlet />, // Use Outlet to render child routes only
         children: [
+          {
+            index: true,
+            element: <PostListPage />,
+            loader: postListLoader,
+          },
           {
             path: "new",
             element: <PostCreator />,

@@ -66,19 +66,21 @@ const PostListPage = () => {
 
   return (
     <PostListContainer>
-      <SearchInput onSearch={handleSearch} />
-      <DropdownContainer>
-        <Dropdown
-          options={extendedCategories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
-          onSelect={handleSelectCategory}
-          defaultOption={{ label: "모두", id: null }}
-        />
-        <Dropdown
-          options={Object.values(POST_SORT_OPTIONS)}
-          onSelect={handleSelectSort}
-          defaultOption={POST_SORT_OPTIONS.DATE_DESC}
-        />
-      </DropdownContainer>
+      <FilterContainer>
+        <SearchInput onSearch={handleSearch} />
+        <DropdownContainer>
+          <Dropdown
+            options={extendedCategories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
+            onSelect={handleSelectCategory}
+            defaultOption={{ label: "모두", id: null }}
+          />
+          <Dropdown
+            options={Object.values(POST_SORT_OPTIONS)}
+            onSelect={handleSelectSort}
+            defaultOption={POST_SORT_OPTIONS.DATE_DESC}
+          />
+        </DropdownContainer>
+      </FilterContainer>
 
       <PostList posts={postsList} />
 
@@ -103,14 +105,20 @@ export default PostListPage;
 // Styled Components
 const PostListContainer = styled.div`
   width: 100%;
-  /* margin: 0 auto; */
-  /* padding: 20px; */
+`;
+
+const FilterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 `;
 
 const DropdownContainer = styled.div`
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
 `;
 
 const Pagination = styled.div`
@@ -140,4 +148,3 @@ const PageButton = styled.button`
     color: #fff;
   }
 `;
-

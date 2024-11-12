@@ -71,7 +71,7 @@ const Home = () => {
         <Navbar>
           <NavLinks>
             <Link to="/quiz/list">Quizzes</Link>
-            <Link to="/posts/list">Posts</Link>
+            <Link to="/posts">Posts</Link>
             <Link to="/leaderboard">LeaderBoard</Link>
             <Link to="/quizseries/list">Quiz Series</Link>
             <Link to="/study/list">Study</Link>
@@ -87,11 +87,11 @@ const Home = () => {
 
         <Navbar>
           <NavLinks>
-            <Link to="/posts/list">공지사항</Link>
-            <Link to="/posts/list">자유 게시판</Link>
-            <Link to="/posts/list">풀이 게시판</Link>
+            <Link to="/posts">공지사항</Link>
+            <Link to="/posts">자유 게시판</Link>
+            <Link to="/posts">풀이 게시판</Link>
           </NavLinks>
-          <CreateButton to="/posts/create">Post</CreateButton>
+          <CreateButton to="/posts/new">Post</CreateButton>
         </Navbar>
         <PostsContainer>
           <PostCard
