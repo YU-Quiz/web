@@ -1,26 +1,23 @@
 import React, { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
-import "../../styles/mypage/MyPage.scss";
-import { getMyCorrectQuizList, getMyIncorrectQuizList, getMyLikedPostList, getMyLikedQuizList, getMyPinnedQuizList, getMyPostList, getMyQuizList } from "../../services/mypage/myList";
+import { useLoaderData } from "react-router-dom";
+import styled from "styled-components";
+import {
+  getMyCorrectQuizList,
+  getMyIncorrectQuizList,
+  getMyLikedPostList,
+  getMyLikedQuizList,
+  getMyPinnedQuizList,
+  getMyPostList,
+  getMyQuizList,
+} from "../../services/mypage/myList";
 import QuizListBox from "../../components/mypage/QuizListBox";
-import Modal from 'react-modal';
 import DetailList from "../../components/mypage/DetailList";
 import PostListBox from "../../components/mypage/PostListBox";
+import ProfileCard from "../../components/mypage/ProfileCard";
+import { PostListTitles, QuizListTitles } from "../../constants/mypage/LIstTitles";
 
-const PostListTitles = {
-  MY_POST_LIST: "작성한 게시글 목록",
-  MY_LIKED_LIST: "좋아요한 게시글 목록",
-};
 
-const QuizListTitles = {
-  MY_QUIZ_LIST: "작성한 퀴즈 목록",
-  MY_PINNED_LIST: "즐겨찾기 목록",
-  MY_LIKED_LIST: "좋아요한 퀴즈 목록",
-  MY_CORRECT_LIST: "푼 문제 목록",
-  MY_INCORRECT_LIST: "틀린 문제 목록",
-};
 
-// loader
 export async function MyPageLoader() {
   const [
     myPostList,
@@ -29,7 +26,7 @@ export async function MyPageLoader() {
     myLikedQuizList,
     myPinnedQuizList,
     myCorrectQuizList,
-    myIncorrectQuizList
+    myIncorrectQuizList,
   ] = await Promise.all([
     getMyPostList(0),
     getMyLikedPostList(0),
@@ -39,7 +36,7 @@ export async function MyPageLoader() {
     getMyCorrectQuizList(0),
     getMyIncorrectQuizList(0),
   ]);
-  // console.log(myPostList);
+
   return {
     myPostList,
     myLikedPostList,
@@ -54,51 +51,84 @@ export async function MyPageLoader() {
 const MyPage = () => {
   const data = useLoaderData();
   const [modalOpen, setModalOpen] = useState(false);
-  // const [listData, setListData] = useState(null);
   const [modalTitle, setModalTitle] = useState("");
-  // const [listType, setListType] = useState("");
 
-  const handleModalOpen = (title)=>{
-
+  const handleModalOpen = (title) => {
     setModalTitle(title);
-
     setModalOpen(true);
   };
 
-  // 모달창 생성 함수
-  function DetailModal(){
-    return(
-      <Modal
-          isOpen={modalOpen}
-          onRequestClose={() => setModalOpen(false)}
-          contentLabel="리스트 더보기"
-          className="detail-report-modal"
-          overlayClassName="detail-modal-overlay" /* 배경 어둡게 */
-      >
-        <DetailList title={modalTitle} />
-      </Modal>
-    );
-  }
+  const DetailModal = () => (
+    modalOpen && (
+      <Overlay onClick={() => setModalOpen(false)}>
+        <ModalContainer onClick={(e) => e.stopPropagation()}>
+          <DetailList title={modalTitle} />
+        </ModalContainer>
+      </Overlay>
+    )
+  );
 
   return (
-    <div className="dashboard-container">
-      <Link to="/" className="my-home-btn">
-        홈으로
-      </Link>
-      <DetailModal></DetailModal>
-      <div className="row">
+    <DashboardContainer>
+      <ProfileCard />
+      <DetailModal />
+      <Row>
         <PostListBox title={PostListTitles.MY_POST_LIST} items={data.myPostList} handleModalOpen={handleModalOpen} />
         <PostListBox title={PostListTitles.MY_LIKED_LIST} items={data.myLikedPostList} handleModalOpen={handleModalOpen} />
         <QuizListBox title={QuizListTitles.MY_QUIZ_LIST} items={data.myQuizList} handleModalOpen={handleModalOpen} />
         <QuizListBox title={QuizListTitles.MY_PINNED_LIST} items={data.myPinnedQuizList} handleModalOpen={handleModalOpen} />
-      </div>
-      <div className="row">
-      <QuizListBox title={QuizListTitles.MY_LIKED_LIST} items={data.myLikedQuizList} handleModalOpen={handleModalOpen} />
+        <QuizListBox title={QuizListTitles.MY_LIKED_LIST} items={data.myLikedQuizList} handleModalOpen={handleModalOpen} />
         <QuizListBox title={QuizListTitles.MY_CORRECT_LIST} items={data.myCorrectQuizList} handleModalOpen={handleModalOpen} />
         <QuizListBox title={QuizListTitles.MY_INCORRECT_LIST} items={data.myIncorrectQuizList} handleModalOpen={handleModalOpen} />
-      </div>
-    </div>
+      </Row>
+    </DashboardContainer>
   );
 };
 
 export default MyPage;
+
+// Styled Components
+const DashboardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Row = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Make sure it's above everything else */
+`;
+
+const ModalContainer = styled.div`
+  width: 70%;
+  height: 90%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+

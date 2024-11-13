@@ -1,58 +1,124 @@
-import { Link, useNavigate } from "react-router-dom";
-import "../../styles/mypage/ProfileCard.scss";
-import { logout } from "../../services/auth/login/authService";
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 import useAuthStore from "../../stores/auth/authStore";
 
 const ProfileCard = () => {
-  const navigate = useNavigate();
   const userInfo = useAuthStore((state) => state.userInfo);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  // 로그인 상태가 완전히 로드될 때까지 렌더링을 지연
   if (!isAuthenticated || !userInfo || !userInfo.nickname) {
-    return <div>Loading...</div>;
+    return <Loading>Loading...</Loading>;
   }
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate("/"); // 홈으로 이동
-    } catch (error) {
-      alert(error.message); // 에러 처리
-    }
-  };
-
-  // username이 10글자 이상일 경우, 뒷부분을 '...'으로 처리
   const displayUsername =
     userInfo.username.length > 10
       ? `${userInfo.username.slice(0, 10)}...`
       : userInfo.username;
 
   return (
-    <div className="profile-container">
-      <div className="profile-picture"></div>
-      <div className="profile-details">
-        <h2>{userInfo.nickname}</h2>
-        <p>@{displayUsername}</p>
-        <div className="profile-stats">
-          <p>100 Quizzes</p>
-          <p>50 Badges</p>
-          <p>1000 Points</p>
-        </div>
-      </div>
-      <div className="profile-actions">
-        <Link to="/my/edit" className="action-btn">
-          정보 수정
-        </Link>
-        <button onClick={handleLogout} className="login-btn">
-          Logout
-        </button>
-      </div>
-      <Link to="/" className="withdraw-btn">
-        회원탈퇴
-      </Link>
-    </div>
+    <ProfileContainer>
+      <ProfilePicture />
+      <UserInfoContainer>
+        <UserInfo>
+          <Nickname>{userInfo.nickname}</Nickname>
+          <UserId>{`ID: ${displayUsername}`}</UserId>
+          <IconsContainer>
+            <MessageIcon to={'/my/edit'}>💬</MessageIcon>
+            <SettingsIcon to={'/my/edit'}>⚙️</SettingsIcon>
+        </IconsContainer>
+        {isAuthenticated&&userInfo.role==="ADMIN" ? (
+          <AdminIcon to={'/admin'}>관리자페이지</AdminIcon>
+        ):(
+          <></>
+        )}
+        </UserInfo>
+      </UserInfoContainer>
+      
+      <ProfileStats>
+        <Stat>100 Quizzes</Stat>
+        <Stat>50 Badges</Stat>
+        <Stat>1000 Points</Stat>
+      </ProfileStats>
+    </ProfileContainer>
   );
 };
 
 export default ProfileCard;
+
+// Styled Components
+const ProfileContainer = styled.div`
+  width: 100%;
+  color: #333;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+`;
+
+const ProfilePicture = styled.div`
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #ddd;
+`;
+
+const UserInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+`;
+
+const Nickname = styled.h2`
+  font-size: 1.25rem;
+  margin: 0;
+`;
+
+const UserId = styled.p`
+  font-size: 0.875rem;
+  color: #e0e0e0;
+  margin: 0;
+`;
+
+const IconsContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  font-size: 1.5rem;
+`;
+
+const MessageIcon = styled(Link)`
+  cursor: pointer;
+`;
+
+const SettingsIcon = styled(Link)`
+  cursor: pointer;
+`;
+
+const AdminIcon = styled(Link)`
+  cursor: pointer;
+`;
+
+const ProfileStats = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.875rem;
+`;
+
+const Stat = styled.p`
+  margin: 0;
+`;
+
+const Loading = styled.div`
+  color: white;
+  font-size: 1rem;
+`;
