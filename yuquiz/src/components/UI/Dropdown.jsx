@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
 const DropdownContainer = styled.div`
   position: relative;
@@ -26,19 +26,27 @@ const Dropdown = ({ options, onSelect, initLabel, defaultOption }) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption || null);
 
   const handleSelect = (event) => {
-    const selectedOption = options.find(option => option.label === event.target.value);
+    const selectedValue = event.target.value;
+    const selectedOption = options.find(
+      (option) => option.value === selectedValue
+    );
     setSelectedOption(selectedOption);
     onSelect(selectedOption);
   };
 
   return (
     <DropdownContainer>
-      <StyledSelect onChange={handleSelect} value={selectedOption ? selectedOption.label : ""}>
+      <StyledSelect
+        onChange={handleSelect}
+        value={selectedOption ? selectedOption.value : ""}
+      >
         {initLabel && !selectedOption && (
-          <StyledOption value="" disabled>{initLabel}</StyledOption>
+          <StyledOption value="" disabled>
+            {initLabel}
+          </StyledOption>
         )}
         {options.map((option, index) => (
-          <StyledOption key={index} value={option.label}>
+          <StyledOption key={index} value={option.value}>
             {option.label}
           </StyledOption>
         ))}

@@ -1,94 +1,196 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/quiz_list_page/QuizListPage.scss";
+import { useSearchParams, Link } from "react-router-dom";
 import QuizList from "../../components/quizlist/QuizList";
-import SearchBar from "../../components/quizlist/SearchBar";
-import SubjectDropdown from "../../components/quizlist/SubjectDropdown";
-import { Link } from "react-router-dom";
-import { getQuizList, SORT_OPTIONS } from "../../services/quiz/QuizManage";
-import SortDropdown from "../../components/postlist/SortDropdown";
+import Dropdown from "../../components/UI/Dropdown";
+import SearchInput from "../../components/UI/SearchInput";
+import Button from "../../components/UI/Button";
+import { getQuizList } from "../../services/quiz/QuizManage";
+import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
+import styled from "styled-components";
+
+// Styled Components 정의
+const QuizListPageContainer = styled.div`
+  background-color: white;
+`;
+
+const ControlsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
+
+const CreateQuizButton = styled(Link)`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+`;
+
+const PageButton = styled.button`
+  margin: 0 5px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+
+  &.active {
+    background-color: #0056b3;
+  }
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  text-align: center;
+`;
+
+const LoadingMessage = styled.p`
+  text-align: center;
+`;
+
+const SORT_OPTIONS = Object.values(SORT_QUIZ_POST).map((option) => ({
+  label: option.label,
+  value: option.value,
+}));
 
 const QuizListPage = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [filteredQuizzes, setFilteredQuizzes] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("All");
-  const [currentPage, setCurrentPage] = useState(0); // 초기 페이지 0
-  const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
-  const [error, setError] = useState(null); // 에러 상태
-  const [sortOption, setSortOption] = useState("DATE_DESC");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const subjects = ["All", "Geography", "History", "Chemistry"];
+  const currentPage = parseInt(searchParams.get("page") || "0", 10);
+  const searchQuery = searchParams.get("keyword") || "";
+  const sortOption = searchParams.get("sort") || "DATE_DESC";
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchQuizzes = async () => {
       setIsLoading(true);
-      setError(null); // 에러 초기화
+      setError(null);
+
       try {
         const quizData = await getQuizList(
           searchQuery,
-          null, //subject인데 아직 서버에 데이터 無
+          null,
           sortOption,
           currentPage
-        ); // 1 기반 페이지 전송
-        setQuizzes(quizData.content);
-        setFilteredQuizzes(quizData.content);
-        setTotalPages(quizData.totalPages); // 전체 페이지 수 설정
+        );
+
+        if (isMounted) {
+          setQuizzes(quizData.content);
+          setFilteredQuizzes(quizData.content);
+          setTotalPages(quizData.totalPages);
+        }
       } catch (error) {
-        setError("퀴즈 목록을 불러오지 못했습니다.");
-        console.error(error);
+        if (isMounted) {
+          setError("퀴즈 목록을 불러오지 못했습니다.");
+          console.error(error);
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
+
     fetchQuizzes();
-  }, [currentPage, searchQuery, selectedSubject, sortOption]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentPage, searchQuery, sortOption]);
 
   const handleSearch = (query) => {
-    setSearchQuery(query);
-    setCurrentPage(0); // 검색 시 페이지 초기화
-  };
-  const handleSelectSort = (sortOption) => {
-    setSortOption(sortOption);
+    updateSearchParams({ keyword: query, page: 0 });
   };
 
-  const handleSelectSubject = (subject) => {
-    setSelectedSubject(subject);
-    setCurrentPage(0); // 과목 변경 시 페이지 초기화
+  const handleSelectSort = (selectedOption) => {
+    updateSearchParams({ sort: selectedOption.value, page: 0 });
+  };
+
+  const updateSearchParams = (newParams) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (newParams.page !== undefined) {
+      params.set("page", newParams.page);
+    }
+    if (newParams.keyword !== undefined) {
+      params.set("keyword", newParams.keyword);
+    }
+    if (newParams.sort !== undefined) {
+      params.set("sort", newParams.sort);
+    }
+    setSearchParams(params);
   };
 
   return (
-    <div className="quiz-list-page-container">
-
-      <div className="controls-container">
-        <SearchBar onSearch={handleSearch} />
-        <SubjectDropdown
-          subjects={subjects}
-          onSelectSubject={handleSelectSubject}
+    <QuizListPageContainer>
+      <ControlsContainer>
+        <SearchInput onSearch={handleSearch} />
+        <Dropdown
+          options={SORT_OPTIONS}
+          onSelect={handleSelectSort}
+          initLabel="정렬 기준 선택"
+          defaultOption={{ value: "DATE_DESC", label: "날짜 내림차순" }}
         />
-        <SortDropdown onSelectSortOption={handleSelectSort} />
-      </div>
+        <CreateQuizButton to="/quiz/create">
+          <Button>Create Quiz</Button>
+        </CreateQuizButton>
+      </ControlsContainer>
 
-      {isLoading && <p>로딩 중...</p>}
-      {error && <p className="error-message">{error}</p>}
+      {isLoading && <LoadingMessage>로딩 중...</LoadingMessage>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       {!isLoading && !error && filteredQuizzes.length === 0 && (
         <p>아직은 표시할 퀴즈가 없습니다.</p>
       )}
       <QuizList currentQuizzes={filteredQuizzes} />
 
-      <div className="pagination-container">
+      <PaginationContainer>
         {Array.from({ length: totalPages }, (_, index) => (
-          <button
+          <PageButton
             key={index}
-            className={`page-button ${index === currentPage ? "active" : ""}`}
-            onClick={() => setCurrentPage(index)}
-            disabled={index === currentPage} // 현재 페이지 비활성화
+            className={index === currentPage ? "active" : ""}
+            onClick={() => updateSearchParams({ page: index })}
+            disabled={index === currentPage}
           >
             {index + 1}
-          </button>
+          </PageButton>
         ))}
-      </div>
-    </div>
+      </PaginationContainer>
+    </QuizListPageContainer>
   );
 };
 
