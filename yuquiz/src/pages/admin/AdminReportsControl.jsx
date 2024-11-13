@@ -1,63 +1,126 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { getAdminReports } from '../../services/admin/adminReportService';
 import ReportsSortDropdown from '../../components/admin/reports/ReportsSortDropdown';
 import ReportsList from '../../components/admin/reports/ReportsList';
+import { REPORT_SORT_OPTIONS } from '../../constants/admin/reportSortOption';
+import Dropdown from '../../components/UI/Dropdown';
 
 const AdminReportsControl = () => {
     const [sortOption, setSortOption] = useState("TYPE_DESC");
     const [reportList, setReportList] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);  // 페이지 상태를 관리
-    const [totalPages, setTotalPages] = useState(1);    // 전체 페이지 수 관리
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const reportList = await getAdminReports(sortOption, currentPage); // 현재 페이지로 사용자 정보 요청
+                const reportList = await getAdminReports(sortOption, currentPage);
                 setReportList(reportList.content);
-                setTotalPages(reportList.totalPages);  // 전체 페이지 수 업데이트
+                setTotalPages(reportList.totalPages);
             } catch (error) {
-                console.error('퀴즈 목록 데이터를 불러오는 중 오류 발생:', error); 
+                console.error('신고 목록 데이터를 불러오는 중 오류 발생:', error);
             }
         };
         fetchData();
-    }, [currentPage, sortOption]);  // currentPage가 변경될 때마다 사용자 정보 다시 로드
+    }, [currentPage, sortOption]);
 
     const handleSelectSort = (sortOption) => {
-        setSortOption(sortOption);
+        setSortOption(sortOption.value);
     };
 
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber); // 페이지 번호 변경
+        setCurrentPage(pageNumber);
     };
 
-    return(
-        <div className="admin-users-control">
-            <h2>신고 관리</h2>
-            <div className="user-list">
-                <h3>전체 신고 조회</h3>
-
-                <div className='controls-container'>  
-                    <ReportsSortDropdown onSelectSortOption={handleSelectSort}/>
-                </div>
-
-                <ReportsList
-                    reports={reportList}
+    return (
+        <Container>
+            <Header>
+                <Title>신고 관리</Title>
+                <Dropdown
+                    options={Object.values(REPORT_SORT_OPTIONS)}
+                    onSelect={handleSelectSort}
+                    defaultOption={REPORT_SORT_OPTIONS.DATE_DESC}
                 />
-                <div className="pagination">
+            </Header>
+
+            <TableContainer>
+                <ReportsList reports={reportList} />
+            </TableContainer>
+
+            <Pagination>
                 {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                    key={index}
-                    className={`page-button ${index === currentPage ? 'active' : ''}`}
-                    onClick={() => handlePageChange(index)}
-                    disabled={index === currentPage} // 현재 페이지는 비활성화
+                    <PageButton
+                        key={index}
+                        className={index === currentPage ? 'active' : ''}
+                        onClick={() => handlePageChange(index)}
+                        disabled={index === currentPage}
                     >
-                    {index + 1}
-                    </button>
+                        {index + 1}
+                    </PageButton>
                 ))}
-                </div>
-            </div>
-        </div>
+            </Pagination>
+        </Container>
     );
 };
 
 export default AdminReportsControl;
+
+// Styled-components for AdminReportsControl
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+`;
+
+const Header = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+`;
+
+const Title = styled.h2`
+    font-size: 1.5rem;
+    font-weight: bold;
+`;
+
+const TableContainer = styled.div`
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+`;
+
+const Pagination = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+`;
+
+const PageButton = styled.button`
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    background-color: #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    &.active {
+        background-color: #86c232;
+        color: white;
+        font-weight: bold;
+    }
+
+    &:hover:not(.active) {
+        background-color: #cfcfcf;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        background-color: #f0f0f0;
+    }
+`;

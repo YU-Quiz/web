@@ -1,75 +1,140 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { forceDeletePost, getAdminPosts } from '../../services/admin/adminPostService';
 import PostsList from '../../components/admin/posts/PostsList';
-import PostsSortDropdown from '../../components/admin/posts/PostsSortDropdown';
+import Dropdown from '../../components/UI/Dropdown'; // Assuming this is a reusable dropdown component
+import { POST_SORT_OPTIONS } from '../../constants/admin/postSortOption'; // Assumes you have a constant file for sorting options
 
 const AdminPostsControl = () => {
     const [sortOption, setSortOption] = useState("DATE_DESC");
     const [postList, setPostList] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);  // 페이지 상태를 관리
-    const [totalPages, setTotalPages] = useState(1);    // 전체 페이지 수 관리
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const postList = await getAdminPosts(sortOption, currentPage); // 현재 페이지로 사용자 정보 요청
+                const postList = await getAdminPosts(sortOption, currentPage);
                 setPostList(postList.content);
-                setTotalPages(postList.totalPages);  // 전체 페이지 수 업데이트
+                setTotalPages(postList.totalPages);
             } catch (error) {
-                console.error('회원 목록 데이터를 불러오는 중 오류 발생:', error); 
+                console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
             }
         };
         fetchData();
-    }, [currentPage, sortOption]);  // currentPage가 변경될 때마다 사용자 정보 다시 로드
+    }, [currentPage, sortOption]);
 
     const handleSelectSort = (sortOption) => {
-        setSortOption(sortOption);
+        setSortOption(sortOption.value);
     };
 
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber); // 페이지 번호 변경
+        setCurrentPage(pageNumber);
     };
 
     const handleDeletePost = async (postId) => {
+        const isConfirmed = window.confirm("정말로 이 퀴즈를 삭제하시겠습니까?");
+    
+        if (!isConfirmed) {
+            return; // If the user cancels, do nothing
+        }
         try {
-          await forceDeletePost(postId);
-          alert("게시글이 삭제되었습니다."); // Show success message
-          window.location.reload()
+            await forceDeletePost(postId);
+            alert("게시글이 삭제되었습니다.");
+            window.location.reload();
         } catch (error) {
-          console.error("게시글 삭제 중 오류 발생:", postId);
-          alert("게시글 삭제에 실패했습니다."); // Show error message
+            console.error("게시글 삭제 중 오류 발생:", error);
+            alert("게시글 삭제에 실패했습니다.");
         }
     };
 
-    return(
-        <div className="admin-users-control">
-            <h2>게시글 관리</h2>
-            <div className="user-list">
-                <h3>전체 게시글 조회</h3>
-
-                <div className='controls-container'>  
-                <PostsSortDropdown onSelectSortOption={handleSelectSort} />
-                </div>
-
-                <PostsList
-                    posts={postList}
-                    onDelete={handleDeletePost}
+    return (
+        <Container>
+            <Header>
+                <Title>게시글 관리</Title>
+                <Dropdown
+                    options={Object.values(POST_SORT_OPTIONS)}
+                    onSelect={handleSelectSort}
+                    defaultOption={POST_SORT_OPTIONS.DATE_DESC}
                 />
-                <div className="pagination">
+            </Header>
+
+            <TableContainer>
+                <PostsList posts={postList} onDelete={handleDeletePost} />
+            </TableContainer>
+
+            <Pagination>
                 {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                    key={index}
-                    className={`page-button ${index === currentPage ? 'active' : ''}`}
-                    onClick={() => handlePageChange(index)}
-                    disabled={index === currentPage} // 현재 페이지는 비활성화
+                    <PageButton
+                        key={index}
+                        className={index === currentPage ? 'active' : ''}
+                        onClick={() => handlePageChange(index)}
+                        disabled={index === currentPage}
                     >
-                    {index + 1}
-                    </button>
+                        {index + 1}
+                    </PageButton>
                 ))}
-                </div>
-            </div>
-        </div>
+            </Pagination>
+        </Container>
     );
 };
 
 export default AdminPostsControl;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Title = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
+const TableContainer = styled.div`
+  flex: 1; /* Fills remaining vertical space */
+  min-height: 0; /* Ensures flexbox works correctly for overflow */
+  overflow-y: auto;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+`;
+
+const PageButton = styled.button`
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+
+  &.active {
+    background-color: #86c232;
+    color: white;
+    font-weight: bold;
+  }
+
+  &:hover:not(.active) {
+    background-color: #cfcfcf;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+  }
+`;

@@ -1,30 +1,15 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
-
-const SORT_OPTIONS = {
-    NICK_DESC: "NICK_DESC",
-    NICK_ASC: "NICK_ASC",
-    MAIL_DESC: "MAIL_DESC",
-    MAIL_ASC: "MAIL_ASC",
-    BAN_DESC: "BAN_DESC",
-    BAN_ASC: "BAN_ASC",
-    ROLE_DESC: "ROLE_DESC",
-    ROLE_ASC: "ROLE_ASC",
-    DATE_DESC: "DATE_DESC",
-    DATE_ASC: "DATE_ASC"
-};
+import { USER_SORT_OPTIONS } from "../../constants/admin/userSortOption";
 
 // 전체 사용자 조회
-const getUsersInfo = async(sort=SORT_OPTIONS.DATE_DESC, page=0) =>{
+const getUsersInfo = async(sort=USER_SORT_OPTIONS.DATE_DESC, page=0) =>{
     try {
         const params = {};
     
-        if (sort && Object.values(SORT_OPTIONS).includes(sort)) {
-          params.sort = sort;
-        } else {
-          params.sort = SORT_OPTIONS.DATE_DESC; // 기본값 설정
-        }
+        params.sort = sort;
         if (page >= 0) params.page = page;
+
         const response = await api.get("/admin/users", {params: params});
         
         return response.data;

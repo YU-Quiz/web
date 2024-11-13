@@ -1,37 +1,55 @@
-
+import React from 'react';
+import styled from 'styled-components';
 import PostItem from './PostItem';
 
-
 const PostsList = ({ posts, onDelete }) => {
-
-
   return (
-    <div className="users-info-list">
-      <table>
+    <ListContainer>
+      <StyledTable>
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>PostTitle</th>
-            <th>Nickname</th>
-            <th>CategoryName</th>
-            <th>Created At</th>
-            <th>LikeCount</th>
-            <th>ViewCount</th>
-            <th>Actions</th>
-          </tr>
+          <HeaderRow>
+            <HeaderCell>ID</HeaderCell>
+            <HeaderCell>Post Title</HeaderCell>
+            <HeaderCell>Nickname</HeaderCell>
+            <HeaderCell>Category Name</HeaderCell>
+            <HeaderCell>Created At</HeaderCell>
+            <HeaderCell>Like Count</HeaderCell>
+            <HeaderCell>View Count</HeaderCell>
+            <HeaderCell>Actions</HeaderCell>
+          </HeaderRow>
         </thead>
         <tbody>
           {posts.map((post) => (
-            <PostItem 
-              key={post.postId} 
-              post={post} 
-              onDelete = {onDelete}
-            />
+            <PostItem key={post.postId} post={post} onDelete={onDelete} />
           ))}
         </tbody>
-      </table>
-    </div>
+      </StyledTable>
+    </ListContainer>
   );
 };
 
 export default PostsList;
+
+// Styled-components for PostsList
+const ListContainer = styled.div`
+  width: 100%;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+`;
+
+const HeaderRow = styled.tr`
+  background-color: #86c232;
+  color: white;
+`;
+
+const HeaderCell = styled.th`
+  padding: 10px;
+  border-bottom: 2px solid #2e7d32;
+  text-align: left;
+  font-weight: bold;
+`;
