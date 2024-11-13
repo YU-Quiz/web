@@ -221,10 +221,6 @@ const router = createBrowserRouter([
         path: "reports-control",
         element: <AdminReportsControl />,
       },
-      {
-        path: "others",
-        element: <ContentTemplate />,
-      },
     ],
   },
 ]);

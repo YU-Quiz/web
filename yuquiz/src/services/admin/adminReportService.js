@@ -1,17 +1,11 @@
 import { REPORT_SORT_OPTIONS } from "../../constants/admin/reportSortOption";
 import api from "../apiService";
 
-const getAdminReports = async (sort, page) => {
+const getAdminReports = async (sort=REPORT_SORT_OPTIONS.DATE_DESC, page=0) => {
   try {
     const params = {};
 
-    const sortOptions = Object.values(REPORT_SORT_OPTIONS).map(option => option.value);
-    
-    if (sort && sortOptions.includes(sort)) {
-      params.sort = sort;
-    } else {
-      params.sort = 'TYPE_DESC'; // 기본값 설정
-    }
+    params.sort = sort;
 
     if (page >= 0) params.page = page;
 
