@@ -3,14 +3,13 @@ import { useSearchParams, Link } from "react-router-dom";
 import QuizList from "../../components/quizlist/QuizList";
 import Dropdown from "../../components/UI/Dropdown";
 import SearchInput from "../../components/UI/SearchInput";
-import Button from "../../components/UI/Button";
 import { getQuizList } from "../../services/quiz/QuizManage";
 import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
 import styled from "styled-components";
 
-// Styled Components 정의
 const QuizListPageContainer = styled.div`
   background-color: white;
+  width: 100%;
 `;
 
 const ControlsContainer = styled.div`
@@ -27,7 +26,6 @@ const CreateQuizButton = styled(Link)`
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,7 +81,6 @@ const SORT_OPTIONS = Object.values(SORT_QUIZ_POST).map((option) => ({
 }));
 
 const QuizListPage = () => {
-  const [quizzes, setQuizzes] = useState([]);
   const [filteredQuizzes, setFilteredQuizzes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -110,7 +107,6 @@ const QuizListPage = () => {
         );
 
         if (isMounted) {
-          setQuizzes(quizData.content);
           setFilteredQuizzes(quizData.content);
           setTotalPages(quizData.totalPages);
         }
@@ -166,9 +162,7 @@ const QuizListPage = () => {
           initLabel="정렬 기준 선택"
           defaultOption={{ value: "DATE_DESC", label: "날짜 내림차순" }}
         />
-        <CreateQuizButton to="/quiz/create">
-          <Button>Create Quiz</Button>
-        </CreateQuizButton>
+        <CreateQuizButton to="/quiz/create">+ 퀴즈 생성</CreateQuizButton>
       </ControlsContainer>
 
       {isLoading && <LoadingMessage>로딩 중...</LoadingMessage>}
