@@ -1,5 +1,5 @@
 // src/router/index.js
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import { QuizSolve } from "../pages/quiz/QuizSolve";
 import { QuizCreator } from "../pages/quiz/QuizCreator";
@@ -182,38 +182,6 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "admin",
-        element: <AdminPageLayout />,
-        children: [
-          {
-            index: true,
-            element: <ContentTemplate />,
-            // loader: MyPageLoader,
-          },
-          {
-            path: "users-control",
-            element: <AdminUsersControl />,
-            // loader: AdminUsersLoader,
-          },
-          {
-            path: "posts-control",
-            element: <AdminPostsControl />,
-          },
-          {
-            path: "quizzes-control",
-            element: <AdminQuizControl />,
-          },
-          {
-            path: "reports-control",
-            element: <AdminReportsControl />,
-          },
-          {
-            path: "others",
-            element: <ContentTemplate />,
-          },
-        ],
-      },
-      {
         path: "login/oauth2/code/kakao",
         element: <KakaoLoginCallback />,
       },
@@ -224,6 +192,38 @@ const router = createBrowserRouter([
       {
         path: "resetPW/req",
         element: <ResResetPW />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminPageLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="users-control" replace />,
+        // loader: MyPageLoader,
+      },
+      {
+        path: "users-control",
+        element: <AdminUsersControl />,
+        // loader: AdminUsersLoader,
+      },
+      {
+        path: "posts-control",
+        element: <AdminPostsControl />,
+      },
+      {
+        path: "quizzes-control",
+        element: <AdminQuizControl />,
+      },
+      {
+        path: "reports-control",
+        element: <AdminReportsControl />,
+      },
+      {
+        path: "others",
+        element: <ContentTemplate />,
       },
     ],
   },
