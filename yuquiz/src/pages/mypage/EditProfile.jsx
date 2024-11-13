@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import "../../styles/mypage/EditProfile.scss";
+import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/auth/authStore";
 import { submitEditMyInfo } from "../../services/mypage/mypage";
+import Button from "../../components/UI/Button";
+import { withdrawUser } from "../../services/user/userService";
 
 const EditProfile = () => {
   const { userInfo, setUserInfo } = useAuthStore((state) => ({
@@ -14,44 +16,80 @@ const EditProfile = () => {
   const [email, setEmail] = useState(userInfo.email);
   const [major, setMajor] = useState(userInfo.majorName);
   const [agreeEmail, setAgreeEmail] = useState(userInfo.agreeEmail);
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [preview, setPreview] = useState(userInfo.profilePicture || "");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // 기본 동작 방지 (페이지 리로드 방지)
+    e.preventDefault();
 
-    // 서버로 보낼 데이터
     const updatedData = {
-      nickname: nickname,
-      email: email,
+      nickname,
+      email,
       majorName: major,
-      agreeEmail: agreeEmail,
+      agreeEmail,
     };
 
-    // 사용자 정보 수정 요청
+    if (profilePicture) {
+      updatedData.profilePicture = profilePicture; // or upload separately if backend requires
+    }
+
     const isSuccess = await submitEditMyInfo(updatedData);
 
     if (isSuccess) {
-      // 서버는 응답으로 실제 데이터를 주지 않으므로, 우리가 가진 데이터로 상태 업데이트
       setUserInfo({
-        ...userInfo, // 기존 role과 같은 필드는 유지
-        ...updatedData, // 수정한 데이터로 업데이트
+        ...userInfo,
+        ...updatedData,
       });
-
-      // 페이지 이동
-      console.log("Navigating to /mypage");
-      navigate("/my"); // 성공 시 마이페이지로 이동
+      alert("회원 정보가 수정되었습니다.");
+      navigate("/my");
     } else {
       console.error("Failed to update user info");
     }
   };
 
+ const handleDeleteAccount = async (e) => {
+  const confirmDelete = window.confirm("회원 탈퇴를 하시겠습니까? 이후 계정은 복구할 수 없습니다.");
+
+  if (confirmDelete) {
+    try {
+      const response = await withdrawUser();
+      if (response.success) { // Adjust based on the actual response structure
+        alert("회원 탈퇴가 완료되었습니다.");
+        navigate("/"); // Redirect to the home page or another appropriate page
+      } else {
+        alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("Error during account deletion:", error);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  }
+};
+
+
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePicture(file);
+    setPreview(URL.createObjectURL(file)); // Preview the uploaded image
+  };
+
   return (
-    <div className="edit-profile-container">
-      <h2>내 정보 수정</h2>
-      <p>소중한 내 정보를 최신으로 관리하세요.</p>
-      <form className="edit-profile-form">
-        <table>
+    <EditProfileContainer>
+      <Title>내 정보 수정</Title>
+      <Description>소중한 내 정보를 최신으로 관리하세요.</Description>
+      <Form>
+        <Table>
           <tbody>
+            <tr>
+              <th>프로필 사진</th>
+              <td>
+                <ProfilePictureWrapper>
+                  <ProfileImage src={preview} />
+                  <input type="file" accept="image/*" onChange={handleProfilePictureChange} />
+                </ProfilePictureWrapper>
+              </td>
+            </tr>
             <tr>
               <th>닉네임</th>
               <td>
@@ -61,16 +99,13 @@ const EditProfile = () => {
                   onChange={(e) => setNickname(e.target.value)}
                   placeholder="닉네임을 입력하세요"
                 />
-                <p className="hint">- (최대 20자 등록 가능)</p>
+                <Hint>- (최대 20자 등록 가능)</Hint>
               </td>
             </tr>
             <tr>
               <th>전공</th>
               <td>
-                <select
-                  value={major}
-                  onChange={(e) => setMajor(e.target.value)}
-                >
+                <select value={major} onChange={(e) => setMajor(e.target.value)}>
                   <option value="컴퓨터공학과">컴퓨터공학과</option>
                   <option value="경영학과">경영학과</option>
                   <option value="기계공학과">기계공학과</option>
@@ -92,29 +127,126 @@ const EditProfile = () => {
             <tr>
               <th>이메일 수신 동의</th>
               <td>
-                <label>
+                <Label>
                   <input
                     type="checkbox"
                     checked={agreeEmail}
                     onChange={(e) => setAgreeEmail(e.target.checked)}
                   />
                   이메일 수신에 동의합니다.
-                </label>
+                </Label>
               </td>
             </tr>
           </tbody>
-        </table>
-        <div className="submit-section">
-          <Link to="/my" className="home-btn">
-            마이페이지로
-          </Link>
-          <button type="button" onClick={handleSubmit}>
-            저장
-          </button>
-        </div>
-      </form>
-    </div>
+        </Table>
+        <SubmitSection>
+          <DeleteAccountButton onClick={handleDeleteAccount}>회원탈퇴</DeleteAccountButton>
+          <Button onClick={handleSubmit}>저장</Button>
+        </SubmitSection>
+      </Form>
+    </EditProfileContainer>
   );
 };
 
 export default EditProfile;
+
+const EditProfileContainer = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const Description = styled.p`
+  color: #777;
+  margin-bottom: 20px;
+`;
+
+const Form = styled.form`
+  width: 100%;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 10px;
+    vertical-align: top;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    width: 200px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+  }
+
+  td {
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  }
+`;
+
+const ProfilePictureWrapper = styled.div`
+  display: flex;
+  align-items: end;
+
+  input[type="file"] {
+    margin-left: 10px;
+  }
+`;
+
+const ProfileImage = styled.img`
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+`;
+
+const Hint = styled.p`
+  margin-top: 5px;
+  font-size: 12px;
+  color: #888;
+`;
+
+const Label = styled.label`
+  font-size: 14px;
+
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+`;
+
+const SubmitSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
+const DeleteAccountButton = styled.button`
+  padding: 10px;
+  font-size: 14px;
+  color: #aaa;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+`;
