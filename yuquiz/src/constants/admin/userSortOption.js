@@ -1,4 +1,4 @@
-export const SORT_OPTIONS = {
+export const USER_SORT_OPTIONS = {
   NICK_DESC: {
     value: "NICK_DESC",
     label: "닉네임 내림차순",

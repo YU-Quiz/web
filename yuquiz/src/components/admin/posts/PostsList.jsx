@@ -1,6 +1,4 @@
-
 import PostItem from './PostItem';
-
 
 const PostsList = ({ posts, onDelete }) => {
 

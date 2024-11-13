@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../../../styles/admin/UsersInfoList.scss";
+import styled from 'styled-components';
 import UserItem from './UserItem';
 
 const UsersInfoList = ({ users, onSuspend, onBan }) => {
@@ -15,33 +15,57 @@ const UsersInfoList = ({ users, onSuspend, onBan }) => {
   };
 
   return (
-    <div className="users-info-list">
-      <table>
+    <ListContainer>
+      <StyledTable>
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Nickname</th>
-            <th>Email</th>
-            <th>Created At</th>
-            <th>Actions</th>
-          </tr>
+          <HeaderRow>
+            <HeaderCell>ID</HeaderCell>
+            <HeaderCell>Username</HeaderCell>
+            <HeaderCell>Nickname</HeaderCell>
+            <HeaderCell>Email</HeaderCell>
+            <HeaderCell>Created At</HeaderCell>
+            <HeaderCell>Actions</HeaderCell>
+          </HeaderRow>
         </thead>
         <tbody>
           {users.map((user) => (
-            <UserItem 
-              key={user.id} 
-              user={user} 
+            <UserItem
+              key={user.id}
+              user={user}
               isDropdownOpen={openDropdownId === user.id} // Pass the open status
               toggleDropdown={() => toggleDropdown(user.id)} // Pass toggle function
               onSuspend={onSuspend}
-              onBan = {onBan}
+              onBan={onBan}
             />
           ))}
         </tbody>
-      </table>
-    </div>
+      </StyledTable>
+    </ListContainer>
   );
 };
 
 export default UsersInfoList;
+
+// Styled-components for UsersInfoList
+const ListContainer = styled.div`
+  width: 100%;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+`;
+
+const HeaderRow = styled.tr`
+  background-color: #86c232;
+  color: white;
+`;
+
+const HeaderCell = styled.th`
+  padding: 10px;
+  /* border-bottom: 2px solid #2e7d32; */
+  text-align: left;
+  font-weight: bold;
+`;
