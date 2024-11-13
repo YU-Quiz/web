@@ -27,6 +27,11 @@ const ProfileCard = () => {
             <MessageIcon to={'/my/edit'}>💬</MessageIcon>
             <SettingsIcon to={'/my/edit'}>⚙️</SettingsIcon>
         </IconsContainer>
+        {isAuthenticated&&userInfo.role==="ADMIN" ? (
+          <AdminIcon to={'/admin'}>관리자페이지</AdminIcon>
+        ):(
+          <></>
+        )}
         </UserInfo>
       </UserInfoContainer>
       
@@ -95,6 +100,10 @@ const MessageIcon = styled(Link)`
 `;
 
 const SettingsIcon = styled(Link)`
+  cursor: pointer;
+`;
+
+const AdminIcon = styled(Link)`
   cursor: pointer;
 `;
 
