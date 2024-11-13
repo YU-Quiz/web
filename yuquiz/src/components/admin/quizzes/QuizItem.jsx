@@ -1,29 +1,54 @@
-import "../../../styles/admin/UserItem.scss";
+import React from 'react';
+import styled from 'styled-components';
 
-const QuizItem = ({
-  quiz,
-  onDelete,
-}) => {
+const QuizItem = ({ quiz, onDelete }) => {
   const { quizId, quizTitle, nickname, createdAt, likeCount, viewCount } = quiz;
 
   const handleDeleteClick = () => {
     onDelete(quizId);
-
   };
 
   return (
-    <tr className="post-item">
-      <td>{quizId}</td>
-      <td>{quizTitle}</td>
-      <td>{nickname}</td>
-      <td>{new Date(createdAt).toLocaleString()}</td>
-      <td>{likeCount}</td>
-      <td>{viewCount}</td>
-      <td className="dropdown-cell">
-        <button onClick={handleDeleteClick}>삭제</button>
-      </td>
-    </tr>
+    <StyledTableRow>
+      <TableCell>{quizId}</TableCell>
+      <TableCell>{quizTitle}</TableCell>
+      <TableCell>{nickname}</TableCell>
+      <TableCell>{new Date(createdAt).toLocaleString()}</TableCell>
+      <TableCell>{likeCount}</TableCell>
+      <TableCell>{viewCount}</TableCell>
+      <ActionCell>
+        <DeleteButton onClick={handleDeleteClick}>삭제</DeleteButton>
+      </ActionCell>
+    </StyledTableRow>
   );
 };
 
 export default QuizItem;
+
+// Styled-components for QuizItem
+const StyledTableRow = styled.tr`
+  td {
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    font-size: 0.9rem;
+    color: #333;
+  }
+`;
+
+const TableCell = styled.td``;
+
+const ActionCell = styled.td`
+`;
+
+const DeleteButton = styled.button`
+  cursor: pointer;
+  font-size: 1rem;
+  border: none;
+  background: none;
+  color: #333;
+
+  &:hover {
+    color: #555;
+  }
+  
+`;
