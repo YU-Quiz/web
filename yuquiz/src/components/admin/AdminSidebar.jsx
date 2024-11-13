@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 const SidebarContainer = styled.div`
   width: 200px;
@@ -50,11 +51,8 @@ const AdminSidebar = () => {
         <SidebarListItem>
           <Link to="/admin/reports-control" style={{ color: "white", textDecoration: "none" }}>오류 신고 관리</Link>
         </SidebarListItem>
-        <SidebarListItem>
-          <Link to="/admin/others" style={{ color: "white", textDecoration: "none" }}>기타 관리</Link>
-        </SidebarListItem>
       </SidebarList>
-      <GoHomeLink to="/">나가기</GoHomeLink>
+      <GoHomeLink to="/"><FaSignOutAlt />  나가기</GoHomeLink>
     </SidebarContainer>
   );
 };
