@@ -123,8 +123,6 @@ const TableContainer = styled.div`
   flex: 1; /* Fills remaining vertical space */
   min-height: 0; /* Ensures flexbox works correctly for overflow */
   overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
 `;
 
 const Pagination = styled.div`

@@ -1,19 +1,11 @@
 import { POST_SORT_OPTIONS } from "../../constants/admin/postSortOption";
 import api from "../apiService";
 
-const getAdminPosts = async (sort, page) => {
+const getAdminPosts = async (sort=POST_SORT_OPTIONS.DATE_DESC, page=0) => {
   try {
     const params = {};
 
-    // POST_SORT_OPTIONS에서 value를 사용하여 비교
-    const sortOptions = Object.values(POST_SORT_OPTIONS).map(option => option.value);
-    
-    if (sort && sortOptions.includes(sort)) {
-      params.sort = sort;
-    } else {
-      params.sort = 'DATE_DESC'; // 기본값 설정
-    }
-
+    params.sort = sort;
     if (page >= 0) params.page = page;
 
     const response = await api.get("/admin/posts", { params });
