@@ -7,7 +7,6 @@ const FooterContainer = styled.footer`
   width: 100%;
   background: #fff;
   border-top: 1px solid #ccc5c5;
-  margin: 0;
 `;
 
 const FooterInner = styled.div`
@@ -58,6 +57,7 @@ const FooterCopyright = styled.p`
   width: 100%;
   font: 12px/1 "arial";
   color: #777;
+  margin-bottom: 20px;
 `;
 
 const Footer = () => {
