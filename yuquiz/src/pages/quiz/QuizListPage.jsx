@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import QuizList from "../../components/quizlist/QuizList";
 import Dropdown from "../../components/UI/Dropdown";
 import SearchInput from "../../components/UI/SearchInput";
 import { getQuizList } from "../../services/quiz/QuizManage";
 import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
 import styled from "styled-components";
+import { QuizGrid } from "../../components/quizlist/QuizGrid";
 
 const QuizListPageContainer = styled.div`
   background-color: white;
@@ -13,6 +13,7 @@ const QuizListPageContainer = styled.div`
 `;
 
 const ControlsContainer = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,8 +21,9 @@ const ControlsContainer = styled.div`
 `;
 
 const CreateQuizButton = styled(Link)`
-  background-color: #007bff;
+  background-color: black;
   color: white;
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -31,7 +33,7 @@ const CreateQuizButton = styled(Link)`
   justify-content: center;
   text-decoration: none;
   &:hover {
-    background-color: #0056b3;
+    background-color: gray;
   }
 `;
 
@@ -170,7 +172,7 @@ const QuizListPage = () => {
       {!isLoading && !error && filteredQuizzes.length === 0 && (
         <p>아직은 표시할 퀴즈가 없습니다.</p>
       )}
-      <QuizList currentQuizzes={filteredQuizzes} />
+      <QuizGrid currentQuizzes={filteredQuizzes} />
 
       <PaginationContainer>
         {Array.from({ length: totalPages }, (_, index) => (
