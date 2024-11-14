@@ -40,7 +40,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
-        // element 요소를 Home 컴포넌트로 바꿀 예정입니다.
       },
       {
         path: "login",

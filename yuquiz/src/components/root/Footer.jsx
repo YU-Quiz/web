@@ -7,6 +7,7 @@ const FooterContainer = styled.footer`
   width: 100%;
   background: #fff;
   border-top: 1px solid #ccc5c5;
+  margin-top: 20px;
 `;
 
 const FooterInner = styled.div`
