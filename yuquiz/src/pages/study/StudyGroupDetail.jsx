@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { removeStudy, showStudy } from '../../services/study/studyService';
 import { getStudyMembers, removeMember } from '../../services/study/studyGroupService';
 import MemberList from '../../components/study/MemberList';
+import { requestStudy } from '../../services/study/studyRequestService';
 
 // Loader Function
 export async function studyDetailsLoader({ params }) {
@@ -39,8 +40,15 @@ const StudyDetailsPage = () => {
     }
   }, [study.id, study.isMember]);
 
-  const handleJoinStudy = () => {
-    alert("스터디에 참여 요청이 전송되었습니다.");
+  const handleJoinStudy = async() => {
+    try {
+      const response = await requestStudy(study.id);
+      alert("신청되었습니다!");
+
+    } catch (error) {
+      console.error("스터디 신청 중 오류 발생:", error);
+      alert(error.message); // 오류 메시지 표시
+    }
   };
 
   const handleEditStudy = () => {
@@ -66,7 +74,7 @@ const StudyDetailsPage = () => {
   };
 
   const handleRemoveMember = async (userId) => {
-    const confirmDelete = window.confirm("멤벌르 추방하시겠습니까?");
+    const confirmDelete = window.confirm("멤버를 추방하시겠습니까?");
     if(confirmDelete){
       try {
         const response = await removeMember(study.id, userId);
