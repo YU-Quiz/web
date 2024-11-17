@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { removeStudy, showStudy } from '../../services/study/studyService';
+import { getStudyMembers } from '../../services/study/studyGroupService';
+import MemberList from '../../components/study/MemberList';
 
 // Loader Function
 export async function studyDetailsLoader({ params }) {
@@ -13,7 +15,29 @@ export async function studyDetailsLoader({ params }) {
 const StudyDetailsPage = () => {
   const study = useLoaderData();
   const navigate = useNavigate();
+  const [members, setMembers] = useState([]);
+  const [isLoadingMembers, setIsLoadingMembers] = useState(true);
+  const [memberError, setMemberError] = useState(null);
+
   console.log(study);
+
+  useEffect(() => {
+    const fetchStudyMembers = async () => {
+      try {
+        const memberList = await getStudyMembers(study.id);
+        setMembers(memberList);
+        setIsLoadingMembers(false);
+      } catch (error) {
+        console.error('스터디원 목록을 불러오는 중 오류 발생:', error);
+        setMemberError(error.message);
+        setIsLoadingMembers(false);
+      }
+    };
+
+    if (study.isMember) {
+      fetchStudyMembers();
+    }
+  }, [study.id, study.isMember]);
 
   const handleJoinStudy = () => {
     alert("스터디에 참여 요청이 전송되었습니다.");
@@ -36,10 +60,20 @@ const StudyDetailsPage = () => {
       }
     }
   };
-  
 
   const handleGoToChat = () => {
     alert("채팅방으로 이동합니다.");
+  };
+
+  const handleRemoveMember = async (userId) => {
+    try {
+      // await (study.id, userId); // study.id와 userId 전달
+      alert('스터디원이 삭제되었습니다.');
+      // 멤버 리스트 새로고침 로직 추가 필요
+    } catch (error) {
+      console.error('스터디원 삭제 중 오류 발생:', error);
+      alert(error.message || '스터디원 삭제에 실패했습니다.');
+    }
   };
 
   return (
@@ -109,34 +143,22 @@ const StudyDetailsPage = () => {
       ) : (
         <MemberSection>
           <SectionTitle>스터디원 목록</SectionTitle>
-          {/* <MemberList>
-            {study.members.map((member) => (
-              <MemberItem key={member.id}>
-                <span>{member.name}</span>
-                {study.role === 'LEADER' && (
-                  <LeaderActions>
-                    <ActionButton
-                      onClick={() => handleAcceptMember(member.id)}
-                    >
-                      가입 승인
-                    </ActionButton>
-                    <ActionButton
-                      onClick={() => handleRemoveMember(member.id)}
-                      danger
-                    >
-                      제거
-                    </ActionButton>
-                  </LeaderActions>
-                )}
-              </MemberItem>
-            ))}
-          </MemberList> */}
+          {isLoadingMembers ? (
+            <LoadingMessage>로딩 중...</LoadingMessage>
+          ) : memberError ? (
+            <ErrorMessage>{memberError}</ErrorMessage>
+          ) : (
+            <MemberList
+              members={members}
+              role={study.role}
+              onRemoveMember={handleRemoveMember}
+            />
+          )}
         </MemberSection>
       )}
     </DetailsContainer>
   );
 };
-
 
 export default StudyDetailsPage;
 
@@ -235,7 +257,7 @@ const InfoValue = styled.span`
 `;
 
 const MemberSection = styled.div`
-  margin-top: 30px;
+  margin: 20px;
 `;
 
 const SectionTitle = styled.h2`
@@ -243,45 +265,6 @@ const SectionTitle = styled.h2`
   font-weight: bold;
   color: #2c3e50;
   margin-bottom: 15px;
-`;
-
-const MemberList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const MemberItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-`;
-
-const LeaderActions = styled.div`
-  display: flex;
-  gap: 12px;
-`;
-
-const ActionButton = styled.button`
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  background-color: ${(props) => (props.danger ? '#e74c3c' : '#2ecc71')};
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: ${(props) =>
-      props.danger ? '#c0392b' : '#27ae60'};
-  }
 `;
 
 const BlurredContent = styled.div`
@@ -325,3 +308,19 @@ const MessageText = styled.p`
   margin: 0;
 `;
 
+// Styled Components
+const MemberRole = styled.span`
+  font-size: 14px;
+  font-weight: bold;
+  color: #1abc9c;
+`;
+
+const LoadingMessage = styled.p`
+  text-align: center;
+  color: #7f8c8d;
+`;
+
+const ErrorMessage = styled.p`
+  text-align: center;
+  color: #e74c3c;
+`;
