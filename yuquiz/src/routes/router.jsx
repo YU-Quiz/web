@@ -24,7 +24,7 @@ import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
 import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
 import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
-import StudyGroupList from "../pages/study/StudyGroupList";
+import StudyGroupList, { studyListLoader } from "../pages/study/StudyGroupList";
 import StudyGroupDetail from "../pages/study/StudyGroupDetail";
 import AdminPostsControl from "../pages/admin/AdminPostsControl";
 import AdminQuizControl from "../pages/admin/AdminQuizControl";
@@ -92,15 +92,12 @@ const router = createBrowserRouter([
       {
         //현재 임시
         path: "study",
-        element: (
-          <>
-            <Outlet />
-          </>
-        ),
+        element: <Outlet />,
         children: [
           {
-            path: "list",
+            index: true,
             element: <StudyGroupList />,
+            loader: studyListLoader,
           },
           {
             path: "create",
