@@ -25,9 +25,9 @@ const Home = () => {
       <QuizSection>
         <SectionTitle>📝 Try Quiz! 📝</SectionTitle>
         <QuizGrid>
-          <QuizCard>Solve<br></br>Quiz</QuizCard>
-          <QuizCard>Create<br />Quiz</QuizCard>
-          <QuizCard>Explore<br />Quiz Series</QuizCard>
+          <QuizCard to={'/quiz/list'}>Solve<br></br>Quiz</QuizCard>
+          <QuizCard to={'/quiz/create'}>Create<br />Quiz</QuizCard>
+          <QuizCard to={'/quizseries/list'}>Explore<br />Quiz Series</QuizCard>
         </QuizGrid>
       </QuizSection>
 
