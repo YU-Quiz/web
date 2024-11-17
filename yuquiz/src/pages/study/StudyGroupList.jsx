@@ -59,7 +59,7 @@ const StudyListPage = () => {
   };
 
   const currentPage = parseInt(searchParams.get("page") || "0", 10);
-  console.log(STUDY_LIST_SORT_OPTIONS);
+  // console.log(STUDY_LIST_SORT_OPTIONS);
   return (
     <StudyListContainer>
       <FilterContainer>

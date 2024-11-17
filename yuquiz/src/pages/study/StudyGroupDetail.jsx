@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { removeStudy, showStudy } from '../../services/study/studyService';
-import { getStudyMembers } from '../../services/study/studyGroupService';
+import { getStudyMembers, removeMember } from '../../services/study/studyGroupService';
 import MemberList from '../../components/study/MemberList';
 
 // Loader Function
@@ -66,13 +66,16 @@ const StudyDetailsPage = () => {
   };
 
   const handleRemoveMember = async (userId) => {
-    try {
-      // await (study.id, userId); // study.id와 userId 전달
-      alert('스터디원이 삭제되었습니다.');
-      // 멤버 리스트 새로고침 로직 추가 필요
-    } catch (error) {
-      console.error('스터디원 삭제 중 오류 발생:', error);
-      alert(error.message || '스터디원 삭제에 실패했습니다.');
+    const confirmDelete = window.confirm("멤벌르 추방하시겠습니까?");
+    if(confirmDelete){
+      try {
+        const response = await removeMember(study.id, userId);
+        alert('스터디원이 삭제되었습니다.');
+        // 멤버 리스트 새로고침 로직 추가 필요
+      } catch (error) {
+        console.error('스터디원 삭제 중 오류 발생:', error);
+        alert(error.message || '스터디원 삭제에 실패했습니다.');
+      }
     }
   };
 

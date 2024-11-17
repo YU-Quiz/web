@@ -1,7 +1,7 @@
 import api from '../apiService'; // Axios 인스턴스 또는 API 헬퍼 파일을 import
 
 // 스터디 그룹원 조회
-export const getStudyMembers = async (studyId) => {
+const getStudyMembers = async (studyId) => {
     
   try {
     const response = await api.get(`/study/${studyId}/member`);
@@ -24,3 +24,31 @@ export const getStudyMembers = async (studyId) => {
     }
   }
 };
+
+// 스터디 멤버 삭제
+const removeMember = async (studyId, memberId) => {
+    try {
+
+
+      const response = await api.delete(`/study/${studyId}/member`, {id: memberId});
+  
+      if (response.status === 204) {
+        return { message: "멤버 삭제 성공" };
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 403) {
+          // 권한 없음
+          throw new Error(`${error.response.data.message}`);
+        } else {
+          // 기타 서버 에러 처리
+          throw new Error("멤버 삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
+        }
+      } else {
+        // 네트워크 에러 처리
+        throw new Error("서버와 연결할 수 없습니다.");
+      }
+    }
+  };
+
+  export { getStudyMembers, removeMember };
