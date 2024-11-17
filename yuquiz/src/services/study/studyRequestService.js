@@ -40,7 +40,7 @@ const requestStudy = async (studyId) => {
         if (status === 404) {
           throw new Error(message || '존재하지 않는 스터디입니다.');
         } else if(status === 409) {
-            throw new Error('이미 가입된 스터디입니다.');
+            throw new Error('가입대기중입니다.');
         } else {
           throw new Error('스터디원 신청목록 조회 중 문제가 발생했습니다. 다시 시도해주세요.');
         }
@@ -52,9 +52,10 @@ const requestStudy = async (studyId) => {
 
   // 스터디 가입 수락
 const acceptStudyRequest = async (studyId, memberId) => {
+    console.log(studyId, memberId);
     
     try {
-      const response = await api.post(`/study/${studyId}/request`, {id: memberId});
+        const response = await api.post(`/study/${studyId}/accept?id=${memberId}`);
   
     //   console.log(response.data);
       return response.data; // 성공 시 신청 목록 반환

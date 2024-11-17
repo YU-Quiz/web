@@ -30,7 +30,7 @@ const removeMember = async (studyId, memberId) => {
     try {
 
 
-      const response = await api.delete(`/study/${studyId}/member`, {id: memberId});
+      const response = await api.delete(`/study/${studyId}/member?id=${memberId}`, {id: memberId});
   
       if (response.status === 204) {
         return { message: "멤버 삭제 성공" };

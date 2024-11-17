@@ -3,8 +3,9 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { removeStudy, showStudy } from '../../services/study/studyService';
 import { getStudyMembers, removeMember } from '../../services/study/studyGroupService';
+import { requestStudy, getStudyRequests, acceptStudyRequest } from '../../services/study/studyRequestService';
 import MemberList from '../../components/study/MemberList';
-import { requestStudy } from '../../services/study/studyRequestService';
+import JoinRequestModal from '../../components/study/JoinRequestModal'; // Import the modal
 
 // Loader Function
 export async function studyDetailsLoader({ params }) {
@@ -20,7 +21,10 @@ const StudyDetailsPage = () => {
   const [isLoadingMembers, setIsLoadingMembers] = useState(true);
   const [memberError, setMemberError] = useState(null);
 
-  console.log(study);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [joinRequests, setJoinRequests] = useState([]);
+  const [isLoadingRequests, setIsLoadingRequests] = useState(true);
+  const [requestError, setRequestError] = useState(null);
 
   useEffect(() => {
     const fetchStudyMembers = async () => {
@@ -40,14 +44,27 @@ const StudyDetailsPage = () => {
     }
   }, [study.id, study.isMember]);
 
-  const handleJoinStudy = async() => {
+  const handleJoinStudy = async () => {
     try {
-      const response = await requestStudy(study.id);
+      await requestStudy(study.id);
       alert("신청되었습니다!");
-
     } catch (error) {
       console.error("스터디 신청 중 오류 발생:", error);
-      alert(error.message); // 오류 메시지 표시
+      alert(error.message);
+    }
+  };
+
+  const handleFetchRequests = async () => {
+    setIsLoadingRequests(true);
+    setRequestError(null);
+    try {
+      const requests = await getStudyRequests(study.id);
+      setJoinRequests(requests);
+      setIsLoadingRequests(false);
+    } catch (error) {
+      console.error("가입 신청 목록을 불러오는 중 오류 발생:", error);
+      setRequestError(error.message);
+      setIsLoadingRequests(false);
     }
   };
 
@@ -59,12 +76,12 @@ const StudyDetailsPage = () => {
     const confirmDelete = window.confirm("스터디를 삭제하시겠습니까?");
     if (confirmDelete) {
       try {
-        const response = await removeStudy(study.id); // study.id를 삭제 API에 전달
-        alert(response.message); // 성공 메시지 표시
-        navigate("/study"); // 스터디 목록 페이지로 이동
+        const response = await removeStudy(study.id);
+        alert(response.message);
+        navigate("/study");
       } catch (error) {
         console.error("스터디 삭제 중 오류 발생:", error);
-        alert(error.message); // 오류 메시지 표시
+        alert(error.message);
       }
     }
   };
@@ -75,17 +92,40 @@ const StudyDetailsPage = () => {
 
   const handleRemoveMember = async (userId) => {
     const confirmDelete = window.confirm("멤버를 추방하시겠습니까?");
-    if(confirmDelete){
+    if (confirmDelete) {
       try {
-        const response = await removeMember(study.id, userId);
+        await removeMember(study.id, userId);
         alert('스터디원이 삭제되었습니다.');
-        // 멤버 리스트 새로고침 로직 추가 필요
+        setMembers(members.filter(member => member.userId !== userId)); // Remove member locally
       } catch (error) {
         console.error('스터디원 삭제 중 오류 발생:', error);
         alert(error.message || '스터디원 삭제에 실패했습니다.');
       }
     }
   };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    handleFetchRequests();
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleAcceptRequest = async (userId) => {
+    try {
+        await acceptStudyRequest(study.id, userId);
+        
+        alert('가입 요청이 승인되었습니다.');
+        setJoinRequests(joinRequests.filter(request => request.userId !== userId)); // 요청 제거
+        setMembers([...members, { userId, role: 'USER', joinedAt: new Date() }]); // 새 멤버 추가
+    } catch (error) {
+        console.error('가입 요청 승인 중 오류 발생:', error);
+        alert(error.message || '가입 요청 승인에 실패했습니다.');
+    }
+};
+
 
   return (
     <DetailsContainer>
@@ -106,6 +146,7 @@ const StudyDetailsPage = () => {
                   <Button onClick={handleDeleteStudy} danger>
                     스터디 삭제
                   </Button>
+                  <Button onClick={handleOpenModal}>가입 신청 목록</Button>
                 </>
               )}
             </>
@@ -167,11 +208,21 @@ const StudyDetailsPage = () => {
           )}
         </MemberSection>
       )}
+
+      <JoinRequestModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        requests={joinRequests}
+        isLoading={isLoadingRequests}
+        error={requestError}
+        onAccept={handleAcceptRequest}
+      />;
     </DetailsContainer>
   );
 };
 
 export default StudyDetailsPage;
+
 
 // Styled Components
 const DetailsContainer = styled.div`
