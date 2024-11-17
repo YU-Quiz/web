@@ -2,12 +2,13 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/root/Header";
 import styled from "styled-components";
+import Footer from "../components/root/Footer";
 
 const RootLayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  /* min-height: 100vh; */
 `;
 
 const MainContainer = styled.main`
@@ -15,7 +16,7 @@ const MainContainer = styled.main`
   flex: 1;
   display: flex;
   justify-content: center;
-  padding: 20px;
+  /* padding: 20px; */
 
   /* Responsive inner width */
   @media (min-width: 1200px) {
@@ -41,7 +42,7 @@ const RootLayout = () => {
         <Outlet />
       </MainContainer>
 
-      {/* <Footer /> */}
+      <Footer />
     </RootLayoutContainer>
   );
 };
