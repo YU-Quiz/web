@@ -25,7 +25,7 @@ import AdminUsersControl from "../pages/admin/AdminUsersControl";
 import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
 import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
 import StudyGroupList, { studyListLoader } from "../pages/study/StudyGroupList";
-import StudyGroupDetail from "../pages/study/StudyGroupDetail";
+import StudyGroupDetail, { studyDetailsLoader } from "../pages/study/StudyGroupDetail";
 import AdminPostsControl from "../pages/admin/AdminPostsControl";
 import AdminQuizControl from "../pages/admin/AdminQuizControl";
 import AdminReportsControl from "../pages/admin/AdminReportsControl";
@@ -100,16 +100,13 @@ const router = createBrowserRouter([
             loader: studyListLoader,
           },
           {
-            path: "create",
+            path: "new",
             element: <QuizCreator />,
           },
           {
             path: ":studyId",
             element: <StudyGroupDetail />,
-          },
-          {
-            path: "play/:quizId",
-            element: <QuizSolve />,
+            loader: studyDetailsLoader,
           },
         ],
       },
