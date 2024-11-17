@@ -20,8 +20,10 @@ const JoinRequestModal = ({
           <LoadingMessage>로딩 중...</LoadingMessage>
         ) : error ? (
           <ErrorMessage>{error}</ErrorMessage>
-        ) : (
+        ) : requests.length > 0 ? (
           <JoinRequestList requests={requests} onAccept={onAccept} />
+        ) : (
+          <EmptyMessage>아직 아무도 신청을 안했네요.😓</EmptyMessage>
         )}
       </ModalContent>
     </ModalOverlay>
@@ -66,4 +68,11 @@ const LoadingMessage = styled.p`
 const ErrorMessage = styled.p`
   text-align: center;
   color: #e74c3c;
+`;
+
+const EmptyMessage = styled.p`
+  text-align: center;
+  color: #95a5a6;
+  font-size: 16px;
+  margin-top: 20px;
 `;

@@ -25,7 +25,7 @@ const StudyDetailsPage = () => {
   const [joinRequests, setJoinRequests] = useState([]);
   const [isLoadingRequests, setIsLoadingRequests] = useState(true);
   const [requestError, setRequestError] = useState(null);
-
+console.log(study);
   useEffect(() => {
     const fetchStudyMembers = async () => {
       try {
@@ -118,13 +118,14 @@ const StudyDetailsPage = () => {
         await acceptStudyRequest(study.id, userId);
         
         alert('가입 요청이 승인되었습니다.');
-        setJoinRequests(joinRequests.filter(request => request.userId !== userId)); // 요청 제거
-        setMembers([...members, { userId, role: 'USER', joinedAt: new Date() }]); // 새 멤버 추가
+        // 요청 승인 후 페이지 새로고침
+        window.location.reload();
     } catch (error) {
         console.error('가입 요청 승인 중 오류 발생:', error);
         alert(error.message || '가입 요청 승인에 실패했습니다.');
     }
 };
+
 
 
   return (
