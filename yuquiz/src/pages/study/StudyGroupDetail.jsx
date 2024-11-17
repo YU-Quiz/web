@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { showStudy } from '../../services/study/studyService';
+import { removeStudy, showStudy } from '../../services/study/studyService';
 
 // Loader Function
 export async function studyDetailsLoader({ params }) {
@@ -12,19 +12,31 @@ export async function studyDetailsLoader({ params }) {
 
 const StudyDetailsPage = () => {
   const study = useLoaderData();
+  const navigate = useNavigate();
   console.log(study);
 
   const handleJoinStudy = () => {
     alert("스터디에 참여 요청이 전송되었습니다.");
   };
 
-  const handleAcceptMember = (memberId) => {
-    alert(`스터디 가입 승인 요청이 전송되었습니다. (Member ID: ${memberId})`);
+  const handleEditStudy = () => {
+    navigate('edit');
   };
 
-  const handleRemoveMember = (memberId) => {
-    alert(`스터디원 제거 요청이 전송되었습니다. (Member ID: ${memberId})`);
+  const handleDeleteStudy = async () => {
+    const confirmDelete = window.confirm("스터디를 삭제하시겠습니까?");
+    if (confirmDelete) {
+      try {
+        const response = await removeStudy(study.id); // study.id를 삭제 API에 전달
+        alert(response.message); // 성공 메시지 표시
+        navigate("/study"); // 스터디 목록 페이지로 이동
+      } catch (error) {
+        console.error("스터디 삭제 중 오류 발생:", error);
+        alert(error.message); // 오류 메시지 표시
+      }
+    }
   };
+  
 
   const handleGoToChat = () => {
     alert("채팅방으로 이동합니다.");
@@ -39,9 +51,19 @@ const StudyDetailsPage = () => {
             <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>
           )}
           {study.isMember && (
-            <Button onClick={handleGoToChat} secondary>
-              채팅방으로 이동
-            </Button>
+            <>
+              <Button onClick={handleGoToChat} secondary>
+                채팅방으로 이동
+              </Button>
+              {study.role === 'LEADER' && (
+                <>
+                  <Button onClick={handleEditStudy}>스터디 수정</Button>
+                  <Button onClick={handleDeleteStudy} danger>
+                    스터디 삭제
+                  </Button>
+                </>
+              )}
+            </>
           )}
         </ButtonGroup>
       </Header>
@@ -111,10 +133,10 @@ const StudyDetailsPage = () => {
           </MemberList> */}
         </MemberSection>
       )}
-
     </DetailsContainer>
   );
 };
+
 
 export default StudyDetailsPage;
 
