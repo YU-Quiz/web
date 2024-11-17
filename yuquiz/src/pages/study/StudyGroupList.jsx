@@ -1,74 +1,153 @@
-import React, { useState, useEffect } from "react";
-import "../../styles/study/StudyGroupList.scss";
-import { Link } from "react-router-dom";
-import SearchBar from "../../components/quizlist/SearchBar";
-import SortDropdown from "../../components/postlist/SortDropdown";
+import React from 'react';
+import { useLoaderData, useSearchParams, Link } from 'react-router-dom';
+import styled from 'styled-components';
+import StudyList from '../../components/study/StudyList';
+import Dropdown from '../../components/UI/Dropdown';
+import SearchInput from '../../components/UI/SearchInput';
+import Button from '../../components/UI/Button'; // Import the Button component
+import { getStudyList } from '../../services/study/studyService';
+import { STUDY_LIST_SORT_OPTIONS } from '../../constants/study/studySortOption';
+import { STUDY_FILTER_OPTIONS } from '../../constants/study/studyFilterOption';
 
-// 임시 데이터
-const tempStudyGroupData = [
-  { id: 1, name: "알고리즘 스터디", join: false },
-  { id: 2, name: "웹 개발 심화 스터디", join: false },
-  { id: 3, name: "자료구조 마스터 스터디", join: true },
-];
+export async function studyListLoader({ request }) {
+  const url = new URL(request.url);
+  const currentPage = parseInt(url.searchParams.get("page") || "0", 10);
+  const keyword = url.searchParams.get("keyword") || "";
+  const sortOption = url.searchParams.get("sort") || "CREATED_DESC";
+  const filter = url.searchParams.get("filter") || "ALL";
 
-const StudyGroupList = () => {
-  const [studyGroupList, setStudyGroupList] = useState(tempStudyGroupData); // 임시 데이터로 초기화
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  const [sortOption, setSortOption] = useState("DATE_DESC");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const studiesListData = await getStudyList(keyword, sortOption, filter, currentPage);
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    setCurrentPage(0);
+  return {
+    studiesList: studiesListData.content,
+    totalPages: studiesListData.totalPages,
+  };
+}
+
+const StudyListPage = () => {
+  const { studiesList, totalPages } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleSelectSort = (selectedSort) => {
+    updateSearchParams({ sort: selectedSort.value, page: 0 });
   };
 
-  const handleSortChange = (option) => {
-    setSortOption(option);
+  const handleSelectFilter = (selectedFilter) => {
+    updateSearchParams({ filter: selectedFilter.value, page: 0 });
   };
 
+  const handleSearch = (keyword) => {
+    updateSearchParams({ keyword, page: 0 });
+  };
+
+  const updateSearchParams = (newParams) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (newParams.page !== undefined) {
+      params.set('page', newParams.page);
+    }
+    if (newParams.sort !== undefined) {
+      params.set('sort', newParams.sort);
+    }
+    if (newParams.filter !== undefined) {
+      params.set('filter', newParams.filter);
+    }
+    if (newParams.keyword !== undefined) {
+      params.set('keyword', newParams.keyword);
+    }
+    setSearchParams(params);
+  };
+
+  const currentPage = parseInt(searchParams.get("page") || "0", 10);
+  // console.log(STUDY_LIST_SORT_OPTIONS);
   return (
-    <div className="study-group-list-page-container">
+    <StudyListContainer>
+      <FilterContainer>
+        <SearchInput onSearch={handleSearch} />
+        <DropdownContainer>
+          <Dropdown
+            options={Object.values(STUDY_LIST_SORT_OPTIONS)}
+            onSelect={handleSelectSort}
+            defaultOption={STUDY_LIST_SORT_OPTIONS.CREATED_DESC}
+          />
+          <Dropdown
+            options={Object.values(STUDY_FILTER_OPTIONS)}
+            onSelect={handleSelectFilter}
+            defaultOption={STUDY_FILTER_OPTIONS.ALL}
+          />
+        </DropdownContainer>
+        <StyledLink to="/study/new">
+          <Button>Create Study</Button>
+        </StyledLink>
+      </FilterContainer>
 
-      <div className="controls-container">
-        <SearchBar onSearch={handleSearch} />
-        <SortDropdown onSelectSortOption={handleSortChange} />
-        <button>+ 스터디 생성</button>
-      </div>
+      <StudyList studies={studiesList} />
 
-      {isLoading && <p>로딩 중...</p>}
-      {error && <p className="error-message">{error}</p>}
-      {studyGroupList.length === 0 && !isLoading && !error && (
-        <p>아직은 표시할 스터디 그룹이 없습니다.</p>
-      )}
-
-      <div className="study-group-list">
-        {studyGroupList.map((group) => (
-          <div key={group.id} className="study-group-item">
-            <Link to={`/study/${group.id}`} className="study-group-name">
-              <h3>{group.name}</h3>
-              {group.join === true ? <></> : <button>가입신청</button>}
-            </Link>
-          </div>
-        ))}
-      </div>
-
-      <div className="pagination-container">
+      <Pagination>
         {Array.from({ length: totalPages }, (_, index) => (
-          <button
+          <PageButton
             key={index}
-            className={`page-button ${index === currentPage ? "active" : ""}`}
-            onClick={() => setCurrentPage(index)}
+            isActive={index === currentPage}
+            onClick={() => updateSearchParams({ page: index })}
             disabled={index === currentPage}
           >
             {index + 1}
-          </button>
+          </PageButton>
         ))}
-      </div>
-    </div>
+      </Pagination>
+    </StudyListContainer>
   );
 };
 
-export default StudyGroupList;
+export default StudyListPage;
+
+// Styled Components
+const StudyListContainer = styled.div`
+  width: 100%;
+`;
+
+const FilterContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const DropdownContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const PageButton = styled.button`
+  padding: 8px 12px;
+  margin: 0 5px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: ${({ isActive }) => (isActive ? '#007bff' : '#f1f1f1')};
+  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
+
+  &:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  &:disabled {
+    cursor: default;
+    background-color: #007bff;
+    color: #fff;
+  }
+`;

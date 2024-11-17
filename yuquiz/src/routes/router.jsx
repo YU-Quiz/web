@@ -24,13 +24,16 @@ import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
 import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
 import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
-import StudyGroupList from "../pages/study/StudyGroupList";
-import StudyGroupDetail from "../pages/study/StudyGroupDetail";
+import StudyGroupList, { studyListLoader } from "../pages/study/StudyGroupList";
+import StudyGroupDetail, { studyDetailsLoader } from "../pages/study/StudyGroupDetail";
 import AdminPostsControl from "../pages/admin/AdminPostsControl";
 import AdminQuizControl from "../pages/admin/AdminQuizControl";
 import AdminReportsControl from "../pages/admin/AdminReportsControl";
 import RootLayout from "../pages/RootLayout";
 import Home from "../pages/Home";
+import StudyDetailsPage from "../pages/study/StudyGroupDetail";
+import StudyGroupCreator from "../pages/study/StudyGroupCreator";
+import StudyGroupFix from "../pages/study/StudyGroupFix";
 
 const router = createBrowserRouter([
   {
@@ -91,27 +94,26 @@ const router = createBrowserRouter([
       {
         //현재 임시
         path: "study",
-        element: (
-          <>
-            <Outlet />
-          </>
-        ),
+        element: <Outlet />,
         children: [
           {
-            path: "list",
+            index: true,
             element: <StudyGroupList />,
+            loader: studyListLoader,
           },
           {
-            path: "create",
-            element: <QuizCreator />,
+            path: "new",
+            element: <StudyGroupCreator />,
           },
           {
             path: ":studyId",
             element: <StudyGroupDetail />,
+            loader: studyDetailsLoader,
           },
           {
-            path: "play/:quizId",
-            element: <QuizSolve />,
+            path: ":studyId/edit",
+            element: <StudyGroupFix />,
+            // loader: studyDetailsLoader,
           },
         ],
       },

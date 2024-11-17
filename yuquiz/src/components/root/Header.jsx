@@ -95,7 +95,7 @@ const Header = () => {
         <NavButton to="/posts">Community</NavButton>
         <NavButton to="/leaderboard">LeaderBoard</NavButton>
         <NavButton to="/quizseries/list">Quiz Series</NavButton>
-        <NavButton to="/study/list">Study</NavButton>
+        <NavButton to="/study">Study</NavButton>
 
         {/* 오른쪽 벽에 붙이는 부분 */}
         <div
