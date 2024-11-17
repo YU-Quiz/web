@@ -111,6 +111,7 @@ const StudyGroupFix = () => {
             <Input
               type="datetime-local"
               value={registerDuration}
+              min={new Date().toISOString().slice(0, 16)} // 현재 시간 이전은 선택 불가
               onChange={(e) => setRegisterDuration(e.target.value)}
               required
             />

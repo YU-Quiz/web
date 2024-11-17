@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../components/UI/Button';
 import { createStudy } from '../../services/study/studyService';
 
@@ -80,6 +80,7 @@ const StudyGroupCreator = () => {
             <Input
               type="datetime-local"
               value={registerDuration}
+              min={new Date().toISOString().slice(0, 16)} // 현재 시간 이전은 선택 불가
               onChange={(e) => setRegisterDuration(e.target.value)}
               required
             />
@@ -98,8 +99,8 @@ const StudyGroupCreator = () => {
         </FlexRow>
 
         <ButtonContainer>
-          <Button type="submit">스터디 생성</Button>
-          <CancelButton onClick={() => navigate('/study')}>취소</CancelButton>
+          <SubmitButton type="submit">스터디 생성</SubmitButton>
+          <CancelButton to={`/study`}>취소</CancelButton>
         </ButtonContainer>
       </Form>
     </FormContainer>
@@ -112,18 +113,19 @@ export default StudyGroupCreator;
 const FormContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 20px;
+  background-color: #f8f9fc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
   margin-top: 100px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const FormTitle = styled.h2`
-  font-size: 24px;
+  font-size: 26px;
   text-align: center;
-  margin-bottom: 20px;
   font-weight: bold;
+  color: #343a40;
+  margin-bottom: 20px;
 `;
 
 const Form = styled.form`
@@ -132,33 +134,53 @@ const Form = styled.form`
 `;
 
 const Label = styled.label`
-  margin-bottom: 8px;
+  font-size: 14px;
   font-weight: bold;
+  color: #495057;
+  margin-bottom: 8px;
 `;
 
 const Input = styled.input`
-  padding: 10px;
+  padding: 12px;
   font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
   margin-bottom: 15px;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #5e72e4;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(94, 114, 228, 0.25);
+  }
 `;
 
 const Textarea = styled.textarea`
-  padding: 10px;
+  padding: 12px;
   font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
   margin-bottom: 15px;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #5e72e4;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(94, 114, 228, 0.25);
+  }
 `;
 
 const FlexRow = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: 20px;
+  margin-bottom: 20px;
 `;
 
 const FlexColumn = styled.div`
@@ -169,20 +191,36 @@ const FlexColumn = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
 `;
 
-const CancelButton = styled.button`
+const SubmitButton = styled.button`
   padding: 10px 20px;
-  background-color: #6c757d;
+  font-size: 14px;
+  background-color: #5e72e4;
   color: white;
-  text-decoration: none;
-  border-radius: 4px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
 
   &:hover {
-    background-color: #5a6268;
+    background-color: #4e60d4;
+  }
+`;
+
+const CancelButton = styled(Link)`
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #f5365c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #d7284b;
   }
 `;
