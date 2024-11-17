@@ -84,24 +84,10 @@ const showStudy = async (studyId) => {
   
 
 // 스터디 수정
-const editStudy = async (
-    studyId,
-    name,
-    description,
-    registrationDuration,
-    maxUser,
-    state
-  ) => {
+const editStudy = async ( studyId, studyData ) => {
     try {
-      const payload = {
-        name: name,
-        description: description,
-        registrationDuration: registrationDuration,
-        maxUser: maxUser,
-        state: state,
-      };
   
-      const response = await api.put(`/study/${studyId}`, payload);
+      const response = await api.put(`/study/${studyId}`, studyData);
   
       console.log(response.data);
       return response.data;

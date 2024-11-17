@@ -33,6 +33,7 @@ import RootLayout from "../pages/RootLayout";
 import Home from "../pages/Home";
 import StudyDetailsPage from "../pages/study/StudyGroupDetail";
 import StudyGroupCreator from "../pages/study/StudyGroupCreator";
+import StudyGroupFix from "../pages/study/StudyGroupFix";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,11 @@ const router = createBrowserRouter([
             path: ":studyId",
             element: <StudyGroupDetail />,
             loader: studyDetailsLoader,
+          },
+          {
+            path: ":studyId/edit",
+            element: <StudyGroupFix />,
+            // loader: studyDetailsLoader,
           },
         ],
       },

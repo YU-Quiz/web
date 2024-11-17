@@ -13,6 +13,28 @@ const StudyGroupCreator = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 클라이언트 유효성 검사
+    if (!name.trim()) {
+      alert('스터디 이름은 필수 입력입니다.');
+      return;
+    }
+
+    if (!description.trim()) {
+      alert('스터디 설명은 필수 입력입니다.');
+      return;
+    }
+
+    if (!registerDuration) {
+      alert('스터디 신청 기간은 필수 입력입니다.');
+      return;
+    }
+
+    if (!maxUser || isNaN(maxUser) || maxUser < 2) {
+      alert('최대 인원은 최소 2명 이상이어야 합니다.');
+      return;
+    }
+
     try {
       const studyData = {
         name,
@@ -67,7 +89,7 @@ const StudyGroupCreator = () => {
             <Label>최대 인원</Label>
             <Input
               type="number"
-              placeholder="최대 인원을 입력하세요"
+              placeholder="최대 인원을 입력하세요 (최소 2명)"
               value={maxUser}
               onChange={(e) => setMaxUser(e.target.value)}
               required

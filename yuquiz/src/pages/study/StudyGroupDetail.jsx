@@ -87,7 +87,7 @@ const StudyDetailsPage = () => {
       ) : (
         <MemberSection>
           <SectionTitle>스터디원 목록</SectionTitle>
-          <MemberList>
+          {/* <MemberList>
             {study.members.map((member) => (
               <MemberItem key={member.id}>
                 <span>{member.name}</span>
@@ -108,7 +108,7 @@ const StudyDetailsPage = () => {
                 )}
               </MemberItem>
             ))}
-          </MemberList>
+          </MemberList> */}
         </MemberSection>
       )}
 
