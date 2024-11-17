@@ -37,17 +37,10 @@ const getStudyList = async (
   };
   
 // 스터디 생성
-const createStudy = async (name, description, registrationDuration, maxUser, state) => {
+const createStudy = async (study) => {
     try {
-      const payload = {
-        name: name,
-        description: description,
-        registrationDuration: registrationDuration,
-        maxUser: maxUser,
-        state: state,
-      };
   
-      const response = await api.post(`/study`, payload);
+      const response = await api.post(`/study`, study, {});
   
       return response.data;
     } catch (error) {

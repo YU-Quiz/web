@@ -31,6 +31,8 @@ import AdminQuizControl from "../pages/admin/AdminQuizControl";
 import AdminReportsControl from "../pages/admin/AdminReportsControl";
 import RootLayout from "../pages/RootLayout";
 import Home from "../pages/Home";
+import StudyDetailsPage from "../pages/study/StudyGroupDetail";
+import StudyGroupCreator from "../pages/study/StudyGroupCreator";
 
 const router = createBrowserRouter([
   {
@@ -101,7 +103,7 @@ const router = createBrowserRouter([
           },
           {
             path: "new",
-            element: <QuizCreator />,
+            element: <StudyGroupCreator />,
           },
           {
             path: ":studyId",
