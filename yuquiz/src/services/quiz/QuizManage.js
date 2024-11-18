@@ -17,7 +17,7 @@ const getQuizList = async (
 
     if (keyword) params.keyword = keyword;
     if (subject) params.subject = subject; // subject가 숫자 값일 것으로 가정
-    if (sort && Object.values(SORT_OPTIONS).includes(sort)) {
+    if (sort) {
       params.sort = sort;
     } else {
       params.sort = SORT_OPTIONS.DATE_DESC; // 기본값 설정

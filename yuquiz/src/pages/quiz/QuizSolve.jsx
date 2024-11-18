@@ -145,7 +145,11 @@ export const QuizSolve = () => {
   const renderLikedStarred = () => {
     return (
       <div className="like-pin-container">
-        <button onClick={handleStarred} className="like-pin-button">
+        <button
+          onClick={handleStarred}
+          style={{ color: starred ? "gold" : "silver", fontWeight: "bold" }}
+          className="like-pin-button"
+        >
           {starred ? "★" : "☆"}
         </button>
         <button onClick={handleLiked} className="like-pin-button">
