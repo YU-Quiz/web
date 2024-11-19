@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import api from "../apiService";
 
 const API_BASE_URL = "/series";
@@ -62,6 +63,21 @@ export const getSeriesDetail = async (seriesId) => {
     return response.data;
   } catch (error) {
     console.error("문제집 상세 정보 조회 실패:", error);
+    throw error;
+  }
+};
+
+export const addQuizToSeries = async (seriesId, quizId) => {
+  try {
+    const response = await api.post(`/series/${seriesId}/${quizId}`);
+    console.log(response);
+    if (response.status === HttpStatusCode.Created) {
+      console.log("문제 추가 성공!");
+    } else if (response.status === HttpStatusCode.NotFound) {
+      console.error("이미 존재하는 문제입니다.");
+    }
+    return response;
+  } catch (error) {
     throw error;
   }
 };
