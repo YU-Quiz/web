@@ -1,17 +1,35 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiMenu } from "react-icons/fi";
+import { showStudy } from "../../services/study/studyService";
+import { useLoaderData } from "react-router-dom";
+
+export async function chatRoomLoader({ params }){
+  const { studyId, chatId } = params;
+
+  const studyData = await showStudy(studyId);
+
+  return {
+    studyData: studyData,
+  };
+}
 
 const ChatRoom = () => {
+  const { studyData } = useLoaderData();
+  console.log(studyData);
+
   const [messages, setMessages] = useState([
-    { user: "Alice", content: "Hi, how's the study going?" },
-    { user: "Me", content: "It's going well, thank you!" },
-    { user: "Bob", content: "Don't forget about the meeting tomorrow." },
-    { user: "Me", content: "Sure thing, I'll be there!" },
-    { user: "Charlie", content: "Great! See you all then." },
+    { user: "Me", content: "ㅎㅇ" },
+    { user: "DaeYoung0726", content: "ㅎㅇ" },
+    { user: "gardenzeeero", content: "ㅎㅇ" },
+    { user: "sernan96", content: "ㅎㅇ" },
+    { user: "Uralauah", content: "ㅎㅇ" },
+    { user: "띵재", content: "ㅎㅇ" },
   ]);
   const [input, setInput] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const members = ["cryingdryice", "DaeYoung0726", "gardenzeeero", "sernan96", "Uralauah", "띵재"];
 
   // 스터디 시작/종료 날짜
   const startDate = new Date("2024-11-01"); // 시작 날짜
@@ -43,7 +61,7 @@ const ChatRoom = () => {
     <Container>
       {/* 스터디 정보 */}
       <StudyHeader>
-        <h1>Study Group: Advanced Algorithms</h1>
+        <h1>{studyData.Name}</h1>
         <ProgressBar>
           <ProgressFill style={{ width: `${progress}%` }} />
         </ProgressBar>
@@ -76,7 +94,7 @@ const ChatRoom = () => {
         <Sidebar isOpen={isSidebarOpen}>
           <SidebarHeader>Members</SidebarHeader>
           <MemberList>
-            {["Alice", "Bob", "Charlie", "David", "Edward", "Frank", "George"].map(
+            {members.map(
               (member, index) => (
                 <MemberItem key={index}>{member}</MemberItem>
               )
@@ -106,7 +124,9 @@ export const Container = styled.div`
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  background-color: #f9f9f9;
+  background-color: #005bb5;
+  border-radius: 10px;
+  padding: 10px;
 `;
 
 export const StudyHeader = styled.div`
