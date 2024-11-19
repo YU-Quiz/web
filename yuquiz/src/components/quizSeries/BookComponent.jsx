@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import useAuthStore from "../../stores/auth/authStore";
 import { Link } from "react-router-dom";
-
+import { FaPencilAlt } from "react-icons/fa";
 const BookWrapper = styled.div`
   width: 200px;
   height: 300px;
@@ -25,7 +25,7 @@ const Cover = styled.div`
   position: absolute;
   transform-origin: left;
   transform: rotateY(0deg); /* 초기 상태 */
-  transition: transform 0.5s ease-in-out; /* 부드러운 회전 효과 */
+  transition: transform 0.75s ease-in-out; /* 부드러운 회전 효과 */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,6 +38,13 @@ const Cover = styled.div`
 `;
 
 const Pages = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  padding-top: 10px;
+  padding-left: 10px;
   width: 100%;
   height: 100%;
   background-color: #f9f9f9;
@@ -47,6 +54,44 @@ const Pages = styled.div`
   backface-visibility: hidden;
   border-right: 5px solid #d3d3d3; /* 우측 테두리 */
   border-bottom: 5px solid #d3d3d3; /* 하단 테두리 */
+`;
+const GoToButton = styled(Link)`
+  border: 1px solid gray;
+  border-radius: 8px;
+  padding: 5px;
+  margin-bottom: 30px;
+  &:hover {
+    background-color: #adadad;
+  }
+`;
+const EditButton = styled.button`
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 80%;
+  border-radius: 8px;
+  border: none; /* 추가 */
+  background: #1ee84c;
+  border: 1px solid gray;
+  &:hover {
+    background-color: #149932;
+  }
+`;
+
+const DeleteButton = styled.button`
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 80%;
+  border-radius: 8px;
+  border: none; /* 기존 유지 */
+  margin-top: 5px; /* 수정 */
+  background: red;
+
+  border: 1px solid gray;
+  &:hover {
+    background-color: #800818;
+  }
 `;
 
 const Title = styled.h1`
@@ -66,7 +111,7 @@ const BookHover = styled.div`
   height: 100%;
   position: relative;
   &:hover ${Cover} {
-    transform: rotateY(-160deg); /* 마우스 올리면 160도 회전 */
+    transform: rotateY(-120deg); /* 마우스 올리면 160도 회전 */
   }
 `;
 
@@ -87,23 +132,27 @@ const BookComponent = (
             <Author>{creator}</Author>
           </Cover>
           <Pages>
-            <Link to={`/quizseries/${id}`}>
-              <button>Go to Quiz</button>
-            </Link>
+            <GoToButton to={`/quizseries/${id}`}>
+              <FaPencilAlt />
+              Go to Quiz
+            </GoToButton>
             {creator === userInfo.nickname && (
-              <button
+              <EditButton
                 className="edit"
                 onClick={() =>
                   handleEditSeries(id, prompt("새 이름을 입력하세요:"))
                 }
               >
                 수정
-              </button>
+              </EditButton>
             )}
             {creator === userInfo.nickname && (
-              <button className="delete" onClick={() => handleDeleteSeries(id)}>
+              <DeleteButton
+                className="delete"
+                onClick={() => handleDeleteSeries(id)}
+              >
                 삭제
-              </button>
+              </DeleteButton>
             )}
           </Pages>
         </Book>
