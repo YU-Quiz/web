@@ -15,7 +15,7 @@ const MainContainer = styled.main`
   flex: 1; /* 남은 공간을 채움 */
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
+  /* align-items: center; 세로 중앙 정렬 */
 
   /* Responsive inner width */
   @media (min-width: 1200px) {

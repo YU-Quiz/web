@@ -117,7 +117,7 @@ const router = createBrowserRouter([
             // loader: studyDetailsLoader,
           },
           {
-            path: ":studyId/chat/:chatId",
+            path: ":studyId/chat",
             element: <ChatRoom />
           }
         ],
