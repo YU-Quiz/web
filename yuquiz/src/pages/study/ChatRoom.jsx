@@ -1,14 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FiMenu } from "react-icons/fi"; // 햄버거 아이콘
+import { FiMenu } from "react-icons/fi";
 
 const ChatRoom = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { user: "Alice", content: "Hi, how's the study going?" },
+    { user: "Me", content: "It's going well, thank you!" },
+    { user: "Bob", content: "Don't forget about the meeting tomorrow." },
+    { user: "Me", content: "Sure thing, I'll be there!" },
+    { user: "Charlie", content: "Great! See you all then." },
+  ]);
   const [input, setInput] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false); // 사이드바 열림 상태
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // 멤버 목록 예시 데이터
-  const members = ["Alice", "Bob", "Charlie", "David"];
+  // 스터디 시작/종료 날짜
+  const startDate = new Date("2024-11-01"); // 시작 날짜
+  const endDate = new Date("2024-12-01"); // 종료 날짜
+
+  // 진행률 상태
+  const [progress, setProgress] = useState(0);
+
+  // 진행률 계산
+  useEffect(() => {
+    const today = new Date();
+    const totalDuration = endDate - startDate; // 총 기간
+    const elapsedDuration = today - startDate; // 지난 기간
+    const progressPercentage = Math.min(
+      100,
+      Math.max(0, (elapsedDuration / totalDuration) * 100)
+    ); // 0% ~ 100% 사이로 제한
+    setProgress(progressPercentage);
+  },[]);
 
   const handleSendMessage = () => {
     if (input.trim() !== "") {
@@ -19,42 +41,59 @@ const ChatRoom = () => {
 
   return (
     <Container>
-      <ChatArea>
-        <ChatHeader>
-          <MenuIcon onClick={() => setSidebarOpen(!sidebarOpen)}>
-            <FiMenu size={24} />
-          </MenuIcon>
-          <h2>Study Chat</h2>
-        </ChatHeader>
+      {/* 스터디 정보 */}
+      <StudyHeader>
+        <h1>Study Group: Advanced Algorithms</h1>
+        <ProgressBar>
+          <ProgressFill style={{ width: `${progress}%` }} />
+        </ProgressBar>
+        <StudyDetails>
+          Progress: {Math.round(progress)}% | Start:{" "}
+          {startDate.toLocaleDateString()} | End: {endDate.toLocaleDateString()}
+        </StudyDetails>
+      </StudyHeader>
+
+      <ChatHeader>
+        <h2>Study Chat</h2>
+        <MenuIcon onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          <FiMenu size={24} />
+        </MenuIcon>
+      </ChatHeader>
+
+      <ContentArea>
         <ChatBody>
           {messages.map((msg, index) => (
-            <Message key={index}>
-              <strong>{msg.user}: </strong>
-              {msg.content}
-            </Message>
+            <MessageContainer key={index} isMe={msg.user === "Me"}>
+              <UserInfo>
+                <UserName isMe={msg.user === "Me"}>{msg.user}</UserName>
+                <TimeStamp>오후 2:37:41</TimeStamp>
+              </UserInfo>
+              <MessageText isMe={msg.user === "Me"}>{msg.content}</MessageText>
+            </MessageContainer>
           ))}
         </ChatBody>
-        <ChatFooter>
-          <Input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-          />
-          <SendButton onClick={handleSendMessage}>Send</SendButton>
-        </ChatFooter>
-      </ChatArea>
-      <Sidebar isOpen={sidebarOpen}>
-        <SidebarHeader>
-          <h3>Members</h3>
-          <CloseButton onClick={() => setSidebarOpen(false)}>×</CloseButton>
-        </SidebarHeader>
-        <MemberList>
-          {members.map((member, index) => (
-            <MemberItem key={index}>{member}</MemberItem>
-          ))}
-        </MemberList>
-      </Sidebar>
+
+        <Sidebar isOpen={isSidebarOpen}>
+          <SidebarHeader>Members</SidebarHeader>
+          <MemberList>
+            {["Alice", "Bob", "Charlie", "David", "Edward", "Frank", "George"].map(
+              (member, index) => (
+                <MemberItem key={index}>{member}</MemberItem>
+              )
+            )}
+          </MemberList>
+        </Sidebar>
+      </ContentArea>
+
+      <ChatFooter>
+        <Input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <SendButton onClick={handleSendMessage}>Send</SendButton>
+      </ChatFooter>
     </Container>
   );
 };
@@ -64,111 +103,153 @@ export default ChatRoom;
 // Styled Components
 export const Container = styled.div`
   display: flex;
-  height: 100vh; /* 화면 전체 높이 */
+  flex-direction: column;
+  min-height: 100vh;
   width: 100%;
   background-color: #f9f9f9;
-  position: relative;
 `;
 
-export const Sidebar = styled.div`
-  position: absolute;
-  top: 0;
-  right: ${(props) => (props.isOpen ? "0" : "-250px")}; /* 컴포넌트 안에서만 슬라이드 */
-  width: 250px;
-  height: 100%;
-  background-color: #f1f1f1;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  transition: right 0.3s ease-in-out;
-  z-index: 2;
-`;
-
-export const SidebarHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  background-color: #6200ea;
+export const StudyHeader = styled.div`
+  background-color: #005bb5;
   color: white;
-
-  h3 {
-    margin: 0;
-    font-size: 18px;
-  }
-`;
-
-export const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-`;
-
-export const MemberList = styled.ul`
-  list-style: none;
-  padding: 20px;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-export const MemberItem = styled.li`
-  padding: 10px;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
   text-align: center;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #e1e1e1;
+  padding: 15px;
+  h1 {
+    margin: 0 0 10px 0;
   }
 `;
 
-export const ChatArea = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+export const ProgressBar = styled.div`
+  background-color: #eaf6ff;
+  width: 80%;
+  height: 10px;
+  margin: 0 auto;
+  border-radius: 5px;
   position: relative;
+`;
+
+export const ProgressFill = styled.div`
+  background-color: #2e96ff;
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.4s ease;
+`;
+
+export const StudyDetails = styled.div`
+  margin-top: 10px;
+  font-size: 14px;
 `;
 
 export const ChatHeader = styled.div`
   height: 60px;
   padding: 10px 20px;
-  background-color: #6200ea;
+  background-color: #0082ce;
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  h2 {
-    margin: 0;
-  }
 `;
 
 export const MenuIcon = styled.div`
   cursor: pointer;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #eeeeee;
+  }
+`;
+
+export const ContentArea = styled.div`
+  flex: 1;
+  display: flex;
 `;
 
 export const ChatBody = styled.div`
   flex: 1;
   padding: 10px;
   overflow-y: auto;
-  background-color: #ffffff;
+  background-color: #eaf6ff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
-export const Message = styled.div`
-  margin: 5px 0;
+export const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: ${(props) => (props.isMe ? "flex-end" : "flex-start")};
+`;
+
+export const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #7aa7d9;
+`;
+
+export const UserName = styled.span`
+  font-weight: bold;
+  color: ${(props) => (props.isMe ? "#7ac3ff" : "#ff7a7a")};
+`;
+
+export const TimeStamp = styled.span`
+  font-size: 12px;
+  color: #004a91;
+`;
+
+export const MessageText = styled.div`
   padding: 10px;
-  background-color: #e1f5fe;
-  border-radius: 5px;
   max-width: 60%;
-  align-self: ${(props) => (props.isMe ? "flex-end" : "flex-start")};
+  background-color: ${(props) => (props.isMe ? "#005bb5" : "#2e96ff")};
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+export const Sidebar = styled.div`
+  width: ${(props) => (props.isOpen ? "250px" : "0")};
+  background-color: #21214c;
+  color: white;
+  overflow: hidden;
+  transition: width 0.4s ease;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const SidebarHeader = styled.div`
+  padding: 15px;
+  background-color: #333366;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+export const MemberList = styled.ul`
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+`;
+
+export const MemberItem = styled.li`
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #444488;
+  }
 `;
 
 export const ChatFooter = styled.div`
