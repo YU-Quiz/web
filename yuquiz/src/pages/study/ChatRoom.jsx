@@ -3,20 +3,24 @@ import styled from "styled-components";
 import { FiMenu } from "react-icons/fi";
 import { showStudy } from "../../services/study/studyService";
 import { useLoaderData } from "react-router-dom";
+import { getStudyMembers } from "../../services/study/studyGroupService";
 
 export async function chatRoomLoader({ params }){
   const { studyId, chatId } = params;
 
   const studyData = await showStudy(studyId);
+  const members = await getStudyMembers(studyId);
 
   return {
     studyData: studyData,
+    chatId: chatId, // 임시
+    members: members,
   };
 }
 
 const ChatRoom = () => {
-  const { studyData } = useLoaderData();
-  console.log(studyData);
+  const { studyData, chatId, members } = useLoaderData();
+  console.log(members);
 
   const [messages, setMessages] = useState([
     { user: "Me", content: "ㅎㅇ" },
@@ -29,7 +33,7 @@ const ChatRoom = () => {
   const [input, setInput] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const members = ["cryingdryice", "DaeYoung0726", "gardenzeeero", "sernan96", "Uralauah", "띵재"];
+  // const members = ["cryingdryice", "DaeYoung0726", "gardenzeeero", "sernan96", "Uralauah", "띵재"];
 
   // 스터디 시작/종료 날짜
   const startDate = new Date("2024-11-01"); // 시작 날짜
@@ -94,12 +98,11 @@ const ChatRoom = () => {
         <Sidebar isOpen={isSidebarOpen}>
           <SidebarHeader>Members</SidebarHeader>
           <MemberList>
-            {members.map(
-              (member, index) => (
-                <MemberItem key={index}>{member}</MemberItem>
-              )
-            )}
+                {members.map((member, index) => (
+                  <MemberItem key={index}>{member.nickname}</MemberItem>
+                ))}
           </MemberList>
+          
         </Sidebar>
       </ContentArea>
 
