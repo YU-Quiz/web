@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FiMenu } from "react-icons/fi";
 import { showStudy } from "../../services/study/studyService";
 import { useLoaderData } from "react-router-dom";
 import { getStudyMembers } from "../../services/study/studyGroupService";
+import { Stomp } from "@stomp/stompjs";
+import axios from "axios";
 
 export async function chatRoomLoader({ params }){
   const { studyId, chatId } = params;
@@ -22,6 +24,7 @@ const ChatRoom = () => {
   const { studyData, chatId, members } = useLoaderData();
   console.log(members);
 
+  const stompClient = useRef(null);
   const [messages, setMessages] = useState([
     { user: "Me", content: "ㅎㅇ" },
     { user: "DaeYoung0726", content: "ㅎㅇ" },
@@ -33,30 +36,40 @@ const ChatRoom = () => {
   const [input, setInput] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // const members = ["cryingdryice", "DaeYoung0726", "gardenzeeero", "sernan96", "Uralauah", "띵재"];
-
-  // 스터디 시작/종료 날짜
-  const startDate = new Date("2024-11-01"); // 시작 날짜
-  const endDate = new Date("2024-12-01"); // 종료 날짜
-
-  // 진행률 상태
-  const [progress, setProgress] = useState(0);
-
-  // 진행률 계산
   useEffect(() => {
-    const today = new Date();
-    const totalDuration = endDate - startDate; // 총 기간
-    const elapsedDuration = today - startDate; // 지난 기간
-    const progressPercentage = Math.min(
-      100,
-      Math.max(0, (elapsedDuration / totalDuration) * 100)
-    ); // 0% ~ 100% 사이로 제한
-    setProgress(progressPercentage);
-  },[]);
+    // connect();
+    // fetchMessages();
+    // 컴포넌트 언마운트 시 웹소켓 연결 해제
+    // return () => disconnect();
+  }, []);
+
+  // 웹소켓 연결
+  const connect = () =>{
+    const socket = new WebSocket("/ws");
+    stompClient.current = Stomp.over(socket);
+    stompClient.current.connect({}, ()=>{
+      stompClient.current.subscribe(`/sub/${chatId}`, (message) =>{
+        const newMessage = JSON.parse(message.body);
+        setMessages((prev)=>[...prev, newMessage]);
+      })
+    });
+  }
+
+  const fetchMessages = () =>{
+    // return axios.get()
+  }
+
+  const disconnect = () =>{
+    if(stompClient.current){
+      stompClient.current.disconnect();
+    }
+  }
 
   const handleSendMessage = () => {
-    if (input.trim() !== "") {
+    if (input.trim() !== "" && stompClient.current) {
       setMessages((prev) => [...prev, { user: "Me", content: input }]);
+
+      // stompClient.current.send(`/pub/message/${chatId}`, {}, JSON.stringify(body) );
       setInput("");
     }
   };
@@ -67,11 +80,10 @@ const ChatRoom = () => {
       <StudyHeader>
         <h1>{studyData.Name}</h1>
         <ProgressBar>
-          <ProgressFill style={{ width: `${progress}%` }} />
+          <ProgressFill style={{ width: `60%` }} />
         </ProgressBar>
         <StudyDetails>
-          Progress: {Math.round(progress)}% | Start:{" "}
-          {startDate.toLocaleDateString()} | End: {endDate.toLocaleDateString()}
+          진행률: 60%
         </StudyDetails>
       </StudyHeader>
 

@@ -1756,6 +1756,11 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@stomp/stompjs@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@stomp/stompjs/-/stompjs-7.0.0.tgz#46b5c454a9dc8262e0b20f3b3dbacaa113993077"
+  integrity sha512-fGdq4wPDnSV/KyOsjq4P+zLc8MFWC3lMmP5FBgLWKPJTYcuCbAIrnRGjB7q2jHZdYCOD5vxLuFoKIYLy5/u8Pw==
+
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
   resolved "https://registry.npmjs.org/@surma/rollup-plugin-off-main-thread/-/rollup-plugin-off-main-thread-2.2.3.tgz"
@@ -8765,6 +8770,11 @@ statuses@2.0.1:
   version "1.5.0"
   resolved "https://registry.npmjs.org/statuses/-/statuses-1.5.0.tgz"
   integrity sha512-OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==
+
+stomp@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/stomp/-/stomp-0.1.1.tgz#95b62cee8b8ea274619203e84d2fd90e9a9c43fb"
+  integrity sha512-W2uuVOzN7tvxjdFg9RYDXLSKaZ3k+8LaYICBjnlQOMwLnEGrkLwOnncZrMd2RXNaVCCfbqpKS53p8x/2cvFSag==
 
 stop-iteration-iterator@^1.0.0:
   version "1.0.0"
