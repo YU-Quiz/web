@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FaBook } from "react-icons/fa"; // React Icons 사용
+import { FaBook } from "react-icons/fa";
 import {
   createSeries,
   getSeriesList,
   deleteSeries,
   updateSeries,
 } from "../../services/quizseries/seriesManage";
-import useAuthStore from "../../stores/auth/authStore";
 import BookComponent from "../../components/quizSeries/BookComponent";
 
-// Styled Components
 const PageContainer = styled.div`
   padding: 20px;
 `;
@@ -36,57 +34,64 @@ const SeriesList = styled.div`
   gap: 15px;
 `;
 
-const SeriesItem = styled.div`
-  position: relative;
-  width: 120px;
-  height: 150px;
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  text-align: center;
 
-  &:hover {
-    background-color: #e9ecef;
+  h2 {
+    margin-bottom: 15px;
   }
 
-  svg {
-    font-size: 50px;
-    color: #3b3b98;
-    margin-bottom: 10px;
-  }
-
-  h3 {
-    margin: 10px 0;
+  input {
+    padding: 10px;
     font-size: 16px;
-    font-weight: bold;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
   }
 
-  .actions {
-    display: flex;
-    gap: 5px;
+  button {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 
-    button {
-      padding: 5px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .edit {
-      background-color: gray;
+    &.create {
+      background-color: #28a745;
       color: white;
+      margin-bottom: 10px;
+
+      &:hover {
+        background-color: #218838;
+      }
     }
 
-    .delete {
+    &.cancel {
       background-color: #dc3545;
       color: white;
+
+      &:hover {
+        background-color: #c82333;
+      }
     }
   }
 `;
@@ -94,9 +99,12 @@ const SeriesItem = styled.div`
 const QuizSeriesPage = () => {
   const [seriesList, setSeriesList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newSeriesName, setNewSeriesName] = useState(""); // 입력 값 관리
+  const [editSeriesId, setEditSeriesId] = useState(null); // 수정 모드 관리
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
+  // 문제집 목록 불러오기
   useEffect(() => {
     const fetchSeriesList = async () => {
       try {
@@ -112,17 +120,28 @@ const QuizSeriesPage = () => {
     fetchSeriesList();
   }, [currentPage]);
 
-  const handleCreateSeries = async (newSeriesName) => {
+  const handleCreateSeries = async () => {
+    if (!newSeriesName.trim()) {
+      alert("문제집 이름을 입력해주세요.");
+      return;
+    }
     try {
-      const newSeries = await createSeries({
-        name: newSeriesName,
-      });
-      setSeriesList((prev) => [...prev, newSeries]);
+      await createSeries({ name: newSeriesName });
+      const updatedSeriesList = await getSeriesList(
+        "",
+        "DATE_DESC",
+        currentPage
+      ); // 전체 목록 다시 불러오기
+      setSeriesList(updatedSeriesList.content || []);
+      setIsModalOpen(false);
+      setNewSeriesName(""); // 입력 값 초기화
     } catch (error) {
       console.error("문제집 생성에 실패했습니다.");
+      alert("문제집 생성에 실패했습니다.");
     }
   };
 
+  // 문제집 수정
   const handleEditSeries = async (seriesId, newName) => {
     try {
       await updateSeries(seriesId, { name: newName });
@@ -131,17 +150,21 @@ const QuizSeriesPage = () => {
           series.id === seriesId ? { ...series, name: newName } : series
         )
       );
+      setEditSeriesId(null); // 수정 모드 종료
     } catch (error) {
       console.error("문제집 수정에 실패했습니다.");
+      alert("문제집 수정에 실패했습니다.");
     }
   };
 
+  // 문제집 삭제
   const handleDeleteSeries = async (seriesId) => {
     try {
       await deleteSeries(seriesId);
       setSeriesList((prev) => prev.filter((series) => series.id !== seriesId));
     } catch (error) {
       console.error("문제집 삭제에 실패했습니다.");
+      alert("문제집 삭제에 실패했습니다.");
     }
   };
 
@@ -155,17 +178,49 @@ const QuizSeriesPage = () => {
               key={series.id}
               quizSeries={series}
               handleDeleteSeries={handleDeleteSeries}
-              handleEditSeries={handleEditSeries}
+              handleEditSeries={(newName) =>
+                handleEditSeries(series.id, newName)
+              }
             >
               <FaBook />
               <h3>{series.name}</h3>
-              <div className="actions"></div>
             </BookComponent>
           ))
         ) : (
           <p>표시할 문제집이 없습니다.</p>
         )}
       </SeriesList>
+
+      {isModalOpen && (
+        <Modal>
+          <ModalContent>
+            <h2>{editSeriesId ? "문제집 수정" : "문제집 생성"}</h2>
+            <input
+              type="text"
+              value={newSeriesName}
+              onChange={(e) => setNewSeriesName(e.target.value)}
+              placeholder={
+                editSeriesId
+                  ? "수정할 이름을 입력하세요"
+                  : "문제집 이름을 입력하세요"
+              }
+            />
+            <button
+              className="create"
+              onClick={
+                editSeriesId
+                  ? () => handleEditSeries(editSeriesId, newSeriesName)
+                  : handleCreateSeries
+              }
+            >
+              {editSeriesId ? "수정" : "생성"}
+            </button>
+            <button className="cancel" onClick={() => setIsModalOpen(false)}>
+              취소
+            </button>
+          </ModalContent>
+        </Modal>
+      )}
     </PageContainer>
   );
 };
