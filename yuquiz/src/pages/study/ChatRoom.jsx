@@ -4,84 +4,69 @@ import { FiMenu } from "react-icons/fi";
 import { showStudy } from "../../services/study/studyService";
 import { useLoaderData } from "react-router-dom";
 import { getStudyMembers } from "../../services/study/studyGroupService";
-import { Stomp } from "@stomp/stompjs";
-import axios from "axios";
+import { getDailyChatLogs } from "../../services/chat/chatService";
+import useWebSocket from "../../hooks/useWebSocket";
+import { getUser } from "../../services/user/userService";
 
-export async function chatRoomLoader({ params }){
+export async function chatRoomLoader({ params }) {
   const { studyId, chatId } = params;
+  const userData = await getUser();
 
   const studyData = await showStudy(studyId);
   const members = await getStudyMembers(studyId);
 
+  // 일간 채팅 로그 가져오기
+  const chatLogs = await getDailyChatLogs(chatId);
+
   return {
-    studyData: studyData,
-    chatId: chatId, // 임시
-    members: members,
+    studyData,
+    roomId: chatId,
+    members,
+    chatLogs, // 초기 채팅 로그 추가
+    userData,
   };
 }
 
 const ChatRoom = () => {
-  const { studyData, chatId, members } = useLoaderData();
-  console.log(members);
-
-  const stompClient = useRef(null);
-  const [messages, setMessages] = useState([
-    { user: "Me", content: "ㅎㅇ" },
-    { user: "DaeYoung0726", content: "ㅎㅇ" },
-    { user: "gardenzeeero", content: "ㅎㅇ" },
-    { user: "sernan96", content: "ㅎㅇ" },
-    { user: "Uralauah", content: "ㅎㅇ" },
-    { user: "띵재", content: "ㅎㅇ" },
-  ]);
+  const { studyData, roomId, members, chatLogs, userData } = useLoaderData();
+  console.log(chatLogs, userData);
+  
+  const [messages, setMessages] = useState(chatLogs);
   const [input, setInput] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    // connect();
-    // fetchMessages();
-    // 컴포넌트 언마운트 시 웹소켓 연결 해제
-    // return () => disconnect();
-  }, []);
-
-  // 웹소켓 연결
-  const connect = () =>{
-    const socket = new WebSocket("/ws");
-    stompClient.current = Stomp.over(socket);
-    stompClient.current.connect({}, ()=>{
-      stompClient.current.subscribe(`/sub/${chatId}`, (message) =>{
-        const newMessage = JSON.parse(message.body);
-        setMessages((prev)=>[...prev, newMessage]);
-      })
-    });
-  }
-
-  const fetchMessages = () =>{
-    // return axios.get()
-  }
-
-  const disconnect = () =>{
-    if(stompClient.current){
-      stompClient.current.disconnect();
-    }
-  }
+  // WebSocket 연결
+  const { sendMessage } = useWebSocket(roomId, 59, (newMessage) => {
+    setMessages((prevMessages) => [...prevMessages, newMessage]); // 수신된 메시지 추가
+  }); // 연결 상태 가져오기
 
   const handleSendMessage = () => {
-    if (input.trim() !== "" && stompClient.current) {
-      setMessages((prev) => [...prev, { user: "Me", content: input }]);
 
-      // stompClient.current.send(`/pub/message/${chatId}`, {}, JSON.stringify(body) );
-      setInput("");
+    if (input.trim()) {
+      const newMessage = {
+        roomId: `${roomId}`,  
+        sender: userData.nickname, // 임시 사용자
+        userId: 59,
+        content: input,
+        createdAt: new Date().toISOString(),
+        type: "TALK",
+      };
+
+      // 메시지 전송
+      sendMessage(newMessage);
+
+      // 로컬 메시지 리스트 업데이트
+      // setMessages((prev) => [...prev, { user: "Me", content: input }]);
+      setInput(""); // 입력 필드 초기화
     }
   };
+  
 
   return (
     <Container>
       {/* 스터디 정보 */}
       <StudyHeader>
         <h1>{studyData.Name}</h1>
-        <ProgressBar>
-          <ProgressFill style={{ width: `60%` }} />
-        </ProgressBar>
         <StudyDetails>
           진행률: 60%
         </StudyDetails>
@@ -99,7 +84,7 @@ const ChatRoom = () => {
           {messages.map((msg, index) => (
             <MessageContainer key={index} isMe={msg.user === "Me"}>
               <UserInfo>
-                <UserName isMe={msg.user === "Me"}>{msg.user}</UserName>
+                <UserName isMe={msg.sender === "Me"}>{msg.sender}</UserName>
                 <TimeStamp>오후 2:37:41</TimeStamp>
               </UserInfo>
               <MessageText isMe={msg.user === "Me"}>{msg.content}</MessageText>
@@ -154,22 +139,6 @@ export const StudyHeader = styled.div`
   }
 `;
 
-export const ProgressBar = styled.div`
-  background-color: #eaf6ff;
-  width: 80%;
-  height: 10px;
-  margin: 0 auto;
-  border-radius: 5px;
-  position: relative;
-`;
-
-export const ProgressFill = styled.div`
-  background-color: #2e96ff;
-  height: 100%;
-  border-radius: 5px;
-  transition: width 0.4s ease;
-`;
-
 export const StudyDetails = styled.div`
   margin-top: 10px;
   font-size: 14px;
@@ -211,6 +180,7 @@ export const ChatBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 70vh;
 `;
 
 export const MessageContainer = styled.div`
