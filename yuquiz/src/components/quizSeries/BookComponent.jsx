@@ -25,7 +25,7 @@ const Cover = styled.div`
   position: absolute;
   transform-origin: left;
   transform: rotateY(0deg); /* 초기 상태 */
-  transition: transform 0.75s ease-in-out; /* 부드러운 회전 효과 */
+  transition: transform 0.6s ease-in-out; /* 부드러운 회전 효과 */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,24 +38,27 @@ const Cover = styled.div`
 `;
 
 const Pages = styled.div`
+  font-weight: bold;
+  font-size: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 25px;
   padding-top: 10px;
   padding-left: 10px;
   width: 100%;
   height: 100%;
   background-color: #f9f9f9;
   position: absolute;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 9px rgba(0, 0, 0, 0.1);
   z-index: 1;
   backface-visibility: hidden;
-  border-right: 5px solid #d3d3d3; /* 우측 테두리 */
-  border-bottom: 5px solid #d3d3d3; /* 하단 테두리 */
+  border-right: 5px solid #d3d3d3;
+  border-bottom: 5px solid #d3d3d3;
 `;
 const GoToButton = styled(Link)`
+  margin-top: 10px
+  font-size: 25px;
   border: 1px solid gray;
   border-radius: 8px;
   padding: 5px;
@@ -84,8 +87,8 @@ const DeleteButton = styled.button`
   cursor: pointer;
   width: 80%;
   border-radius: 8px;
-  border: none; /* 기존 유지 */
-  margin-top: 5px; /* 수정 */
+  border: none;
+  margin-top: 5px;
   background: red;
 
   border: 1px solid gray;
@@ -95,14 +98,19 @@ const DeleteButton = styled.button`
 `;
 
 const Title = styled.h1`
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
   font-size: 18px;
+  width: 70%;
   margin: 0;
+  border: 3px solid gray;
   color: #333;
+  margin-bottom: 70%;
 `;
 
 const Author = styled.p`
   font-size: 14px;
-  margin: 0;
   color: #666;
 `;
 
@@ -128,10 +136,13 @@ const BookComponent = (
       <BookHover>
         <Book>
           <Cover>
-            <Title>{name}</Title>
+            <Title title={name}>
+              {name.length > 5 ? name.substring(0, 4) + "..." : name}
+            </Title>
             <Author>{creator}</Author>
           </Cover>
           <Pages>
+            {name}
             <GoToButton to={`/quizseries/${id}`}>
               <FaPencilAlt />
               Go to Quiz
