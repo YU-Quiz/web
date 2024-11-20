@@ -11,38 +11,22 @@ import JoinRequestModal from '../../components/study/JoinRequestModal'; // Impor
 export async function studyDetailsLoader({ params }) {
   const { studyId } = params;
   const studyDetails = await showStudy(studyId);
-  return studyDetails;
+  const memberList = await getStudyMembers(studyId);
+
+  return {
+    study: studyDetails,
+    members: memberList
+  };
 }
 
 const StudyDetailsPage = () => {
-  const study = useLoaderData();
+  const {study, members} = useLoaderData();
   const navigate = useNavigate();
-  const [members, setMembers] = useState([]);
-  const [isLoadingMembers, setIsLoadingMembers] = useState(true);
-  const [memberError, setMemberError] = useState(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [joinRequests, setJoinRequests] = useState([]);
   const [isLoadingRequests, setIsLoadingRequests] = useState(true);
   const [requestError, setRequestError] = useState(null);
 console.log(study);
-  useEffect(() => {
-    const fetchStudyMembers = async () => {
-      try {
-        const memberList = await getStudyMembers(study.id);
-        setMembers(memberList);
-        setIsLoadingMembers(false);
-      } catch (error) {
-        console.error('스터디원 목록을 불러오는 중 오류 발생:', error);
-        setMemberError(error.message);
-        setIsLoadingMembers(false);
-      }
-    };
-
-    if (study.isMember) {
-      fetchStudyMembers();
-    }
-  }, [study.id, study.isMember]);
 
   const handleJoinStudy = async () => {
     try {
@@ -87,7 +71,7 @@ console.log(study);
   };
 
   const handleGoToChat = () => {
-    alert("채팅방으로 이동합니다.");
+    navigate(`chat/${study.chatRoomId}`);
   };
 
   const handleRemoveMember = async (userId) => {
@@ -96,7 +80,7 @@ console.log(study);
       try {
         await removeMember(study.id, userId);
         alert('스터디원이 삭제되었습니다.');
-        setMembers(members.filter(member => member.userId !== userId)); // Remove member locally
+        window.location.reload();
       } catch (error) {
         console.error('스터디원 삭제 중 오류 발생:', error);
         alert(error.message || '스터디원 삭제에 실패했습니다.');
@@ -196,17 +180,11 @@ console.log(study);
       ) : (
         <MemberSection>
           <SectionTitle>스터디원 목록</SectionTitle>
-          {isLoadingMembers ? (
-            <LoadingMessage>로딩 중...</LoadingMessage>
-          ) : memberError ? (
-            <ErrorMessage>{memberError}</ErrorMessage>
-          ) : (
-            <MemberList
+          <MemberList
               members={members}
               role={study.role}
               onRemoveMember={handleRemoveMember}
             />
-          )}
         </MemberSection>
       )}
 

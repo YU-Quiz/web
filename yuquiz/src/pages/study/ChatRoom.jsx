@@ -7,10 +7,13 @@ import { getStudyMembers } from "../../services/study/studyGroupService";
 import { getDailyChatLogs } from "../../services/chat/chatService";
 import useWebSocket from "../../hooks/useWebSocket";
 import { getUser } from "../../services/user/userService";
+import useAuthStore from "../../stores/auth/authStore";
+import parseJwtWithBearer from "../../utils/parseJWT";
+import formatDate from "../../utils/formatDate";
 
 export async function chatRoomLoader({ params }) {
   const { studyId, chatId } = params;
-  const userData = await getUser();
+  const {nickname} = await getUser();
 
   const studyData = await showStudy(studyId);
   const members = await getStudyMembers(studyId);
@@ -23,12 +26,15 @@ export async function chatRoomLoader({ params }) {
     roomId: chatId,
     members,
     chatLogs, // 초기 채팅 로그 추가
-    userData,
+    sender: nickname,
   };
 }
 
 const ChatRoom = () => {
-  const { studyData, roomId, members, chatLogs, userData } = useLoaderData();
+  const { studyData, roomId, members, chatLogs, sender } = useLoaderData();
+  const { accessToken} = useAuthStore();
+  const {userId} = parseJwtWithBearer(accessToken);
+  // console.log(parseJwtWithBearer(accessToken));
   // console.log(chatLogs, userData);
   
   const [messages, setMessages] = useState(chatLogs);
@@ -37,7 +43,7 @@ const ChatRoom = () => {
   const chatBodyRef = useRef(null);
 
   // WebSocket 연결
-  const { sendMessage } = useWebSocket(roomId, 59, (newMessage) => {
+  const { sendMessage } = useWebSocket(roomId, (newMessage) => {
     if (chatBodyRef.current) {
       const isScrolledToBottom =
         chatBodyRef.current.scrollHeight - chatBodyRef.current.scrollTop ===
@@ -67,7 +73,7 @@ const ChatRoom = () => {
     if (input.trim()) {
       const newMessage = {
         roomId: `${roomId}`,  
-        sender: userData.nickname, // 임시 사용자
+        sender: sender, // 임시 사용자
         // userId: 59,
         content: input,
         // createdAt: new Date().toISOString(),
@@ -88,13 +94,6 @@ const ChatRoom = () => {
       setInput("");
     }
   };
-  
-  // useEffect(() => {
-  //   if (chatBodyRef.current) {
-  //     chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-  //   }
-  //   console.log("asdf");
-  // }, []);
 
   return (
     <Container>
@@ -116,12 +115,12 @@ const ChatRoom = () => {
       <ContentArea>
         <ChatBody ref={chatBodyRef}>
           {messages.map((msg, index) => (
-            <MessageContainer key={index} isMe={msg.user === "Me"}>
+            <MessageContainer key={index} isMe={msg.userId === userId}>
               <UserInfo>
-                <UserName isMe={msg.sender === "Me"}>{msg.sender}</UserName>
-                <TimeStamp isMe={msg.sender === "Me"}>{new Date(msg.createdAt).toLocaleString()}</TimeStamp>
+                <UserName isMe={msg.userId === userId}>{msg.sender}</UserName>
               </UserInfo>
-              <MessageText isMe={msg.user === "Me"}>{msg.content}</MessageText>
+              <MessageText isMe={msg.userId === userId}>{msg.content}</MessageText>
+              <TimeStamp isMe={msg.userId === userId}>{formatDate(msg.createdAt)}</TimeStamp>
             </MessageContainer>
           ))}
         </ChatBody>

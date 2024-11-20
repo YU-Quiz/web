@@ -3,7 +3,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import useAuthStore from '../stores/auth/authStore';
 
-const useWebSocket = (roomId, userId, onMessageReceived) => {
+const useWebSocket = (roomId, onMessageReceived) => {
   const clientRef = useRef(null);
   const [connected, setConnected] = useState(false); // 연결 상태 관리
   const { accessToken } = useAuthStore(); // accessToken 가져오기
@@ -13,7 +13,7 @@ const useWebSocket = (roomId, userId, onMessageReceived) => {
     const stompClient = new Client({
       webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
       reconnectDelay: 5000,
-      debug: (msg) => console.log('STOMP: ', msg), // 디버깅 로그
+      // debug: (msg) => console.log('STOMP: ', msg), // 디버깅 로그
       connectHeaders: {
         Authorization: `${accessToken}`,
         roomId: roomId,
