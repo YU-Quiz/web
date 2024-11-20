@@ -34,6 +34,7 @@ const ChatRoom = () => {
   const [messages, setMessages] = useState(chatLogs);
   const [input, setInput] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const chatBodyRef = useRef(null);
 
   // WebSocket 연결
   const { sendMessage } = useWebSocket(roomId, 59, (newMessage) => {
@@ -58,9 +59,17 @@ const ChatRoom = () => {
       // 로컬 메시지 리스트 업데이트
       // setMessages((prev) => [...prev, { user: "Me", content: input }]);
       setInput(""); // 입력 필드 초기화
+      if (chatBodyRef.current) {
+        chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+      }
     }
   };
   
+  // useEffect(() => {
+  //   if (chatBodyRef.current) {
+  //     chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+  //   }
+  // }, [messages]);
 
   return (
     <Container>
@@ -80,7 +89,7 @@ const ChatRoom = () => {
       </ChatHeader>
 
       <ContentArea>
-        <ChatBody>
+        <ChatBody ref={chatBodyRef}>
           {messages.map((msg, index) => (
             <MessageContainer key={index} isMe={msg.user === "Me"}>
               <UserInfo>
