@@ -123,11 +123,11 @@ const BookHover = styled.div`
   }
 `;
 
-const BookComponent = (
-  { quizSeries },
+const BookComponent = ({
+  quizSeries,
   handleEditSeries,
-  handleDeleteSeries
-) => {
+  handleDeleteSeries,
+}) => {
   const { id, name, creator } = quizSeries;
 
   const { userInfo } = useAuthStore();
@@ -160,7 +160,11 @@ const BookComponent = (
             {creator === userInfo.nickname && (
               <DeleteButton
                 className="delete"
-                onClick={() => handleDeleteSeries(id)}
+                onClick={() => {
+                  if (window.confirm("정말로 삭제하시겠습니까?")) {
+                    handleDeleteSeries(id);
+                  }
+                }}
               >
                 삭제
               </DeleteButton>
