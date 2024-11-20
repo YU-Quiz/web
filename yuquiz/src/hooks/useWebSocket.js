@@ -13,7 +13,7 @@ const useWebSocket = (roomId, userId, onMessageReceived) => {
     const stompClient = new Client({
       webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
       reconnectDelay: 5000,
-      // debug: (msg) => console.log('STOMP: ', msg), // 디버깅 로그
+      debug: (msg) => console.log('STOMP: ', msg), // 디버깅 로그
       connectHeaders: {
         Authorization: `${accessToken}`,
         roomId: roomId,
@@ -56,9 +56,9 @@ const useWebSocket = (roomId, userId, onMessageReceived) => {
         destination: `/pub/message/${roomId}`,
         body: JSON.stringify(message),
         headers: {
-            Authorization: `${accessToken}`, // 토큰 추가
+            // Authorization: `${accessToken}`, // 토큰 추가
             roomId: roomId,
-            userId: userId,
+            // userId: userId,
         },
       });
     }

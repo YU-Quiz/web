@@ -29,7 +29,7 @@ export async function chatRoomLoader({ params }) {
 
 const ChatRoom = () => {
   const { studyData, roomId, members, chatLogs, userData } = useLoaderData();
-  console.log(chatLogs, userData);
+  // console.log(chatLogs, userData);
   
   const [messages, setMessages] = useState(chatLogs);
   const [input, setInput] = useState("");
@@ -38,8 +38,29 @@ const ChatRoom = () => {
 
   // WebSocket 연결
   const { sendMessage } = useWebSocket(roomId, 59, (newMessage) => {
-    setMessages((prevMessages) => [...prevMessages, newMessage]); // 수신된 메시지 추가
+    if (chatBodyRef.current) {
+      const isScrolledToBottom =
+        chatBodyRef.current.scrollHeight - chatBodyRef.current.scrollTop ===
+        chatBodyRef.current.clientHeight;
+
+      // 새 메시지 추가
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+      // 스크롤이 맨 아래일 경우 자동으로 스크롤
+      if (isScrolledToBottom) {
+        setTimeout(() => {
+          chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        }, 0);
+      }
+    }
   }); // 연결 상태 가져오기
+
+  // 페이지 첫 로딩 시 스크롤 맨 아래로
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, []);
 
   const handleSendMessage = () => {
 
@@ -47,21 +68,24 @@ const ChatRoom = () => {
       const newMessage = {
         roomId: `${roomId}`,  
         sender: userData.nickname, // 임시 사용자
-        userId: 59,
+        // userId: 59,
         content: input,
-        createdAt: new Date().toISOString(),
+        // createdAt: new Date().toISOString(),
         type: "TALK",
       };
 
       // 메시지 전송
       sendMessage(newMessage);
 
-      // 로컬 메시지 리스트 업데이트
-      // setMessages((prev) => [...prev, { user: "Me", content: input }]);
-      setInput(""); // 입력 필드 초기화
-      if (chatBodyRef.current) {
-        chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-      }
+      // 스크롤을 맨 아래로 이동
+      setTimeout(() => {
+        if (chatBodyRef.current) {
+          chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        }
+      }, 0);
+
+      // 입력 필드 초기화
+      setInput("");
     }
   };
   
@@ -69,7 +93,8 @@ const ChatRoom = () => {
   //   if (chatBodyRef.current) {
   //     chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
   //   }
-  // }, [messages]);
+  //   console.log("asdf");
+  // }, []);
 
   return (
     <Container>
@@ -94,7 +119,7 @@ const ChatRoom = () => {
             <MessageContainer key={index} isMe={msg.user === "Me"}>
               <UserInfo>
                 <UserName isMe={msg.sender === "Me"}>{msg.sender}</UserName>
-                <TimeStamp>오후 2:37:41</TimeStamp>
+                <TimeStamp isMe={msg.sender === "Me"}>{new Date(msg.createdAt).toLocaleString()}</TimeStamp>
               </UserInfo>
               <MessageText isMe={msg.user === "Me"}>{msg.content}</MessageText>
             </MessageContainer>
