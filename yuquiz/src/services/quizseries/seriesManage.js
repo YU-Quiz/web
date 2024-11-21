@@ -39,6 +39,8 @@ export const createSeries = async (seriesData) => {
 export const updateSeries = async (seriesId, seriesData) => {
   try {
     const response = await api.put(`${API_BASE_URL}/${seriesId}`, seriesData);
+    console.log(response);
+    alert(response.data.response);
     return response.data;
   } catch (error) {
     console.error("문제집 수정 실패:", error);
@@ -69,7 +71,7 @@ export const getSeriesDetail = async (seriesId) => {
 
 export const addQuizToSeries = async (seriesId, quizId) => {
   try {
-    const response = await api.post(`/series/${seriesId}/${quizId}`);
+    const response = await api.post(`/series/quizzes/${seriesId}/${quizId}`);
     console.log(response);
     if (response.status === HttpStatusCode.Created) {
       console.log("문제 추가 성공!");
@@ -77,6 +79,22 @@ export const addQuizToSeries = async (seriesId, quizId) => {
       console.error("이미 존재하는 문제입니다.");
     }
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuizListInSeries = async (seriesId) => {
+  try {
+    const response = await api.get(`/series/${seriesId}/quizzes`, {
+      params: { page: 0 },
+    });
+    if (response.status === HttpStatusCode.Ok) {
+      console.log("문제 추가 성공!");
+    } else if (response.status === HttpStatusCode.Forbidden) {
+      console.error("권한이 없습니다.");
+    }
+    return response.data;
   } catch (error) {
     throw error;
   }

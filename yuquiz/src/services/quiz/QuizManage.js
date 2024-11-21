@@ -5,27 +5,15 @@ const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
 const SORT_OPTIONS = SORT_QUIZ_POST;
 
-const getQuizList = async (
-  keyword = "",
-  subject = null,
-  sort = "DATE_DESC",
-  page = 0
-) => {
+const getQuizList = async (keyword = "", sort = "DATE_DESC", page = 0) => {
   try {
-    // 유효한 값만 params에 포함시키는 방법
-    const params = {};
-
-    if (keyword) params.keyword = keyword;
-    if (subject) params.subject = subject; // subject가 숫자 값일 것으로 가정
-    if (sort) {
-      params.sort = sort;
-    } else {
-      params.sort = SORT_OPTIONS.DATE_DESC; // 기본값 설정
-    }
-    if (page >= 0) params.page = page;
-
-    // API 호출
-    const response = await api.get(`${SERVER_API}/quizzes`, { params });
+    const response = await api.get(`${SERVER_API}/quizzes`, {
+      params: {
+        keyword,
+        sort,
+        page,
+      },
+    });
     console.log(response.data);
 
     return response.data;

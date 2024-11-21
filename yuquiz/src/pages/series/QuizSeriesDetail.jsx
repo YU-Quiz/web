@@ -4,6 +4,7 @@ import styled from "styled-components";
 import QuizListItem from "../../components/quizlist/QuizListItem";
 import {
   addQuizToSeries,
+  getQuizListInSeries,
   getSeriesDetail,
 } from "../../services/quizseries/seriesManage";
 import QuizListPage from "../quiz/QuizListPage";
@@ -120,8 +121,10 @@ const QuizSeriesDetail = () => {
     const fetchSeriesDetail = async () => {
       try {
         const data = await getSeriesDetail(seriesId);
+        const quizList = await getQuizListInSeries(seriesId);
+        console.log(quizList);
         setSeriesDetail(data);
-        setQuizList(data.quizzes || []);
+        setQuizList(quizList.content || []);
       } catch (error) {
         setError("문제집 정보를 불러오지 못했습니다.");
       } finally {
