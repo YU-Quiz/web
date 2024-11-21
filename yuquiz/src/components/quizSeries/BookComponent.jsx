@@ -123,11 +123,7 @@ const BookHover = styled.div`
   }
 `;
 
-const BookComponent = ({
-  quizSeries,
-  handleEditSeries,
-  handleDeleteSeries,
-}) => {
+const BookComponent = ({ quizSeries, handleEdit, handleDeleteSeries }) => {
   const { id, name, creator } = quizSeries;
 
   const { userInfo } = useAuthStore();
@@ -150,9 +146,14 @@ const BookComponent = ({
             {creator === userInfo.nickname && (
               <EditButton
                 className="edit"
-                onClick={() =>
-                  handleEditSeries(id, prompt("새 이름을 입력하세요:"))
-                }
+                onClick={() => {
+                  const newName = prompt("새 이름을 입력하세요:");
+                  if (!newName || !newName.trim()) {
+                    alert("유효한 이름을 입력하세요.");
+                    return;
+                  }
+                  handleEdit(newName.trim());
+                }}
               >
                 수정
               </EditButton>

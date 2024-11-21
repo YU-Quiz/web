@@ -8,24 +8,13 @@ import {
   updateSeries,
 } from "../../services/quizseries/seriesManage";
 import BookComponent from "../../components/quizSeries/BookComponent";
+import { useSearchParams } from "react-router-dom";
+import Dropdown from "../../components/UI/Dropdown";
+import SearchInput from "../../components/UI/SearchInput";
+import { SORT_OPTIONS } from "../../services/quiz/QuizManage";
 
 const PageContainer = styled.div`
   padding: 20px;
-`;
-
-const Button = styled.button`
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-bottom: 20px;
-
-  &:hover {
-    background-color: #218838;
-  }
 `;
 
 const SeriesList = styled.div`
@@ -95,20 +84,76 @@ const ModalContent = styled.div`
     }
   }
 `;
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+`;
+const PageButton = styled.button`
+  margin: 0 5px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+
+  &.active {
+    background-color: #0056b3;
+  }
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+`;
+const CreateButton = styled.button`
+  width: 120px;
+  height: 40px;
+  background: #007bff;
+  border-radius: 8px;
+  border: none;
+  margin-left: 10px;
+  margin-right: 10px;
+  &:hover {
+    background: #0056b3;
+  }
+`;
+const ControlsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
 
 const QuizSeriesPage = () => {
   const [seriesList, setSeriesList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSeriesName, setNewSeriesName] = useState(""); // 입력 값 관리
   const [editSeriesId, setEditSeriesId] = useState(null); // 수정 모드 관리
-  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("keyword") || "";
+  const sortOption = searchParams.get("sort") || "DATE_DESC";
+  const currentPage = parseInt(searchParams.get("page") || "0", 10);
 
   // 문제집 목록 불러오기
   useEffect(() => {
     const fetchSeriesList = async () => {
       try {
-        const seriesData = await getSeriesList("", "DATE_DESC", currentPage);
+        const seriesData = await getSeriesList(
+          searchQuery,
+          sortOption,
+          currentPage
+        );
+
         setSeriesList(seriesData.content || []);
         setTotalPages(seriesData.totalPages || 1);
       } catch (error) {
@@ -118,8 +163,30 @@ const QuizSeriesPage = () => {
     };
 
     fetchSeriesList();
-  }, [currentPage]);
+  }, [currentPage, searchQuery, sortOption]);
 
+  const handleSearch = (query) => {
+    updateSearchParams({ keyword: query, page: 0 });
+  };
+
+  const handleSelectSort = (selectedOption) => {
+    updateSearchParams({ sort: selectedOption.value, page: 0 });
+  };
+
+  const updateSearchParams = (newParams) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (newParams.page !== undefined) {
+      params.set("page", newParams.page);
+    }
+    if (newParams.keyword !== undefined) {
+      params.set("keyword", newParams.keyword);
+    }
+    if (newParams.sort !== undefined) {
+      params.set("sort", newParams.sort);
+    }
+    setSearchParams(params);
+  };
   const handleCreateSeries = async () => {
     if (!newSeriesName.trim()) {
       alert("문제집 이름을 입력해주세요.");
@@ -170,7 +237,18 @@ const QuizSeriesPage = () => {
 
   return (
     <PageContainer>
-      <Button onClick={() => setIsModalOpen(true)}>+ 문제집 생성</Button>
+      <ControlsContainer>
+        <SearchInput onSearch={handleSearch} />
+        <Dropdown
+          options={SORT_OPTIONS}
+          onSelect={handleSelectSort}
+          initLabel="정렬 기준 선택"
+          defaultOption={{ value: "DATE_DESC", label: "날짜 내림차순" }}
+        />
+        <CreateButton onClick={() => setIsModalOpen(true)}>
+          + 문제집 생성
+        </CreateButton>
+      </ControlsContainer>
       <SeriesList>
         {seriesList.length > 0 ? (
           seriesList.map((series) => (
@@ -178,9 +256,7 @@ const QuizSeriesPage = () => {
               key={series.id}
               quizSeries={series}
               handleDeleteSeries={handleDeleteSeries}
-              handleEditSeries={(newName) =>
-                handleEditSeries(series.id, newName)
-              }
+              handleEdit={(newName) => handleEditSeries(series.id, newName)}
             >
               <FaBook />
               <h3>{series.name}</h3>
@@ -221,6 +297,18 @@ const QuizSeriesPage = () => {
           </ModalContent>
         </Modal>
       )}
+      <PaginationContainer>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <PageButton
+            key={index}
+            className={index === currentPage ? "active" : ""}
+            onClick={() => updateSearchParams({ page: index })}
+            disabled={index === currentPage}
+          >
+            {index + 1}
+          </PageButton>
+        ))}
+      </PaginationContainer>
     </PageContainer>
   );
 };
