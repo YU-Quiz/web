@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import QuizListItem from "../../components/quizlist/QuizListItem";
 import {
   addQuizToSeries,
+  deleteQuizFromSeries,
   getQuizListInSeries,
   getSeriesDetail,
 } from "../../services/quizseries/seriesManage";
-import QuizListPage from "../quiz/QuizListPage";
 import ForAddQuizList from "../../components/quizSeries/ForAddQuizList";
+import { QuizCard } from "../../components/quizlist/QuizCard";
+import useAuthStore from "../../stores/auth/authStore";
 
 const Container = styled.div`
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(auto-fit, 200px);
   padding: 20px;
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
+  justify-content: center;
+  position: relative;
 `;
 
 const BackButton = styled.button`
@@ -62,12 +68,16 @@ const InfoText = styled.p`
   color: #333;
 `;
 
-const QuizList = styled.div`
-  margin-top: 20px;
+const QuizAddButton = styled.button`
+  border-radius: 8px;
+  background: white;
+  font-weight: bold;
+  font-size: 30px;
+  color: gray;
+  border: 1px solid gray;
 
-  p {
-    font-size: 16px;
-    color: #666;
+  &:hover {
+    background: silver;
   }
 `;
 
@@ -109,20 +119,49 @@ const ModalContent = styled.div`
     }
   }
 `;
+
+const ContextMenu = styled.div`
+  position: absolute;
+  top: ${(props) => props.y}px;
+  left: ${(props) => props.x}px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  padding: 10px;
+
+  button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+`;
+
 const QuizSeriesDetail = () => {
   const { seriesId } = useParams();
   const navigate = useNavigate();
   const [seriesDetail, setSeriesDetail] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [quizList, setQuizList] = useState([]);
+  const [contextMenu, setContextMenu] = useState(null); // 우클릭 메뉴 상태
+  const [selectedQuiz, setSelectedQuiz] = useState(null); // 선택된 퀴즈
+  const { userInfo } = useAuthStore();
   useEffect(() => {
     const fetchSeriesDetail = async () => {
       try {
         const data = await getSeriesDetail(seriesId);
         const quizList = await getQuizListInSeries(seriesId);
-        console.log(quizList);
         setSeriesDetail(data);
         setQuizList(quizList.content || []);
       } catch (error) {
@@ -136,29 +175,62 @@ const QuizSeriesDetail = () => {
 
   const handleAddQuizToSeries = async (quiz) => {
     try {
-      await addQuizToSeries(seriesId, quiz.quizId); // 서버에 추가 요청
-      setQuizList((prev) => [...prev, quiz]); // quizList 상태 업데이트
+      await addQuizToSeries(seriesId, quiz.quizId);
+      setQuizList((prev) => [...prev, quiz]);
       alert("문제가 성공적으로 추가되었습니다!");
     } catch (error) {
       alert(error.message || "문제 추가에 실패했습니다.");
     }
   };
 
+  const handleContextMenu = (e, quiz) => {
+    e.preventDefault();
+    setContextMenu({ x: e.pageX, y: e.pageY });
+    setSelectedQuiz(quiz);
+  };
+
+  const handleDeleteQuiz = async () => {
+    if (!selectedQuiz) return;
+    try {
+      await deleteQuizFromSeries(seriesId, selectedQuiz.quizId); // 삭제 API 호출
+      setQuizList((prev) =>
+        prev.filter((quiz) => quiz.quizId !== selectedQuiz.quizId)
+      );
+      setContextMenu(null); // 메뉴 닫기
+      alert("퀴즈가 삭제되었습니다.");
+    } catch (error) {
+      alert("퀴즈 삭제에 실패했습니다.");
+    }
+  };
+
+  const handleCloseContextMenu = () => setContextMenu(null);
+
   if (loading) return <p>로딩 중...</p>;
   if (error) return <p>{error}</p>;
   if (!seriesDetail) return <p>문제집 정보를 찾을 수 없습니다.</p>;
-  console.log(quizList);
+
   return (
-    <Container>
-      <BackButton onClick={() => navigate(-1)}>← 돌아가기</BackButton>
+    <Container onClick={handleCloseContextMenu}>
+      <BackButton onClick={() => navigate(-1)}>⬅️ 돌아가기</BackButton>
       <TitleSection>
         <h2>{seriesDetail.name}</h2>
-        <button onClick={() => setIsModalOpen(true)}>+ 문제 추가</button>
       </TitleSection>
       <InfoText>작성자: {seriesDetail.creator}</InfoText>
-      <InfoText>스터디 이름: {seriesDetail.studyName || "없음"}</InfoText>
+      <InfoText>
+        {seriesDetail.studyName ? `스터디 이름:${seriesDetail.studyName}` : ""}
+      </InfoText>
+      <QuizAddButton onClick={() => setIsModalOpen(true)}>
+        + 문제 추가
+      </QuizAddButton>
       {quizList.length > 0 ? (
-        quizList.map((quiz) => <QuizListItem key={quiz.quizId} quiz={quiz} />)
+        quizList.map((quiz) => (
+          <div
+            key={quiz.quizId}
+            onContextMenu={(e) => handleContextMenu(e, quiz)}
+          >
+            <QuizCard quiz={quiz} />
+          </div>
+        ))
       ) : (
         <p>등록된 문제가 없습니다.</p>
       )}
@@ -174,6 +246,11 @@ const QuizSeriesDetail = () => {
             <ForAddQuizList onAddQuiz={handleAddQuizToSeries}></ForAddQuizList>
           </ModalContent>
         </Modal>
+      )}
+      {contextMenu && seriesDetail.creator === userInfo.nickname && (
+        <ContextMenu x={contextMenu.x} y={contextMenu.y}>
+          <button onClick={handleDeleteQuiz}>삭제</button>
+        </ContextMenu>
       )}
     </Container>
   );
