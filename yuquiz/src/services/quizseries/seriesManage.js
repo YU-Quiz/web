@@ -99,3 +99,16 @@ export const getQuizListInSeries = async (seriesId) => {
     throw error;
   }
 };
+export const deleteQuizFromSeries = async (seriesId, quizId) => {
+  try {
+    const response = await api.delete(`/series/quizzses/${seriesId}/${quizId}`);
+    if (response.status === HttpStatusCode.NoContent) {
+      console.log("문제 삭제 성공!");
+    } else if (response.status === HttpStatusCode.Forbidden) {
+      console.error("권한이 없습니다.");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
