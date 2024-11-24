@@ -121,9 +121,7 @@ export const ShortAnswer = ({ quizID }) => {
       <QuizContainer>
         <QuizHeader>{quizData.question}</QuizHeader>
         <p>{isCorrect}</p>
-        <GoToListButton onClick={() => navigate("/quiz/list")}>
-          목록으로
-        </GoToListButton>
+        <GoToListButton onClick={() => navigate(-1)}>목록으로</GoToListButton>
       </QuizContainer>
     );
   }
