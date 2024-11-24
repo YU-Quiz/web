@@ -38,7 +38,7 @@ const BackButton = styled.button`
 
 const TitleSection = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   margin-bottom: 20px;
 
