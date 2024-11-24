@@ -10,6 +10,7 @@ import {
 import ForAddQuizList from "../../components/quizSeries/ForAddQuizList";
 import { QuizCard } from "../../components/quizlist/QuizCard";
 import useAuthStore from "../../stores/auth/authStore";
+import { IoMdArrowBack } from "react-icons/io";
 
 const Container = styled.div`
   display: grid;
@@ -26,8 +27,8 @@ const Container = styled.div`
 const BackButton = styled.button`
   background: none;
   border: none;
-  color: #007bff;
-  font-size: 16px;
+  color: black;
+  font-size: 30px;
   cursor: pointer;
   margin-bottom: 20px;
 
@@ -222,7 +223,9 @@ const QuizSeriesDetail = () => {
 
   return (
     <Container onClick={handleCloseContextMenu}>
-      <BackButton onClick={() => navigate(-1)}>⬅️ 돌아가기</BackButton>
+      <BackButton onClick={() => navigate(-1)}>
+        <IoMdArrowBack />
+      </BackButton>
       <TitleSection>
         <h2>{seriesDetail.name}</h2>
       </TitleSection>
