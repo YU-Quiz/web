@@ -4,6 +4,8 @@ import { getQuizList } from "../../services/quiz/QuizManage"; // 문제 목록 A
 
 const SeriesContainer = styled.div`
   width: 100%;
+  overflow: hidden;
+  height: 100%;
 `;
 const SearchInput = styled.input`
   width: 100%;
@@ -15,7 +17,7 @@ const SearchInput = styled.input`
 `;
 
 const QuizListContainer = styled.div`
-  max-height: 400px;
+  max-height: 460px;
   overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -71,7 +73,7 @@ const ForAddQuizList = ({ onAddQuiz }) => {
     <SeriesContainer>
       <SearchInput
         type="text"
-        placeholder="문제를 검색하세요"
+        placeholder="문제를 검색하여 클릭해 추가하세요."
         value={searchQuery}
         onChange={handleSearch}
       />

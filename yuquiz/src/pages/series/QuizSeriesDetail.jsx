@@ -145,6 +145,17 @@ const ContextMenu = styled.div`
     }
   }
 `;
+const ModalCloseButton = styled.button`
+  font-size: 23px;
+  padding: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: gray;
+  &:hover {
+    color: black;
+  }
+`;
 
 const QuizSeriesDetail = () => {
   const { seriesId } = useParams();
@@ -237,12 +248,12 @@ const QuizSeriesDetail = () => {
       {isModalOpen && (
         <Modal>
           <ModalContent>
-            <button
+            <ModalCloseButton
               className="close-button"
               onClick={() => setIsModalOpen(false)}
             >
-              ×
-            </button>
+              닫기
+            </ModalCloseButton>
             <ForAddQuizList onAddQuiz={handleAddQuizToSeries}></ForAddQuizList>
           </ModalContent>
         </Modal>
