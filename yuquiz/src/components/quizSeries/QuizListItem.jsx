@@ -100,9 +100,9 @@ const QuizListItem = ({ quiz }) => {
     <QuizContainer>
       <QuizHeader>
         <QuizTitle
-          className={
+        /*className={
             isSolved === null ? "unsolved" : isSolved ? "correct" : "wrong"
-          }
+          }*/
         >
           <Link to={`/quiz/play/${quizId}`}>{quizTitle}</Link>
         </QuizTitle>

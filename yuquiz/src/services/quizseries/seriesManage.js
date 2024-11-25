@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import api from "../apiService";
 
 const API_BASE_URL = "/series";
@@ -38,6 +39,8 @@ export const createSeries = async (seriesData) => {
 export const updateSeries = async (seriesId, seriesData) => {
   try {
     const response = await api.put(`${API_BASE_URL}/${seriesId}`, seriesData);
+    console.log(response);
+    alert(response.data.response);
     return response.data;
   } catch (error) {
     console.error("문제집 수정 실패:", error);
@@ -62,6 +65,50 @@ export const getSeriesDetail = async (seriesId) => {
     return response.data;
   } catch (error) {
     console.error("문제집 상세 정보 조회 실패:", error);
+    throw error;
+  }
+};
+
+export const addQuizToSeries = async (seriesId, quizId) => {
+  try {
+    const response = await api.post(`/series/quizzes/${seriesId}/${quizId}`);
+    console.log(response);
+    if (response.status === HttpStatusCode.Created) {
+      console.log("문제 추가 성공!");
+    } else if (response.status === HttpStatusCode.NotFound) {
+      console.error("이미 존재하는 문제입니다.");
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getQuizListInSeries = async (seriesId) => {
+  try {
+    const response = await api.get(`/series/${seriesId}/quizzes`, {
+      params: { page: 0 },
+    });
+    if (response.status === HttpStatusCode.Ok) {
+      console.log("문제 추가 성공!");
+    } else if (response.status === HttpStatusCode.Forbidden) {
+      console.error("권한이 없습니다.");
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteQuizFromSeries = async (seriesId, quizId) => {
+  try {
+    const response = await api.delete(`/series/quizzses/${seriesId}/${quizId}`);
+    if (response.status === HttpStatusCode.NoContent) {
+      console.log("문제 삭제 성공!");
+    } else if (response.status === HttpStatusCode.Forbidden) {
+      console.error("권한이 없습니다.");
+    }
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };

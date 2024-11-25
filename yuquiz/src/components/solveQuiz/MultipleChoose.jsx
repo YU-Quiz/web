@@ -163,9 +163,7 @@ export const MultipleChoose = ({ quizID }) => {
       <QuizContainer>
         <QuizHeader>{quizData.title}</QuizHeader>
         <p>{isCorrect}</p>
-        <GoToListButton onClick={() => navigate("/quiz/list")}>
-          목록으로
-        </GoToListButton>
+        <GoToListButton onClick={() => navigate(-1)}>목록으로</GoToListButton>
       </QuizContainer>
     );
   }
