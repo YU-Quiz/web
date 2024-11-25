@@ -6,7 +6,7 @@ const getStudyMembers = async (studyId) => {
   try {
     const response = await api.get(`/study/${studyId}/member`);
 
-    console.log(response.data);
+    // console.log(response.data);
     return response.data; // 성공 시 스터디원 목록 반환
   } catch (error) {
     if (error.response) {

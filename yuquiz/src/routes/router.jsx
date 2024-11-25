@@ -34,6 +34,7 @@ import Home from "../pages/Home";
 import StudyDetailsPage from "../pages/study/StudyGroupDetail";
 import StudyGroupCreator from "../pages/study/StudyGroupCreator";
 import StudyGroupFix from "../pages/study/StudyGroupFix";
+import ChatRoom, { chatRoomLoader } from "../pages/study/ChatRoom";
 
 const router = createBrowserRouter([
   {
@@ -115,6 +116,11 @@ const router = createBrowserRouter([
             element: <StudyGroupFix />,
             // loader: studyDetailsLoader,
           },
+          {
+            path: ":studyId/chat/:chatId",
+            element: <ChatRoom />,
+            loader: chatRoomLoader,
+          }
         ],
       },
       {
