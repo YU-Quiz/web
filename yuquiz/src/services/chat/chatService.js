@@ -19,20 +19,15 @@ const getDailyChatLogs = async (roomId) => {
 
 // 날짜별 채팅 내역 조회
 const getChatLogsByDate = async (roomId, date) => {
-    try {
-
-      const response = await api.delete(`/chat/${roomId}/messages?date=${date}`);
-  
-      if (response.status === 204) {
-        return { message: "멤버 삭제 성공" };
-      }
-    } catch (error) {
-        if (error.response) {
-            throw new Error('날짜별 채팅 내역 조회 중 문제가 발생했습니다. 다시 시도해주세요.');
-        } else {
-          throw new Error('서버와 연결할 수 없습니다.');
-        }
-    }
-  };
+  try {
+    const response = await api.get(`/chat/${roomId}/messages`, {
+      params: { date },
+    });
+    return response.data; // 응답 데이터 반환
+  } catch (error) {
+    console.error("Error fetching chat logs by date:", error.message);
+    throw new Error("날짜별 채팅 내역 조회 중 문제가 발생했습니다.");
+  }
+};
 
   export { getChatLogsByDate, getDailyChatLogs };
