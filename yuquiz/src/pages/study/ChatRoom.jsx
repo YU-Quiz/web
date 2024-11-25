@@ -10,6 +10,7 @@ import { getUser } from "../../services/user/userService";
 import useAuthStore from "../../stores/auth/authStore";
 import parseJwtWithBearer from "../../utils/parseJWT";
 import formatDate from "../../utils/formatDate";
+import ChatInput from "../../components/study/ChatInput";
 
 export async function chatRoomLoader({ params }) {
   const { studyId, chatId } = params;
@@ -113,26 +114,21 @@ const ChatRoom = () => {
     }
   };
   
+  const handleSendMessage = (input) => {
+    const newMessage = {
+      roomId: `${roomId}`,
+      sender: sender,
+      content: input,
+      type: "TALK",
+    };
 
-  const handleSendMessage = () => {
-    if (input.trim()) {
-      const newMessage = {
-        roomId: `${roomId}`,
-        sender: sender,
-        content: input,
-        type: "TALK",
-      };
+    sendMessage(newMessage);
 
-      sendMessage(newMessage);
-
-      setTimeout(() => {
-        if (chatBodyRef.current) {
-          chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-        }
-      }, 0);
-
-      setInput("");
-    }
+    setTimeout(() => {
+      if (chatBodyRef.current) {
+        chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+      }
+    }, 0);
   };
 
   return (
@@ -150,14 +146,12 @@ const ChatRoom = () => {
 
       <ContentArea>
         <ChatBody ref={chatBodyRef}>
-          {/* 이전 채팅 불러오기 버튼 */}
           {hasMore && (
             <LoadMoreButton onClick={fetchPreviousMessages} disabled={isLoading}>
               {isLoading ? "Loading..." : "Load Previous Messages"}
             </LoadMoreButton>
           )}
 
-          {/* 메시지 목록 */}
           {messages.map((msg, index) => (
             <MessageContainer key={index} isMe={msg.userId === userId}>
               <UserInfo>
@@ -179,21 +173,13 @@ const ChatRoom = () => {
         </Sidebar>
       </ContentArea>
 
-      <ChatFooter>
-        <Input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <SendButton onClick={handleSendMessage}>Send</SendButton>
-      </ChatFooter>
+      {/* ChatInput 컴포넌트 사용 */}
+      <ChatInput onSendMessage={handleSendMessage} />
     </Container>
   );
 };
 
 export default ChatRoom;
-
 
 // Styled Components
 export const Container = styled.div`
