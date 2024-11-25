@@ -35,7 +35,7 @@ const ChatRoom = () => {
   const { accessToken} = useAuthStore();
   const {userId} = parseJwtWithBearer(accessToken);
   // console.log(parseJwtWithBearer(accessToken));
-  // console.log(chatLogs, userData);
+  // console.log(studyData);
   
   const [messages, setMessages] = useState(chatLogs);
   const [input, setInput] = useState("");
@@ -100,9 +100,9 @@ const ChatRoom = () => {
       {/* 스터디 정보 */}
       <StudyHeader>
         <h1>{studyData.Name}</h1>
-        <StudyDetails>
-          진행률: 60%
-        </StudyDetails>
+        {/* <StudyDetails>
+          {studyData.description}
+        </StudyDetails> */}
       </StudyHeader>
 
       <ChatHeader>
@@ -226,7 +226,7 @@ export const UserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: 16px;
   color: #7aa7d9;
 `;
 

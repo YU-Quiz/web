@@ -11,29 +11,48 @@ import JoinRequestModal from '../../components/study/JoinRequestModal'; // Impor
 export async function studyDetailsLoader({ params }) {
   const { studyId } = params;
   const studyDetails = await showStudy(studyId);
-  const memberList = await getStudyMembers(studyId);
 
   return {
     study: studyDetails,
-    members: memberList
   };
 }
 
 const StudyDetailsPage = () => {
-  const {study, members} = useLoaderData();
+  const { study } = useLoaderData();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [joinRequests, setJoinRequests] = useState([]);
   const [isLoadingRequests, setIsLoadingRequests] = useState(true);
   const [requestError, setRequestError] = useState(null);
-console.log(study);
+  const [members, setMembers] = useState([]);
+  const [loadingMembers, setLoadingMembers] = useState(false);
+  const [membersError, setMembersError] = useState(null);
+
+  useEffect(() => {
+    if (study.isMember) {
+      const fetchMembers = async () => {
+        setLoadingMembers(true);
+        setMembersError(null);
+        try {
+          const membersList = await getStudyMembers(study.id);
+          setMembers(membersList);
+        } catch (error) {
+          console.error('스터디 멤버 조회 중 오류 발생:', error);
+          setMembersError(error.message || '스터디 멤버를 불러오지 못했습니다.');
+        } finally {
+          setLoadingMembers(false);
+        }
+      };
+      fetchMembers();
+    }
+  }, [study.isMember, study.id]);
 
   const handleJoinStudy = async () => {
     try {
       await requestStudy(study.id);
-      alert("신청되었습니다!");
+      alert('신청되었습니다!');
     } catch (error) {
-      console.error("스터디 신청 중 오류 발생:", error);
+      console.error('스터디 신청 중 오류 발생:', error);
       alert(error.message);
     }
   };
@@ -46,7 +65,7 @@ console.log(study);
       setJoinRequests(requests);
       setIsLoadingRequests(false);
     } catch (error) {
-      console.error("가입 신청 목록을 불러오는 중 오류 발생:", error);
+      console.error('가입 신청 목록을 불러오는 중 오류 발생:', error);
       setRequestError(error.message);
       setIsLoadingRequests(false);
     }
@@ -57,14 +76,14 @@ console.log(study);
   };
 
   const handleDeleteStudy = async () => {
-    const confirmDelete = window.confirm("스터디를 삭제하시겠습니까?");
+    const confirmDelete = window.confirm('스터디를 삭제하시겠습니까?');
     if (confirmDelete) {
       try {
         const response = await removeStudy(study.id);
         alert(response.message);
-        navigate("/study");
+        navigate('/study');
       } catch (error) {
-        console.error("스터디 삭제 중 오류 발생:", error);
+        console.error('스터디 삭제 중 오류 발생:', error);
         alert(error.message);
       }
     }
@@ -75,12 +94,12 @@ console.log(study);
   };
 
   const handleRemoveMember = async (userId) => {
-    const confirmDelete = window.confirm("멤버를 추방하시겠습니까?");
+    const confirmDelete = window.confirm('멤버를 추방하시겠습니까?');
     if (confirmDelete) {
       try {
         await removeMember(study.id, userId);
         alert('스터디원이 삭제되었습니다.');
-        window.location.reload();
+        setMembers((prev) => prev.filter((member) => member.id !== userId));
       } catch (error) {
         console.error('스터디원 삭제 중 오류 발생:', error);
         alert(error.message || '스터디원 삭제에 실패했습니다.');
@@ -99,27 +118,21 @@ console.log(study);
 
   const handleAcceptRequest = async (userId) => {
     try {
-        await acceptStudyRequest(study.id, userId);
-        
-        alert('가입 요청이 승인되었습니다.');
-        // 요청 승인 후 페이지 새로고침
-        window.location.reload();
+      await acceptStudyRequest(study.id, userId);
+      alert('가입 요청이 승인되었습니다.');
+      setJoinRequests((prev) => prev.filter((request) => request.userId !== userId));
     } catch (error) {
-        console.error('가입 요청 승인 중 오류 발생:', error);
-        alert(error.message || '가입 요청 승인에 실패했습니다.');
+      console.error('가입 요청 승인 중 오류 발생:', error);
+      alert(error.message || '가입 요청 승인에 실패했습니다.');
     }
-};
-
-
+  };
 
   return (
     <DetailsContainer>
       <Header>
         <Title>{study.Name}</Title>
         <ButtonGroup>
-          {!study.isMember && (
-            <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>
-          )}
+          {!study.isMember && <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>}
           {study.isMember && (
             <>
               <Button onClick={handleGoToChat} secondary>
@@ -141,7 +154,7 @@ console.log(study);
 
       <DescriptionSection>
         <DescriptionTitle>스터디 소개</DescriptionTitle>
-        <DescriptionText>{study.description || "스터디 설명이 없습니다."}</DescriptionText>
+        <DescriptionText>{study.description || '스터디 설명이 없습니다.'}</DescriptionText>
       </DescriptionSection>
 
       <InfoSection>
@@ -180,11 +193,13 @@ console.log(study);
       ) : (
         <MemberSection>
           <SectionTitle>스터디원 목록</SectionTitle>
-          <MemberList
-              members={members}
-              role={study.role}
-              onRemoveMember={handleRemoveMember}
-            />
+          {loadingMembers ? (
+            <LoadingMessage>스터디원 목록을 불러오는 중...</LoadingMessage>
+          ) : membersError ? (
+            <ErrorMessage>{membersError}</ErrorMessage>
+          ) : (
+            <MemberList members={members} role={study.role} onRemoveMember={handleRemoveMember} />
+          )}
         </MemberSection>
       )}
 
@@ -195,13 +210,12 @@ console.log(study);
         isLoading={isLoadingRequests}
         error={requestError}
         onAccept={handleAcceptRequest}
-      />;
+      />
     </DetailsContainer>
   );
 };
 
 export default StudyDetailsPage;
-
 
 // Styled Components
 const DetailsContainer = styled.div`
@@ -226,7 +240,6 @@ const Title = styled.h1`
   font-size: 26px;
   font-weight: bold;
   color: #2c3e50;
-  margin: 0;
 `;
 
 const ButtonGroup = styled.div`
@@ -240,13 +253,13 @@ const Button = styled.button`
   font-weight: bold;
   border: none;
   border-radius: 8px;
-  background-color: ${(props) => (props.secondary ? '#95a5a6' : '#3498db')};
+  background-color: ${(props) => (props.danger ? '#e74c3c' : '#3498db')};
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${(props) => (props.secondary ? '#7f8c8d' : '#2980b9')};
+    background-color: ${(props) => (props.danger ? '#c0392b' : '#2980b9')};
   }
 `;
 
@@ -255,20 +268,17 @@ const DescriptionSection = styled.div`
   background-color: #ffffff;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const DescriptionTitle = styled.h2`
   font-size: 22px;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 10px;
 `;
 
 const DescriptionText = styled.p`
   font-size: 16px;
   color: #34495e;
-  line-height: 1.6;
 `;
 
 const InfoSection = styled.div`
@@ -281,10 +291,9 @@ const InfoSection = styled.div`
 const InfoItem = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 15px 20px;
+  padding: 15px;
   background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const InfoLabel = styled.span`
@@ -305,7 +314,6 @@ const SectionTitle = styled.h2`
   font-size: 22px;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 15px;
 `;
 
 const BlurredContent = styled.div`
@@ -313,8 +321,6 @@ const BlurredContent = styled.div`
   overflow: hidden;
   border-radius: 12px;
   background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 20px;
 
   &::before {
     content: '';
@@ -323,15 +329,15 @@ const BlurredContent = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(5px); /* 흐릿하게 만듦 */
-    background: rgba(255, 255, 255, 0.7); /* 살짝 흰 배경 추가 */
+    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.7);
     z-index: 1;
   }
 `;
 
 const NonMemberMessage = styled.div`
   position: relative;
-  z-index: 2; /* 흐린 배경 위에 위치 */
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -346,14 +352,6 @@ const MessageText = styled.p`
   font-size: 18px;
   color: #721c24;
   font-weight: bold;
-  margin: 0;
-`;
-
-// Styled Components
-const MemberRole = styled.span`
-  font-size: 14px;
-  font-weight: bold;
-  color: #1abc9c;
 `;
 
 const LoadingMessage = styled.p`
