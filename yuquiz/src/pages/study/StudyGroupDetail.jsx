@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { removeStudy, showStudy } from '../../services/study/studyService';
 import { getStudyMembers, removeMember } from '../../services/study/studyGroupService';
@@ -213,16 +213,23 @@ const StudyDetailsPage = () => {
           </NonMemberMessage>
         </BlurredContent>
       ) : (
-        <MemberSection>
-          <SectionTitle>스터디원 목록</SectionTitle>
-          {loadingMembers ? (
-            <LoadingMessage>스터디원 목록을 불러오는 중...</LoadingMessage>
-          ) : membersError ? (
-            <ErrorMessage>{membersError}</ErrorMessage>
-          ) : (
-            <MemberList members={members} role={study.role} onRemoveMember={handleRemoveMember} />
-          )}
-        </MemberSection>
+        <>
+          <NavigationSection>
+            <StyledLink to={`/study/${study.id}/notices`}>공지사항</StyledLink>
+            <StyledLink to={`/study/${study.id}/posts`}>스터디 게시판</StyledLink>
+            <StyledLink to={`/study/${study.id}/quizseries`}>스터디 퀴즈</StyledLink>
+          </NavigationSection>
+          <MemberSection>
+            <SectionTitle>스터디원 목록</SectionTitle>
+            {loadingMembers ? (
+              <LoadingMessage>스터디원 목록을 불러오는 중...</LoadingMessage>
+            ) : membersError ? (
+              <ErrorMessage>{membersError}</ErrorMessage>
+            ) : (
+              <MemberList members={members} role={study.role} onRemoveMember={handleRemoveMember} />
+            )}
+          </MemberSection>
+        </>
       )}
 
       <JoinRequestModal
@@ -384,4 +391,28 @@ const LoadingMessage = styled.p`
 const ErrorMessage = styled.p`
   text-align: center;
   color: #e74c3c;
+`;
+
+const NavigationSection = styled.div`
+  display: flex;
+  /* justify-content: space-around; */
+  margin: 20px 20px;
+`;
+
+const StyledLink = styled(Link)`
+  flex: 1;
+  padding: 10px 20px;
+  background-color: #6cb0dd;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+
+  &:active {
+    background-color: #003d80;
+  }
 `;
