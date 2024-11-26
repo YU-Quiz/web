@@ -104,6 +104,7 @@ const StudyDetailsPage = () => {
         console.error('스터디원 삭제 중 오류 발생:', error);
         alert(error.message || '스터디원 삭제에 실패했습니다.');
       }
+      window.location.reload();
     }
   };
 
@@ -118,14 +119,35 @@ const StudyDetailsPage = () => {
 
   const handleAcceptRequest = async (userId) => {
     try {
+      // 가입 요청 승인 API 호출
       await acceptStudyRequest(study.id, userId);
       alert('가입 요청이 승인되었습니다.');
+  
+      // 가입 요청 목록에서 해당 사용자를 찾음
+      const newMemberRequest = joinRequests.find((request) => request.userId === userId);
+  
+      if (!newMemberRequest) {
+        throw new Error('가입 요청 정보를 찾을 수 없습니다.');
+      }
+  
+      // 새로운 멤버 정보로 추가
+      const newMember = {
+        id: newMemberRequest.userId,
+        nickname: newMemberRequest.name,
+        joinedAt: new Date().toISOString(), // 현재 시간 추가 (예시)
+      };
+  
+      // 멤버 목록 업데이트
+      setMembers((prevMembers) => [...prevMembers, newMember]);
+  
+      // 가입 요청 목록 업데이트
       setJoinRequests((prev) => prev.filter((request) => request.userId !== userId));
     } catch (error) {
       console.error('가입 요청 승인 중 오류 발생:', error);
       alert(error.message || '가입 요청 승인에 실패했습니다.');
     }
   };
+  
 
   return (
     <DetailsContainer>
