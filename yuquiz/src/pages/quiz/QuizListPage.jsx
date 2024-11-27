@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useLoaderData } from "react-router-dom";
 import Dropdown from "../../components/UI/Dropdown";
 import SearchInput from "../../components/UI/SearchInput";
 import { getQuizList } from "../../services/quiz/QuizManage";
@@ -13,27 +13,26 @@ const QuizListPageContainer = styled.div`
 `;
 
 const ControlsContainer = styled.div`
+  margin-top: 10px;
+  gap: 5px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const CreateQuizButton = styled(Link)`
-  background-color: black;
-  color: white;
   padding: 10px 20px;
+  background-color: #2c4697;
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
+  font-weight: bold;
   &:hover {
-    background-color: gray;
+    background-color: #2c4655;
   }
 `;
 
@@ -47,7 +46,7 @@ const PaginationContainer = styled.div`
 const PageButton = styled.button`
   margin: 0 5px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: silver;
   color: white;
   border: none;
   cursor: pointer;
@@ -59,18 +58,13 @@ const PageButton = styled.button`
   }
 
   &:hover {
-    background-color: #0056b3;
+    background-color: gray;
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.6;
   }
-`;
-
-const ErrorMessage = styled.p`
-  color: red;
-  text-align: center;
 `;
 
 const LoadingMessage = styled.p`
@@ -81,55 +75,27 @@ const SORT_OPTIONS = Object.values(SORT_QUIZ_POST).map((option) => ({
   label: option.label,
   value: option.value,
 }));
+export async function QuizListLoader({ request }) {
+  const url = new URL(request.url);
+  const currentPage = parseInt(url.searchParams.get("page") || "0", 10);
+  const keyword = url.searchParams.get("keyword") || "";
+  const sortOption = url.searchParams.get("sort") || "DATE_DESC";
 
+  const QuizListData = await getQuizList(
+    keyword,
+    null,
+    sortOption,
+    currentPage
+  );
+
+  return {
+    quizzList: QuizListData.content,
+    totalPages: QuizListData.totalPages,
+  };
+}
 const QuizListPage = () => {
-  const [filteredQuizzes, setFilteredQuizzes] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(1);
+  const { quizzList, totalPages } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const currentPage = parseInt(searchParams.get("page") || "0", 10);
-  const searchQuery = searchParams.get("keyword") || "";
-  const sortOption = searchParams.get("sort") || "DATE_DESC";
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchQuizzes = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const quizData = await getQuizList(
-          searchQuery,
-          null,
-          sortOption,
-          currentPage
-        );
-
-        if (isMounted) {
-          setFilteredQuizzes(quizData.content);
-          setTotalPages(quizData.totalPages);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setError("퀴즈 목록을 불러오지 못했습니다.");
-          console.error(error);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchQuizzes();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [currentPage, searchQuery, sortOption]);
 
   const handleSearch = (query) => {
     updateSearchParams({ keyword: query, page: 0 });
@@ -145,15 +111,15 @@ const QuizListPage = () => {
     if (newParams.page !== undefined) {
       params.set("page", newParams.page);
     }
-    if (newParams.keyword !== undefined) {
-      params.set("keyword", newParams.keyword);
-    }
     if (newParams.sort !== undefined) {
       params.set("sort", newParams.sort);
     }
+    if (newParams.keyword !== undefined) {
+      params.set("keyword", newParams.keyword);
+    }
     setSearchParams(params);
   };
-
+  const currentPage = parseInt(searchParams.get("page") || "0", 10);
   return (
     <QuizListPageContainer>
       <ControlsContainer>
@@ -167,12 +133,11 @@ const QuizListPage = () => {
         <CreateQuizButton to="/quiz/create">+ 퀴즈 생성</CreateQuizButton>
       </ControlsContainer>
 
-      {isLoading && <LoadingMessage>로딩 중...</LoadingMessage>}
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-      {!isLoading && !error && filteredQuizzes.length === 0 && (
-        <p>아직은 표시할 퀴즈가 없습니다.</p>
+      {quizzList ? (
+        <QuizGrid currentQuizzes={quizzList} />
+      ) : (
+        <LoadingMessage>로딩 중...</LoadingMessage>
       )}
-      <QuizGrid currentQuizzes={filteredQuizzes} />
 
       <PaginationContainer>
         {Array.from({ length: totalPages }, (_, index) => (

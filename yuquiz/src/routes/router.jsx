@@ -1,6 +1,6 @@
 // src/router/index.js
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
-import QuizListPage from "../pages/quiz/QuizListPage";
+import QuizListPage, { QuizListLoader } from "../pages/quiz/QuizListPage";
 import { QuizSolve } from "../pages/quiz/QuizSolve";
 import { QuizCreator } from "../pages/quiz/QuizCreator";
 import { QuizFix } from "../pages/quiz/QuizFix";
@@ -25,7 +25,9 @@ import AdminUsersControl from "../pages/admin/AdminUsersControl";
 import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
 import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
 import StudyGroupList, { studyListLoader } from "../pages/study/StudyGroupList";
-import StudyGroupDetail, { studyDetailsLoader } from "../pages/study/StudyGroupDetail";
+import StudyGroupDetail, {
+  studyDetailsLoader,
+} from "../pages/study/StudyGroupDetail";
 import AdminPostsControl from "../pages/admin/AdminPostsControl";
 import AdminQuizControl from "../pages/admin/AdminQuizControl";
 import AdminReportsControl from "../pages/admin/AdminReportsControl";
@@ -120,7 +122,7 @@ const router = createBrowserRouter([
             path: ":studyId/chat/:chatId",
             element: <ChatRoom />,
             loader: chatRoomLoader,
-          }
+          },
         ],
       },
       {
@@ -147,8 +149,9 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "list",
+            index: true,
             element: <QuizListPage />,
+            loader: QuizListLoader,
           },
           {
             path: "create",
