@@ -38,6 +38,7 @@ import ChatRoom, { chatRoomLoader } from "../pages/study/ChatRoom";
 import StudyNoticesListPage, { studyNoticesListLoader } from "../pages/study/StudyNotices";
 import StudyNoticeCreator from "../pages/study/StudyNoticeCreator";
 import StudyPostsListPage, { studyPostsListLoader } from "../pages/study/StudyPosts";
+import StudyPostCreator from "../pages/study/StudyPostCreator";
 
 const router = createBrowserRouter([
   {
@@ -140,7 +141,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":studyId/posts/new",
-            // element: <StudyPostCreator />,
+            element: <StudyPostCreator />,
           },
           {
             path: ":studyId/quizseries",

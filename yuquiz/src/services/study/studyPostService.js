@@ -33,7 +33,7 @@ const getStudyPostsList = async (
         } else if (status === 404) {
             throw new Error(message || '존재하지 않는 스터디입니다.');
         } else {
-            throw new Error("스터디 공지 목록 불러오는 중 문제 발생. 다시 시도해주세요.");
+            throw new Error("스터디 게시글 목록 불러오는 중 문제 발생. 다시 시도해주세요.");
         }
       } else {
         throw new Error("서버와 연결할 수 없습니다.");
@@ -54,7 +54,7 @@ const getStudyPostsList = async (
             } else if (status === 404) {
                 throw new Error(message || '존재하지 않는 스터디입니다.');
             } else {
-                throw new Error("스터디 공지 작성 중 문제 발생. 다시 시도해주세요.");
+                throw new Error("스터디 게시글 작성 중 문제 발생. 다시 시도해주세요.");
             }
         } else {
             throw new Error("서버와 연결할 수 없습니다.");
