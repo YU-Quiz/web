@@ -1,10 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const NoticeItem = ({ notice }) => {
   return (
     <TableRow>
-      <TableCell>{notice.postTitle}</TableCell>
+      <TableCell>
+        <StyledLink to={`/posts/${notice.postId}`}>{notice.postTitle}</StyledLink>
+      </TableCell>
       <TableCell>{notice.nickname}</TableCell>
       <TableCell>{new Date(notice.createdAt).toLocaleDateString()}</TableCell>
       <TableCell>{notice.likeCount}</TableCell>
@@ -38,5 +41,16 @@ const TableCell = styled.td`
     font-weight: bold;
     color: #0056b3;
     text-align: left;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: #0056b3; /* 링크 기본 색상 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: bold;
+
+  &:hover {
+    color: #003d80; /* 호버 시 어두운 색상 */
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
   }
 `;

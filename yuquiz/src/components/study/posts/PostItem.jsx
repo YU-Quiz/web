@@ -1,16 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const StudyPostItem = ({ post }) => {
   return (
     <TableRow>
-      <TableCell>{post.postTitle}</TableCell>
+      <TableCell>
+        <StyledLink to={`/posts/${post.postId}`}>{post.postTitle}</StyledLink>
+      </TableCell>
       <TableCell>{post.nickname}</TableCell>
       <TableCell>{new Date(post.createdAt).toLocaleDateString()}</TableCell>
       <TableCell>{post.likeCount}</TableCell>
       <TableCell>{post.viewCount}</TableCell>
     </TableRow>
-  );};
+  );
+};
 
 export default StudyPostItem;
 
@@ -37,5 +41,16 @@ const TableCell = styled.td`
     font-weight: bold;
     color: #0056b3;
     text-align: left;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: #0056b3; /* 링크 기본 색상 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: bold;
+
+  &:hover {
+    color: #003d80; /* 호버 시 어두운 색상 */
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
   }
 `;
