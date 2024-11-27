@@ -89,10 +89,6 @@ const StudyDetailsPage = () => {
     }
   };
 
-  const handleGoToChat = () => {
-    navigate(`chat/${study.chatRoomId}`);
-  };
-
   const handleRemoveMember = async (userId) => {
     const confirmDelete = window.confirm('멤버를 추방하시겠습니까?');
     if (confirmDelete) {
@@ -155,20 +151,13 @@ const StudyDetailsPage = () => {
         <Title>{study.Name}</Title>
         <ButtonGroup>
           {!study.isMember && <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>}
-          {study.isMember && (
-            <>
-              <Button onClick={handleGoToChat} secondary>
-                채팅방으로 이동
+          {study.role === 'LEADER' && (
+              <>
+              <Button onClick={handleEditStudy}>스터디 수정</Button>
+              <Button onClick={handleDeleteStudy} danger>
+                스터디 삭제
               </Button>
-              {study.role === 'LEADER' && (
-                <>
-                  <Button onClick={handleEditStudy}>스터디 수정</Button>
-                  <Button onClick={handleDeleteStudy} danger>
-                    스터디 삭제
-                  </Button>
-                  <Button onClick={handleOpenModal}>가입 신청 목록</Button>
-                </>
-              )}
+              <Button onClick={handleOpenModal}>가입 신청 목록</Button>
             </>
           )}
         </ButtonGroup>
@@ -215,9 +204,10 @@ const StudyDetailsPage = () => {
       ) : (
         <>
           <NavigationSection>
-            <StyledLink to={`/study/${study.id}/notices`}>공지사항</StyledLink>
-            <StyledLink to={`/study/${study.id}/posts`}>스터디 게시판</StyledLink>
-            <StyledLink to={`/study/${study.id}/quizseries`}>스터디 퀴즈</StyledLink>
+            <StyledLink to={`notices`}>공지사항</StyledLink>
+            <StyledLink to={`posts`}>스터디 게시판</StyledLink>
+            <StyledLink to={`quizseries`}>스터디 문제집</StyledLink>
+            <StyledLink to={`chat/${study.chatRoomId}`}>채팅방</StyledLink>
           </NavigationSection>
           <MemberSection>
             <SectionTitle>스터디원 목록</SectionTitle>
