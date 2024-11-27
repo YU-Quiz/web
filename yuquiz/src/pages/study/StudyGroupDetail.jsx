@@ -395,13 +395,15 @@ const ErrorMessage = styled.p`
 
 const NavigationSection = styled.div`
   display: flex;
-  /* justify-content: space-around; */
+  justify-content: space-around;
   margin: 20px 20px;
 `;
 
 const StyledLink = styled(Link)`
   flex: 1;
   padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
   background-color: #6cb0dd;
   color: white;
   text-decoration: none;
@@ -410,9 +412,5 @@ const StyledLink = styled(Link)`
 
   &:hover {
     background-color: #2980b9;
-  }
-
-  &:active {
-    background-color: #003d80;
   }
 `;

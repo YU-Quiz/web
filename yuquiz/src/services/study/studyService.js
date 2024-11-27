@@ -23,8 +23,8 @@ const getStudyList = async (
       const response = await api.get(`/study`, {
         params: params,
       });
-      console.log(params);
-      console.log(response.data);
+      // console.log(params);
+      // console.log(response.data);
   
       return response.data;
     } catch (error) {
