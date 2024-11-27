@@ -91,7 +91,7 @@ const Header = () => {
             title="누르시면 홈화면으로 돌아갑니다."
           />
         </NavButton>
-        <NavButton to="/quiz/list">Quizzes</NavButton>
+        <NavButton to="/quiz">Quizzes</NavButton>
         <NavButton to="/posts">Community</NavButton>
         <NavButton to="/leaderboard">LeaderBoard</NavButton>
         <NavButton to="/quizseries/list">Quiz Series</NavButton>
