@@ -35,6 +35,11 @@ import StudyDetailsPage from "../pages/study/StudyGroupDetail";
 import StudyGroupCreator from "../pages/study/StudyGroupCreator";
 import StudyGroupFix from "../pages/study/StudyGroupFix";
 import ChatRoom, { chatRoomLoader } from "../pages/study/ChatRoom";
+import StudyNoticesListPage, { studyNoticesListLoader } from "../pages/study/StudyNotices";
+import StudyNoticeCreator from "../pages/study/StudyNoticeCreator";
+import StudyPostsListPage, { studyPostsListLoader } from "../pages/study/StudyPosts";
+import StudyPostCreator from "../pages/study/StudyPostCreator";
+import StudySeries from "../pages/study/StudySeries";
 
 const router = createBrowserRouter([
   {
@@ -120,7 +125,30 @@ const router = createBrowserRouter([
             path: ":studyId/chat/:chatId",
             element: <ChatRoom />,
             loader: chatRoomLoader,
-          }
+          },
+          {
+            path: ":studyId/notices",
+            element: <StudyNoticesListPage />,
+            loader: studyNoticesListLoader,
+          },
+          {
+            path: ":studyId/notices/new",
+            element: <StudyNoticeCreator />,
+          },
+          {
+            path: ":studyId/posts",
+            element: <StudyPostsListPage />,
+            loader: studyPostsListLoader, 
+          },
+          {
+            path: ":studyId/posts/new",
+            element: <StudyPostCreator />,
+          },
+          {
+            path: ":studyId/quizseries",
+            element: <StudySeries />,
+            // loader: studyDetailsLoader,
+          },
         ],
       },
       {

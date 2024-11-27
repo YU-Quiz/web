@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { removeStudy, showStudy } from '../../services/study/studyService';
 import { getStudyMembers, removeMember } from '../../services/study/studyGroupService';
@@ -89,10 +89,6 @@ const StudyDetailsPage = () => {
     }
   };
 
-  const handleGoToChat = () => {
-    navigate(`chat/${study.chatRoomId}`);
-  };
-
   const handleRemoveMember = async (userId) => {
     const confirmDelete = window.confirm('멤버를 추방하시겠습니까?');
     if (confirmDelete) {
@@ -104,6 +100,7 @@ const StudyDetailsPage = () => {
         console.error('스터디원 삭제 중 오류 발생:', error);
         alert(error.message || '스터디원 삭제에 실패했습니다.');
       }
+      window.location.reload();
     }
   };
 
@@ -118,14 +115,35 @@ const StudyDetailsPage = () => {
 
   const handleAcceptRequest = async (userId) => {
     try {
+      // 가입 요청 승인 API 호출
       await acceptStudyRequest(study.id, userId);
       alert('가입 요청이 승인되었습니다.');
+  
+      // 가입 요청 목록에서 해당 사용자를 찾음
+      const newMemberRequest = joinRequests.find((request) => request.userId === userId);
+  
+      if (!newMemberRequest) {
+        throw new Error('가입 요청 정보를 찾을 수 없습니다.');
+      }
+  
+      // 새로운 멤버 정보로 추가
+      const newMember = {
+        id: newMemberRequest.userId,
+        nickname: newMemberRequest.name,
+        joinedAt: new Date().toISOString(), // 현재 시간 추가 (예시)
+      };
+  
+      // 멤버 목록 업데이트
+      setMembers((prevMembers) => [...prevMembers, newMember]);
+  
+      // 가입 요청 목록 업데이트
       setJoinRequests((prev) => prev.filter((request) => request.userId !== userId));
     } catch (error) {
       console.error('가입 요청 승인 중 오류 발생:', error);
       alert(error.message || '가입 요청 승인에 실패했습니다.');
     }
   };
+  
 
   return (
     <DetailsContainer>
@@ -133,20 +151,13 @@ const StudyDetailsPage = () => {
         <Title>{study.Name}</Title>
         <ButtonGroup>
           {!study.isMember && <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>}
-          {study.isMember && (
-            <>
-              <Button onClick={handleGoToChat} secondary>
-                채팅방으로 이동
+          {study.role === 'LEADER' && (
+              <>
+              <Button onClick={handleEditStudy}>스터디 수정</Button>
+              <Button onClick={handleDeleteStudy} danger>
+                스터디 삭제
               </Button>
-              {study.role === 'LEADER' && (
-                <>
-                  <Button onClick={handleEditStudy}>스터디 수정</Button>
-                  <Button onClick={handleDeleteStudy} danger>
-                    스터디 삭제
-                  </Button>
-                  <Button onClick={handleOpenModal}>가입 신청 목록</Button>
-                </>
-              )}
+              <Button onClick={handleOpenModal}>가입 신청 목록</Button>
             </>
           )}
         </ButtonGroup>
@@ -191,16 +202,24 @@ const StudyDetailsPage = () => {
           </NonMemberMessage>
         </BlurredContent>
       ) : (
-        <MemberSection>
-          <SectionTitle>스터디원 목록</SectionTitle>
-          {loadingMembers ? (
-            <LoadingMessage>스터디원 목록을 불러오는 중...</LoadingMessage>
-          ) : membersError ? (
-            <ErrorMessage>{membersError}</ErrorMessage>
-          ) : (
-            <MemberList members={members} role={study.role} onRemoveMember={handleRemoveMember} />
-          )}
-        </MemberSection>
+        <>
+          <NavigationSection>
+            <StyledLink to={`notices`}>공지사항</StyledLink>
+            <StyledLink to={`posts`}>스터디 게시판</StyledLink>
+            <StyledLink to={`quizseries`}>스터디 문제집</StyledLink>
+            <StyledLink to={`chat/${study.chatRoomId}`}>채팅방</StyledLink>
+          </NavigationSection>
+          <MemberSection>
+            <SectionTitle>스터디원 목록</SectionTitle>
+            {loadingMembers ? (
+              <LoadingMessage>스터디원 목록을 불러오는 중...</LoadingMessage>
+            ) : membersError ? (
+              <ErrorMessage>{membersError}</ErrorMessage>
+            ) : (
+              <MemberList members={members} role={study.role} onRemoveMember={handleRemoveMember} />
+            )}
+          </MemberSection>
+        </>
       )}
 
       <JoinRequestModal
@@ -362,4 +381,26 @@ const LoadingMessage = styled.p`
 const ErrorMessage = styled.p`
   text-align: center;
   color: #e74c3c;
+`;
+
+const NavigationSection = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 20px;
+`;
+
+const StyledLink = styled(Link)`
+  flex: 1;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  background-color: #6cb0dd;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2980b9;
+  }
 `;
