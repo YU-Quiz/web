@@ -1,9 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import JoinRequestItem from './JoinRequestItem';
+import React from "react";
+import styled from "styled-components";
+import JoinRequestItem from "./JoinRequestItem";
 
 const JoinRequestList = ({ requests, onAccept }) => {
-    console.log(requests);
   return (
     <List>
       {requests.map((request) => (

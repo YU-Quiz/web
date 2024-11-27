@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
-import useAuthStore from '../stores/auth/authStore';
+import { useEffect, useRef, useState } from "react";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
+import useAuthStore from "../stores/auth/authStore";
 
 const useWebSocket = (roomId, onMessageReceived) => {
   const clientRef = useRef(null);
@@ -11,14 +11,14 @@ const useWebSocket = (roomId, onMessageReceived) => {
   useEffect(() => {
     // STOMP 클라이언트 초기화
     const stompClient = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+      webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
       reconnectDelay: 5000,
       // debug: (msg) => console.log('STOMP: ', msg), // 디버깅 로그
       connectHeaders: {
         Authorization: `${accessToken}`,
         roomId: roomId,
-        'accept-version': '1.2', // 서버에서 지원하는 STOMP 버전
-        'heart-beat': '10000,10000', // Heartbeat 설정 (클라이언트와 서버 간 주기적인 Ping)
+        "accept-version": "1.2", // 서버에서 지원하는 STOMP 버전
+        "heart-beat": "10000,10000", // Heartbeat 설정 (클라이언트와 서버 간 주기적인 Ping)
       },
       onConnect: () => {
         // console.log('Connected to WebSocket');
@@ -32,7 +32,7 @@ const useWebSocket = (roomId, onMessageReceived) => {
         });
       },
       onDisconnect: () => {
-        console.log('Disconnected from WebSocket');
+        //console.log('Disconnected from WebSocket');
         setConnected(false); // 연결 해제 시 상태 업데이트
       },
     });
@@ -56,9 +56,9 @@ const useWebSocket = (roomId, onMessageReceived) => {
         destination: `/pub/message/${roomId}`,
         body: JSON.stringify(message),
         headers: {
-            // Authorization: `${accessToken}`, // 토큰 추가
-            roomId: roomId,
-            // userId: userId,
+          // Authorization: `${accessToken}`, // 토큰 추가
+          roomId: roomId,
+          // userId: userId,
         },
       });
     }
@@ -68,4 +68,3 @@ const useWebSocket = (roomId, onMessageReceived) => {
 };
 
 export default useWebSocket;
-

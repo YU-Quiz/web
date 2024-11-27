@@ -12,13 +12,13 @@ const getQuizList = async (keyword = "", sort = "DATE_DESC", page = 0) => {
       sort: sort || "DATE_DESC",
       page: Number(page) >= 0 ? Number(page) : 0, // 기본값 설정
     };
-    console.log("getQuizList 호출 직전 page 값:", page);
+    //console.log("getQuizList 호출 직전 page 값:", page);
 
     const response = await api.get(`${SERVER_API}/quizzes`, {
       params: params,
     });
-    console.log("params 객체:", params);
-    console.log(response.data);
+    //console.log("params 객체:", params);
+    //console.log(response.data);
 
     return response.data;
   } catch (error) {
@@ -34,7 +34,7 @@ const getQuiz = async (quizID) => {
   try {
     // API 호출
     const response = await api.get(`${SERVER_API}/quizzes/${quizID}`);
-    console.log(response.data);
+    //console.log(response.data);
 
     return response.data;
   } catch (error) {
@@ -113,7 +113,7 @@ const likeQuiz = async (quizId, liked) => {
 };
 
 const sendReport = async (data, quizID) => {
-  console.log(data);
+  //console.log(data);
   try {
     const response = await api.post(
       `${SERVER_API}/quizzes/${quizID}/report`,

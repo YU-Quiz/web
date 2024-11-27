@@ -24,7 +24,7 @@ const useAuthStore = create(
           set({ accessToken, isAuthenticated: true });
           // userInfo를 동기적으로 가져오기
           const userInfo = await api.get(`users/my`);
-          console.log("유저정보: ", userInfo);
+          //console.log("유저정보: ", userInfo);
           if (userInfo && userInfo.data) {
             set({
               userInfo: userInfo.data,

@@ -13,13 +13,13 @@ const NaverLoginCallback = () => {
       const code = query.get("code");
       const errorDescription = query.get("error_description");
 
-      console.log("네이버 로그인 응답:", { code, errorDescription });
+      //console.log("네이버 로그인 응답:", { code, errorDescription });
 
       if (code) {
         try {
           // 백엔드로 인가 코드를 전송하여 로그인 처리
           const response = await naverLogin(code);
-          console.log("카카오 로그인 성공:", response);
+          //console.log("카카오 로그인 성공:", response);
           if (response === true) {
             navigate("/");
             return;
