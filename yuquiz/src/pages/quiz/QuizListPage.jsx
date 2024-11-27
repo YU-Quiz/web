@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSearchParams, Link, useLoaderData } from "react-router-dom";
 import Dropdown from "../../components/UI/Dropdown";
 import SearchInput from "../../components/UI/SearchInput";
@@ -75,18 +75,14 @@ const SORT_OPTIONS = Object.values(SORT_QUIZ_POST).map((option) => ({
   label: option.label,
   value: option.value,
 }));
+
 export async function QuizListLoader({ request }) {
   const url = new URL(request.url);
   const currentPage = parseInt(url.searchParams.get("page") || "0", 10);
   const keyword = url.searchParams.get("keyword") || "";
   const sortOption = url.searchParams.get("sort") || "DATE_DESC";
 
-  const QuizListData = await getQuizList(
-    keyword,
-    null,
-    sortOption,
-    currentPage
-  );
+  const QuizListData = await getQuizList(keyword, sortOption, currentPage);
 
   return {
     quizzList: QuizListData.content,
