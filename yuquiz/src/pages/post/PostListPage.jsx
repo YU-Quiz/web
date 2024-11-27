@@ -1,13 +1,13 @@
-import React from 'react';
-import { useLoaderData, useSearchParams, Link } from 'react-router-dom';
-import styled from 'styled-components';
-import PostList from '../../components/postlist/PostList';
-import Dropdown from '../../components/UI/Dropdown';
-import SearchInput from '../../components/UI/SearchInput';
-import Button from '../../components/UI/Button'; // Import the Button component
-import { getPostsList } from '../../services/post/postService';
-import { getCategories } from '../../services/post/postMetaService';
-import { POST_SORT_OPTIONS } from '../../constants/admin/postSortOption';
+import React from "react";
+import { useLoaderData, useSearchParams, Link } from "react-router-dom";
+import styled from "styled-components";
+import PostList from "../../components/postlist/PostList";
+import Dropdown from "../../components/UI/Dropdown";
+import SearchInput from "../../components/UI/SearchInput";
+import Button from "../../components/UI/Button"; // Import the Button component
+import { getPostsList } from "../../services/post/postService";
+import { getCategories } from "../../services/post/postMetaService";
+import { POST_SORT_OPTIONS } from "../../constants/admin/postSortOption";
 
 export async function postListLoader({ request }) {
   const url = new URL(request.url);
@@ -17,7 +17,12 @@ export async function postListLoader({ request }) {
   const sortOption = url.searchParams.get("sort") || "DATE_DESC";
 
   const categoriesData = await getCategories();
-  const postsListData = await getPostsList(keyword, categoryId, sortOption, currentPage);
+  const postsListData = await getPostsList(
+    keyword,
+    categoryId,
+    sortOption,
+    currentPage
+  );
 
   return {
     categories: categoriesData,
@@ -30,7 +35,10 @@ const PostListPage = () => {
   const { categories, postsList, totalPages } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const extendedCategories = [{ id: null, categoryName: '모두' }, ...categories];
+  const extendedCategories = [
+    { id: null, categoryName: "모두" },
+    ...categories,
+  ];
 
   const handleSelectCategory = (selectedCategory) => {
     const categoryId = selectedCategory.id !== null ? selectedCategory.id : 0;
@@ -49,16 +57,16 @@ const PostListPage = () => {
     const params = new URLSearchParams(searchParams);
 
     if (newParams.page !== undefined) {
-      params.set('page', newParams.page);
+      params.set("page", newParams.page);
     }
     if (newParams.categoryId !== undefined) {
-      params.set('categoryId', newParams.categoryId);
+      params.set("categoryId", newParams.categoryId);
     }
     if (newParams.sort !== undefined) {
-      params.set('sort', newParams.sort);
+      params.set("sort", newParams.sort);
     }
     if (newParams.keyword !== undefined) {
-      params.set('keyword', newParams.keyword);
+      params.set("keyword", newParams.keyword);
     }
     setSearchParams(params);
   };
@@ -71,7 +79,10 @@ const PostListPage = () => {
         <SearchInput onSearch={handleSearch} />
         <DropdownContainer>
           <Dropdown
-            options={extendedCategories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
+            options={extendedCategories.map((cat) => ({
+              label: cat.categoryName,
+              id: cat.id,
+            }))}
             onSelect={handleSelectCategory}
             defaultOption={{ label: "모두", id: null }}
           />
@@ -114,10 +125,11 @@ const PostListContainer = styled.div`
 const FilterContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  margin-top: 10px;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 5px;
+  margin-bottom: 10px;
 `;
 
 const DropdownContainer = styled.div`
@@ -142,8 +154,8 @@ const PageButton = styled.button`
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: ${({ isActive }) => (isActive ? '#007bff' : '#f1f1f1')};
-  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
+  background-color: ${({ isActive }) => (isActive ? "#007bff" : "#f1f1f1")};
+  color: ${({ isActive }) => (isActive ? "#fff" : "#000")};
 
   &:hover {
     background-color: #007bff;

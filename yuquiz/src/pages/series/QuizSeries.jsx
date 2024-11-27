@@ -90,10 +90,11 @@ const PaginationContainer = styled.div`
   margin-top: 20px;
   padding: 10px;
 `;
+
 const PageButton = styled.button`
   margin: 0 5px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: silver;
   color: white;
   border: none;
   cursor: pointer;
@@ -105,7 +106,7 @@ const PageButton = styled.button`
   }
 
   &:hover {
-    background-color: #0056b3;
+    background-color: gray;
   }
 
   &:disabled {

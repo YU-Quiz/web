@@ -67,35 +67,6 @@ const GoToButton = styled(Link)`
     background-color: #adadad;
   }
 `;
-const EditButton = styled.button`
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  width: 80%;
-  border-radius: 8px;
-  border: none; /* 추가 */
-  background: #1ee84c;
-  border: 1px solid gray;
-  &:hover {
-    background-color: #149932;
-  }
-`;
-
-const DeleteButton = styled.button`
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  width: 80%;
-  border-radius: 8px;
-  border: none;
-  margin-top: 5px;
-  background: red;
-
-  border: 1px solid gray;
-  &:hover {
-    background-color: #800818;
-  }
-`;
 
 const Title = styled.h1`
   background: white;
@@ -120,6 +91,34 @@ const BookHover = styled.div`
   position: relative;
   &:hover ${Cover} {
     transform: rotateY(-120deg); /* 마우스 올리면 160도 회전 */
+  }
+`;
+const EditButton = styled.button`
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  &:hover {
+    background-color: #fbbb00;
+  }
+`;
+
+const DeleteButton = styled(Link)`
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #f5365c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 5px;
+  &:hover {
+    background-color: #d7284b;
   }
 `;
 
