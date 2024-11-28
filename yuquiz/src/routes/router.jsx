@@ -42,6 +42,7 @@ import StudyPostsListPage, {
 } from "../pages/study/StudyPosts";
 import StudyPostCreator from "../pages/study/StudyPostCreator";
 import StudySeries from "../pages/study/StudySeries";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -77,7 +78,7 @@ const router = createBrowserRouter([
         path: "quizseries",
         element: (
           <>
-            <Outlet />
+            <PrivateRoute />
           </>
         ),
         children: [
