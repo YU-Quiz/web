@@ -111,6 +111,9 @@ export const Login = () => {
         </div>
       </form>
       <div className="other-container">
+        <Link to="/register" className="button-others">
+          회원가입
+        </Link>
         <Link to="/findID" className="button-others">
           아이디찾기
         </Link>

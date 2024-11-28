@@ -14,7 +14,7 @@ import { SORT_OPTIONS } from "../../services/quiz/QuizManage";
 import { getStudySeriesList } from "../../services/study/studyQuizSeriesService";
 
 const StudySeries = () => {
-    const { studyId } = useParams();
+  const { studyId } = useParams();
   const [seriesList, setSeriesList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSeriesName, setNewSeriesName] = useState(""); // 입력 값 관리
@@ -30,7 +30,7 @@ const StudySeries = () => {
     const fetchSeriesList = async () => {
       try {
         const seriesData = await getStudySeriesList(
-            studyId,
+          studyId,
           searchQuery,
           sortOption,
           currentPage
@@ -123,7 +123,9 @@ const StudySeries = () => {
       <ControlsContainer>
         <SearchInput onSearch={handleSearch} />
         <Dropdown
-          options={SORT_OPTIONS}
+          options={SORT_OPTIONS.filter((option) =>
+            option.value.includes("DATE")
+          )}
           onSelect={handleSelectSort}
           initLabel="정렬 기준 선택"
           defaultOption={{ value: "DATE_DESC", label: "날짜 내림차순" }}
@@ -299,15 +301,18 @@ const PageButton = styled.button`
   }
 `;
 const CreateButton = styled.button`
-  width: 120px;
-  height: 40px;
-  background: #007bff;
-  border-radius: 8px;
+  padding: 10px 20px;
+  background-color: #2c4697;
+  color: white;
   border: none;
-  margin-left: 10px;
-  margin-right: 10px;
+  border-radius: 4px;
+  height: 43px;
+  width: 210px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
   &:hover {
-    background: #0056b3;
+    background-color: #2c4655;
   }
 `;
 const ControlsContainer = styled.div`
@@ -315,5 +320,7 @@ const ControlsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  gap: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
