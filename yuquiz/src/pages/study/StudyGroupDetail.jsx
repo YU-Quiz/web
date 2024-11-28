@@ -154,7 +154,7 @@ const StudyDetailsPage = () => {
           {study.role === 'LEADER' && (
               <>
               <Button onClick={handleEditStudy}>스터디 수정</Button>
-              <Button onClick={handleDeleteStudy} danger>
+              <Button onClick={handleDeleteStudy} $danger>
                 스터디 삭제
               </Button>
               <Button onClick={handleOpenModal}>가입 신청 목록</Button>
@@ -272,13 +272,13 @@ const Button = styled.button`
   font-weight: bold;
   border: none;
   border-radius: 8px;
-  background-color: ${(props) => (props.danger ? '#e74c3c' : '#3498db')};
+  background-color: ${(props) => (props.$danger ? '#e74c3c' : '#3498db')};
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${(props) => (props.danger ? '#c0392b' : '#2980b9')};
+    background-color: ${(props) => (props.$danger ? '#c0392b' : '#2980b9')};
   }
 `;
 

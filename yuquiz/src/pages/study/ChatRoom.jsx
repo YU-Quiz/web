@@ -40,7 +40,6 @@ const ChatRoom = () => {
   const { userId } = parseJwtWithBearer(accessToken);
 
   const [messages, setMessages] = useState(chatLogs);
-  const [input, setInput] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -159,21 +158,21 @@ const ChatRoom = () => {
           )}
 
           {messages.map((msg, index) => (
-            <MessageContainer key={index} isMe={msg.userId === userId}>
+            <MessageContainer key={index} $isMe={msg.userId === userId}>
               <UserInfo>
-                <UserName isMe={msg.userId === userId}>{msg.sender}</UserName>
+                <UserName $isMe={msg.userId === userId}>{msg.sender}</UserName>
               </UserInfo>
-              <MessageText isMe={msg.userId === userId}>
+              <MessageText $isMe={msg.userId === userId}>
                 {msg.content}
               </MessageText>
-              <TimeStamp isMe={msg.userId === userId}>
+              <TimeStamp $isMe={msg.userId === userId}>
                 {formatDate(msg.createdAt)}
               </TimeStamp>
             </MessageContainer>
           ))}
         </ChatBody>
 
-        <Sidebar isOpen={isSidebarOpen}>
+        <Sidebar $isOpen={isSidebarOpen}>
           <SidebarHeader>Members</SidebarHeader>
           <MemberList>
             {members.map((member, index) => (

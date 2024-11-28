@@ -103,7 +103,7 @@ const PostListPage = () => {
         {Array.from({ length: totalPages }, (_, index) => (
           <PageButton
             key={index}
-            isActive={index === currentPage}
+            $isActive={index === currentPage}
             onClick={() => updateSearchParams({ page: index })}
             disabled={index === currentPage}
           >

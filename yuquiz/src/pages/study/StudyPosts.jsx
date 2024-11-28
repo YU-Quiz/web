@@ -77,7 +77,7 @@ const StudyPostsListPage = () => {
           {Array.from({ length: totalPages }, (_, index) => (
             <PaginationButton
               key={index}
-              isActive={index === currentPage}
+              $isActive={index === currentPage}
               onClick={() => updateSearchParams({ page: index })}
               disabled={index === currentPage}
             >
@@ -122,7 +122,7 @@ const StudyPostsListPage = () => {
     margin-bottom: 20px;
   `;
   
-  const StyledTable = styled.table`
+  const StyledTable = styled.div`
     width: 100%;
     border-collapse: collapse;
     text-align: left;
