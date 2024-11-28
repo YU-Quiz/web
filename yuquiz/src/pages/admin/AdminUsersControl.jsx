@@ -34,7 +34,7 @@ const AdminUsersControl = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    console.log("pagenumber", pageNumber);
+    //console.log("pagenumber", pageNumber);
   };
 
   const handleSuspend = async (isSuspended, userId) => {
@@ -76,7 +76,11 @@ const AdminUsersControl = () => {
       </Header>
 
       <TableContainer>
-        <UsersInfoList users={usersList} onSuspend={handleSuspend} onBan={handleBan} />
+        <UsersInfoList
+          users={usersList}
+          onSuspend={handleSuspend}
+          onBan={handleBan}
+        />
       </TableContainer>
 
       <Pagination>

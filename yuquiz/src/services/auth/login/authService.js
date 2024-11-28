@@ -40,7 +40,7 @@ const kakaoLogin = async (code) => {
     const response = await api.post("/auth/sign-in/kakao", { code });
     const { accessToken } = response.data;
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
-    console.log(response.data);
+    //console.log(response.data);
     return response.data.isRegistered;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.message) {
@@ -57,7 +57,7 @@ const naverLogin = async (code) => {
     const response = await api.post("/auth/sign-in/naver", { code });
     const { accessToken } = response.data;
     useAuthStore.getState().login(accessToken); // Zustand 상태 업데이트
-    console.log(response.data);
+    //console.log(response.data);
     return response.data.isRegistered;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.message) {

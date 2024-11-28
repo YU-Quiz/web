@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from '../../components/UI/Button';
-import Dropdown from '../../components/UI/Dropdown';
-import { createPost } from '../../services/post/postService';
-import { getCategories } from '../../services/post/postMetaService';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../../components/UI/Button";
+import Dropdown from "../../components/UI/Dropdown";
+import { createPost } from "../../services/post/postService";
+import { getCategories } from "../../services/post/postMetaService";
 
 const PostCreator = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +19,7 @@ const PostCreator = () => {
         const categoriesData = await getCategories();
         setCategories(categoriesData);
       } catch (error) {
-        console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
+        console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
       }
     };
 
@@ -55,7 +55,10 @@ const PostCreator = () => {
       <Form onSubmit={handleSubmit}>
         <Label>카테고리</Label>
         <Dropdown
-          options={categories.map(cat => ({ label: cat.categoryName, id: cat.id }))}
+          options={categories.map((cat) => ({
+            label: cat.categoryName,
+            id: cat.id,
+          }))}
           onSelect={handleCategoryChange}
           initLabel="카테고리 선택"
         />

@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from '../../components/UI/Button';
-import { createStudy } from '../../services/study/studyService';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../../components/UI/Button";
+import { createStudy } from "../../services/study/studyService";
 
 const StudyGroupCreator = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [registerDuration, setRegisterDuration] = useState('');
-  const [maxUser, setMaxUser] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [registerDuration, setRegisterDuration] = useState("");
+  const [maxUser, setMaxUser] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // 클라이언트 유효성 검사
     if (!name.trim()) {
-      alert('스터디 이름은 필수 입력입니다.');
+      alert("스터디 이름은 필수 입력입니다.");
       return;
     }
 
     if (!description.trim()) {
-      alert('스터디 설명은 필수 입력입니다.');
+      alert("스터디 설명은 필수 입력입니다.");
       return;
     }
 
     if (!registerDuration) {
-      alert('스터디 신청 기간은 필수 입력입니다.');
+      alert("스터디 신청 기간은 필수 입력입니다.");
       return;
     }
 
     if (!maxUser || isNaN(maxUser) || maxUser < 2) {
-      alert('최대 인원은 최소 2명 이상이어야 합니다.');
+      alert("최대 인원은 최소 2명 이상이어야 합니다.");
       return;
     }
 
@@ -41,15 +41,15 @@ const StudyGroupCreator = () => {
         description,
         registerDuration,
         maxUser: parseInt(maxUser, 10),
-        state: 'ACTIVE',
+        state: "ACTIVE",
       };
-      console.log(studyData);
+      //console.log(studyData);
       await createStudy(studyData);
-      alert('스터디 생성 성공!');
-      navigate('/study');
+      alert("스터디 생성 성공!");
+      navigate("/study");
     } catch (error) {
-      console.error('스터디 생성 중 오류 발생:', error);
-      alert('스터디 생성에 실패했습니다. 다시 시도해주세요.');
+      console.error("스터디 생성 중 오류 발생:", error);
+      alert("스터디 생성에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

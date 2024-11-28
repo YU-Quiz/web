@@ -1,7 +1,7 @@
 import { POST_SORT_OPTIONS } from "../../constants/admin/postSortOption";
 import api from "../apiService";
 
-const getAdminPosts = async (sort=POST_SORT_OPTIONS.DATE_DESC, page=0) => {
+const getAdminPosts = async (sort = POST_SORT_OPTIONS.DATE_DESC, page = 0) => {
   try {
     const params = {};
 
@@ -14,24 +14,24 @@ const getAdminPosts = async (sort=POST_SORT_OPTIONS.DATE_DESC, page=0) => {
   } catch (error) {
     if (error.response) {
       console.log(error.response);
-      throw new Error('게시글 목록 불러오는 중 문제 발생. 다시 시도해주세요.');
+      throw new Error("게시글 목록 불러오는 중 문제 발생. 다시 시도해주세요.");
     } else {
-      throw new Error('서버와 연결할 수 없습니다.');
+      throw new Error("서버와 연결할 수 없습니다.");
     }
   }
 };
 
 // 게시글 삭제
-const forceDeletePost = async(postId)=>{
+const forceDeletePost = async (postId) => {
   try {
     const response = await api.delete(`/admin/posts/${postId}`);
   } catch (error) {
-    if(error.response){
+    if (error.response) {
       throw new Error(`게시글 강제삭제중 문제 발생. 다시 시도해주세요.`);
-    }else{
-      throw new Error('서버와 연결할 수 없습니다.');
+    } else {
+      throw new Error("서버와 연결할 수 없습니다.");
     }
   }
-}
+};
 
 export { getAdminPosts, forceDeletePost };

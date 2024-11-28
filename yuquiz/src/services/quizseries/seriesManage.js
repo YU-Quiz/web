@@ -39,7 +39,7 @@ export const createSeries = async (seriesData) => {
 export const updateSeries = async (seriesId, seriesData) => {
   try {
     const response = await api.put(`${API_BASE_URL}/${seriesId}`, seriesData);
-    console.log(response);
+    //console.log(response);
     alert(response.data.response);
     return response.data;
   } catch (error) {
@@ -72,9 +72,9 @@ export const getSeriesDetail = async (seriesId) => {
 export const addQuizToSeries = async (seriesId, quizId) => {
   try {
     const response = await api.post(`/series/quizzes/${seriesId}/${quizId}`);
-    console.log(response);
+    //console.log(response);
     if (response.status === HttpStatusCode.Created) {
-      console.log("문제 추가 성공!");
+      //console.log("문제 추가 성공!");
     } else if (response.status === HttpStatusCode.NotFound) {
       console.error("이미 존재하는 문제입니다.");
     }
@@ -90,7 +90,7 @@ export const getQuizListInSeries = async (seriesId) => {
       params: { page: 0 },
     });
     if (response.status === HttpStatusCode.Ok) {
-      console.log("문제 추가 성공!");
+      //console.log("문제 추가 성공!");
     } else if (response.status === HttpStatusCode.Forbidden) {
       console.error("권한이 없습니다.");
     }
@@ -103,7 +103,7 @@ export const deleteQuizFromSeries = async (seriesId, quizId) => {
   try {
     const response = await api.delete(`/series/quizzses/${seriesId}/${quizId}`);
     if (response.status === HttpStatusCode.NoContent) {
-      console.log("문제 삭제 성공!");
+      //console.log("문제 삭제 성공!");
     } else if (response.status === HttpStatusCode.Forbidden) {
       console.error("권한이 없습니다.");
     }

@@ -4,7 +4,8 @@ import { IoMdArrowBack } from "react-icons/io";
 import { useState } from "react";
 import { login } from "../../services/auth/login/authService"; // 로그인 서비스 함수
 import Modal from "react-modal";
-
+import logo from "../../assets/yuquiz_logo.png";
+import styled from "styled-components";
 // 모달의 루트 요소 설정
 Modal.setAppElement("#root");
 
@@ -60,7 +61,7 @@ export const Login = () => {
         <IoMdArrowBack />
       </Link>
       <div className="title-box">
-        <p className="logo">YU Quiz</p>
+        <YULogo src={logo} alt="YU Quiz"></YULogo>
       </div>
       <form className="login-container" onSubmit={handleLogin}>
         <div>
@@ -120,3 +121,14 @@ export const Login = () => {
     </div>
   );
 };
+
+const YULogo = styled.img`
+  color: $primary-color;
+  font-size: 50px;
+  width: 30%;
+  height: auto;
+  font-weight: 400;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+`;

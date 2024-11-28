@@ -1,13 +1,13 @@
-import React from 'react';
-import { useLoaderData, useSearchParams, Link } from 'react-router-dom';
-import styled from 'styled-components';
-import StudyList from '../../components/study/StudyList';
-import Dropdown from '../../components/UI/Dropdown';
-import SearchInput from '../../components/UI/SearchInput';
-import Button from '../../components/UI/Button'; // Import the Button component
-import { getStudyList } from '../../services/study/studyService';
-import { STUDY_LIST_SORT_OPTIONS } from '../../constants/study/studySortOption';
-import { STUDY_FILTER_OPTIONS } from '../../constants/study/studyFilterOption';
+import React from "react";
+import { useLoaderData, useSearchParams, Link } from "react-router-dom";
+import styled from "styled-components";
+import StudyList from "../../components/study/StudyList";
+import Dropdown from "../../components/UI/Dropdown";
+import SearchInput from "../../components/UI/SearchInput";
+import Button from "../../components/UI/Button"; // Import the Button component
+import { getStudyList } from "../../services/study/studyService";
+import { STUDY_LIST_SORT_OPTIONS } from "../../constants/study/studySortOption";
+import { STUDY_FILTER_OPTIONS } from "../../constants/study/studyFilterOption";
 
 export async function studyListLoader({ request }) {
   const url = new URL(request.url);
@@ -16,7 +16,12 @@ export async function studyListLoader({ request }) {
   const sortOption = url.searchParams.get("sort") || "CREATED_DESC";
   const filter = url.searchParams.get("filter") || "ALL";
 
-  const studiesListData = await getStudyList(keyword, sortOption, filter, currentPage);
+  const studiesListData = await getStudyList(
+    keyword,
+    sortOption,
+    filter,
+    currentPage
+  );
 
   return {
     studiesList: studiesListData.content,
@@ -44,16 +49,16 @@ const StudyListPage = () => {
     const params = new URLSearchParams(searchParams);
 
     if (newParams.page !== undefined) {
-      params.set('page', newParams.page);
+      params.set("page", newParams.page);
     }
     if (newParams.sort !== undefined) {
-      params.set('sort', newParams.sort);
+      params.set("sort", newParams.sort);
     }
     if (newParams.filter !== undefined) {
-      params.set('filter', newParams.filter);
+      params.set("filter", newParams.filter);
     }
     if (newParams.keyword !== undefined) {
-      params.set('keyword', newParams.keyword);
+      params.set("keyword", newParams.keyword);
     }
     setSearchParams(params);
   };
@@ -77,7 +82,7 @@ const StudyListPage = () => {
           />
         </DropdownContainer>
         <StyledLink to="/study/new">
-          <Button>Create Study</Button>
+          <CreateButton>Create Study</CreateButton>
         </StyledLink>
       </FilterContainer>
 
@@ -101,17 +106,29 @@ const StudyListPage = () => {
 
 export default StudyListPage;
 
-// Styled Components
 const StudyListContainer = styled.div`
   width: 100%;
 `;
 
+const CreateButton = styled.button`
+  padding: 10px 20px;
+  background-color: #2c4697;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  &:hover {
+    background-color: #2c4655;
+  }
+`;
 const FilterContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: 20px;
 `;
 
@@ -137,8 +154,8 @@ const PageButton = styled.button`
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: ${({ isActive }) => (isActive ? '#007bff' : '#f1f1f1')};
-  color: ${({ isActive }) => (isActive ? '#fff' : '#000')};
+  background-color: ${({ isActive }) => (isActive ? "#007bff" : "#f1f1f1")};
+  color: ${({ isActive }) => (isActive ? "#fff" : "#000")};
 
   &:hover {
     background-color: #007bff;

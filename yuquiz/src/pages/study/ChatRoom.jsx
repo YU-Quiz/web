@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { FiMenu } from "react-icons/fi";
 import { showStudy } from "../../services/study/studyService";
 import { useLoaderData } from "react-router-dom";
 import { getStudyMembers } from "../../services/study/studyGroupService";
-import { getDailyChatLogs, getChatLogsByDate } from "../../services/chat/chatService";
+import {
+  getDailyChatLogs,
+  getChatLogsByDate,
+} from "../../services/chat/chatService";
 import useWebSocket from "../../hooks/useWebSocket";
 import { getUser } from "../../services/user/userService";
 import useAuthStore from "../../stores/auth/authStore";
@@ -68,38 +71,38 @@ const ChatRoom = () => {
 
   const fetchPreviousMessages = async () => {
     if (isLoading || !hasMore) return;
-  
+
     setIsLoading(true);
     try {
       let currentDate = new Date(lastFetchedDate);
       let olderMessages = [];
-  
+
       while (true) {
         // 하루 전으로 이동
         currentDate.setDate(currentDate.getDate() - 1);
         const formattedDate = currentDate.toISOString().split("T")[0];
-  
+
         // API 호출
-        console.log("Fetching messages for date:", formattedDate);
+        //console.log("Fetching messages for date:", formattedDate);
         olderMessages = await getChatLogsByDate(roomId, formattedDate);
-  
+
         if (olderMessages.length > 0) break;
-  
-        console.log(`No messages for ${formattedDate}, moving to the previous day...`);
-  
+
+        //console.log(`No messages for ${formattedDate}, moving to the previous day...`);
+
         if (currentDate < new Date("2024-11-23")) {
           setHasMore(false);
-          console.log("No more messages to fetch.");
+          //console.log("No more messages to fetch.");
           return;
         }
       }
-  
+
       // 새로운 메시지 추가
       setMessages((prev) => [
         ...olderMessages,
         ...prev, // 기존 메시지
       ]);
-  
+
       // 가장 오래된 메시지의 날짜로 업데이트
       if (olderMessages.length > 0) {
         setLastFetchedDate(olderMessages[0]?.createdAt);
@@ -113,7 +116,7 @@ const ChatRoom = () => {
       setIsLoading(false);
     }
   };
-  
+
   const handleSendMessage = (input) => {
     const newMessage = {
       roomId: `${roomId}`,
@@ -147,7 +150,10 @@ const ChatRoom = () => {
       <ContentArea>
         <ChatBody ref={chatBodyRef}>
           {hasMore && (
-            <LoadMoreButton onClick={fetchPreviousMessages} disabled={isLoading}>
+            <LoadMoreButton
+              onClick={fetchPreviousMessages}
+              disabled={isLoading}
+            >
               {isLoading ? "Loading..." : "Load Previous Messages"}
             </LoadMoreButton>
           )}
@@ -157,8 +163,12 @@ const ChatRoom = () => {
               <UserInfo>
                 <UserName isMe={msg.userId === userId}>{msg.sender}</UserName>
               </UserInfo>
-              <MessageText isMe={msg.userId === userId}>{msg.content}</MessageText>
-              <TimeStamp isMe={msg.userId === userId}>{formatDate(msg.createdAt)}</TimeStamp>
+              <MessageText isMe={msg.userId === userId}>
+                {msg.content}
+              </MessageText>
+              <TimeStamp isMe={msg.userId === userId}>
+                {formatDate(msg.createdAt)}
+              </TimeStamp>
             </MessageContainer>
           ))}
         </ChatBody>

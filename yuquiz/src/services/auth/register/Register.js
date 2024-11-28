@@ -226,7 +226,7 @@ const registerOauth = async (registerData) => {
       `${SERVER_API}/auth/sign-up/oauth`,
       registerData
     );
-    console.log(response, registerData);
+    //console.log(response, registerData);
 
     if (response && response.status === HttpStatusCode.Ok) {
       alert("소셜 회원가입이 성공적으로 완료되었습니다.");
@@ -236,7 +236,7 @@ const registerOauth = async (registerData) => {
       return false;
     }
   } catch (error) {
-    console.log(registerData);
+    //console.log(registerData);
     if (error.response && error.response.status === HttpStatusCode.Conflict) {
       alert(error.response.data.message || "이미 등록된 사용자입니다.");
     } else {

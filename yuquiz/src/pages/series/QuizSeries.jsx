@@ -90,10 +90,11 @@ const PaginationContainer = styled.div`
   margin-top: 20px;
   padding: 10px;
 `;
+
 const PageButton = styled.button`
   margin: 0 5px;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: silver;
   color: white;
   border: none;
   cursor: pointer;
@@ -105,7 +106,7 @@ const PageButton = styled.button`
   }
 
   &:hover {
-    background-color: #0056b3;
+    background-color: gray;
   }
 
   &:disabled {
@@ -114,15 +115,16 @@ const PageButton = styled.button`
   }
 `;
 const CreateButton = styled.button`
-  width: 120px;
-  height: 40px;
-  background: #007bff;
-  border-radius: 8px;
+  padding: 10px 20px;
+  background-color: #2c4697;
+  color: white;
   border: none;
-  margin-left: 10px;
-  margin-right: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
   &:hover {
-    background: #0056b3;
+    background-color: #2c4655;
   }
 `;
 const ControlsContainer = styled.div`
@@ -130,7 +132,9 @@ const ControlsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  gap: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const QuizSeriesPage = () => {
@@ -240,7 +244,9 @@ const QuizSeriesPage = () => {
       <ControlsContainer>
         <SearchInput onSearch={handleSearch} />
         <Dropdown
-          options={SORT_OPTIONS}
+          options={SORT_OPTIONS.filter((option) =>
+            option.value.includes("DATE")
+          )}
           onSelect={handleSelectSort}
           initLabel="정렬 기준 선택"
           defaultOption={{ value: "DATE_DESC", label: "날짜 내림차순" }}

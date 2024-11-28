@@ -82,7 +82,7 @@ export const QuizFix = () => {
       // fixQuiz API 호출로 데이터 전송
       const wellDone = await fixQuiz(updatedQuiz);
       if (wellDone) {
-        console.log("Updated Quiz:", updatedQuiz);
+        //console.log("Updated Quiz:", updatedQuiz);
         alert("수정 성공");
         // 퀴즈 목록 페이지로 이동
         navigate(`/quiz/play/${updatedQuiz.quizId}`);

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useAuthStore from "../../stores/auth/authStore";
+import { CgProfile } from "react-icons/cg";
 
 const ProfileCard = () => {
   const userInfo = useAuthStore((state) => state.userInfo);
@@ -24,17 +25,17 @@ const ProfileCard = () => {
           <Nickname>{userInfo.nickname}</Nickname>
           <UserId>{`ID: ${displayUsername}`}</UserId>
           <IconsContainer>
-            <MessageIcon to={'/my/edit'}>💬</MessageIcon>
-            <SettingsIcon to={'/my/edit'}>⚙️</SettingsIcon>
-        </IconsContainer>
-        {isAuthenticated&&userInfo.role==="ADMIN" ? (
-          <AdminIcon to={'/admin'}>관리자페이지</AdminIcon>
-        ):(
-          <></>
-        )}
+            <MessageIcon to={"/my/edit"}>💬</MessageIcon>
+            <SettingsIcon to={"/my/edit"}>⚙️</SettingsIcon>
+          </IconsContainer>
+          {isAuthenticated && userInfo.role === "ADMIN" ? (
+            <AdminIcon to={"/admin"}>관리자페이지</AdminIcon>
+          ) : (
+            <></>
+          )}
         </UserInfo>
       </UserInfoContainer>
-      
+
       <ProfileStats>
         <Stat>100 Quizzes</Stat>
         <Stat>50 Badges</Stat>
@@ -58,11 +59,11 @@ const ProfileContainer = styled.div`
   gap: 20px;
 `;
 
-const ProfilePicture = styled.div`
+const ProfilePicture = styled(CgProfile)`
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background-color: #ddd;
+  background-color: white;
 `;
 
 const UserInfoContainer = styled.div`

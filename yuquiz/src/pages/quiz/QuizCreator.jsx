@@ -90,7 +90,7 @@ export const QuizCreator = () => {
       choices: choices,
       subjectId: 2,
     };
-    console.log(data);
+    //console.log(data);
     if (handlerSubmitQuiz(data)) {
       alert("퀴즈 생성 성공!");
       navigate("/");

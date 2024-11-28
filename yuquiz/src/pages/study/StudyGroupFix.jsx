@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import Button from '../../components/UI/Button';
-import { editStudy, showStudy } from '../../services/study/studyService';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Button from "../../components/UI/Button";
+import { editStudy, showStudy } from "../../services/study/studyService";
 
 const StudyGroupFix = () => {
   const { studyId } = useParams();
   const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [registerDuration, setRegisterDuration] = useState('');
-  const [maxUser, setMaxUser] = useState('');
-  const [state, setState] = useState('ACTIVE'); // 활동 상태
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [registerDuration, setRegisterDuration] = useState("");
+  const [maxUser, setMaxUser] = useState("");
+  const [state, setState] = useState("ACTIVE"); // 활동 상태
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,11 +26,11 @@ const StudyGroupFix = () => {
         setState(studyDetails.state); // 상태 데이터 추가
         setIsLoading(false);
 
-        console.log(studyDetails);
+        //console.log(studyDetails);
       } catch (error) {
-        console.error('스터디 정보를 불러오는 중 오류 발생:', error);
-        alert('스터디 정보를 불러오지 못했습니다.');
-        navigate('/study');
+        console.error("스터디 정보를 불러오는 중 오류 발생:", error);
+        alert("스터디 정보를 불러오지 못했습니다.");
+        navigate("/study");
       }
     };
 
@@ -42,22 +42,22 @@ const StudyGroupFix = () => {
 
     // 클라이언트 유효성 검사
     if (!name.trim()) {
-      alert('스터디 이름은 필수 입력입니다.');
+      alert("스터디 이름은 필수 입력입니다.");
       return;
     }
 
     if (!description.trim()) {
-      alert('스터디 설명은 필수 입력입니다.');
+      alert("스터디 설명은 필수 입력입니다.");
       return;
     }
 
     if (!registerDuration) {
-      alert('스터디 신청 기간은 필수 입력입니다.');
+      alert("스터디 신청 기간은 필수 입력입니다.");
       return;
     }
 
     if (!maxUser || isNaN(maxUser) || maxUser < 2) {
-      alert('최대 인원은 최소 2명 이상이어야 합니다.');
+      alert("최대 인원은 최소 2명 이상이어야 합니다.");
       return;
     }
 
@@ -71,12 +71,12 @@ const StudyGroupFix = () => {
       };
       await editStudy(studyId, studyData);
 
-      console.log(studyData);
-      alert('스터디 수정 성공!');
-      navigate('/study');
+      //console.log(studyData);
+      alert("스터디 수정 성공!");
+      navigate("/study");
     } catch (error) {
-      console.error('스터디 수정 중 오류 발생:', error);
-      alert('스터디 수정에 실패했습니다. 다시 시도해주세요.');
+      console.error("스터디 수정 중 오류 발생:", error);
+      alert("스터디 수정에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

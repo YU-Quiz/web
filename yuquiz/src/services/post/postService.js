@@ -20,8 +20,8 @@ const getPostsList = async (
     const response = await api.get(`/posts`, {
       params: params,
     });
-    console.log(params);
-    console.log(response.data);
+    //console.log(params);
+    //console.log(response.data);
 
     return response.data;
   } catch (error) {
@@ -32,7 +32,6 @@ const getPostsList = async (
     }
   }
 };
-
 
 // 게시글 생성
 const createPost = async (categoryId, title, content) => {
@@ -82,7 +81,7 @@ const editPost = async (postId, categoryId, title, content) => {
       content: content,
     });
 
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
   } catch (error) {
     if (error.response) {
