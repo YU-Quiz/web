@@ -1,10 +1,8 @@
-// src/router/index.js
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import QuizListPage, { QuizListLoader } from "../pages/quiz/QuizListPage";
 import { QuizSolve } from "../pages/quiz/QuizSolve";
 import { QuizCreator } from "../pages/quiz/QuizCreator";
 import { QuizFix } from "../pages/quiz/QuizFix";
-import MyPageLayout from "../pages/mypage/MyPageLayout";
 import MyPage, { MyPageLoader } from "../pages/mypage/MyPage";
 import EditProfile from "../pages/mypage/EditProfile";
 import { Login } from "../pages/login/Login";
@@ -20,9 +18,8 @@ import ReqResetPW from "../pages/login/findpw/ReqResetPW";
 import ResResetPW from "../pages/login/findpw/ResResetPW";
 import { FindID } from "../pages/login/findID/FindID";
 import AdminPageLayout from "../pages/admin/AdminPageLayout";
-import ContentTemplate from "../components/admin/ContentTemplate";
 import AdminUsersControl from "../pages/admin/AdminUsersControl";
-import QuizSeriesPage, { QuizSeries } from "../pages/series/QuizSeries";
+import QuizSeriesPage from "../pages/series/QuizSeries";
 import QuizSeriesDetail from "../pages/series/QuizSeriesDetail";
 import StudyGroupList, { studyListLoader } from "../pages/study/StudyGroupList";
 import StudyGroupDetail, {
@@ -33,13 +30,16 @@ import AdminQuizControl from "../pages/admin/AdminQuizControl";
 import AdminReportsControl from "../pages/admin/AdminReportsControl";
 import RootLayout from "../pages/RootLayout";
 import Home from "../pages/Home";
-import StudyDetailsPage from "../pages/study/StudyGroupDetail";
 import StudyGroupCreator from "../pages/study/StudyGroupCreator";
 import StudyGroupFix from "../pages/study/StudyGroupFix";
 import ChatRoom, { chatRoomLoader } from "../pages/study/ChatRoom";
-import StudyNoticesListPage, { studyNoticesListLoader } from "../pages/study/StudyNotices";
+import StudyNoticesListPage, {
+  studyNoticesListLoader,
+} from "../pages/study/StudyNotices";
 import StudyNoticeCreator from "../pages/study/StudyNoticeCreator";
-import StudyPostsListPage, { studyPostsListLoader } from "../pages/study/StudyPosts";
+import StudyPostsListPage, {
+  studyPostsListLoader,
+} from "../pages/study/StudyPosts";
 import StudyPostCreator from "../pages/study/StudyPostCreator";
 import StudySeries from "../pages/study/StudySeries";
 
@@ -140,7 +140,7 @@ const router = createBrowserRouter([
           {
             path: ":studyId/posts",
             element: <StudyPostsListPage />,
-            loader: studyPostsListLoader, 
+            loader: studyPostsListLoader,
           },
           {
             path: ":studyId/posts/new",
