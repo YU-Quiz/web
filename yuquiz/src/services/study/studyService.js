@@ -1,5 +1,6 @@
 import api from "../apiService";
 import { STUDY_LIST_SORT_OPTIONS } from "../../constants/study/studySortOption";
+import { HttpStatusCode } from "axios";
 
 // 스터디 리스트 조회
 const getStudyList = async (
@@ -26,7 +27,10 @@ const getStudyList = async (
 
     return response.data;
   } catch (error) {
-    if (error.response) {
+    if (error.status === HttpStatusCode.Forbidden) {
+      alert("로그인하고 이용해주세요.");
+      window.location.href = "http://localhost:3000/login";
+    } else if (error.response) {
       throw new Error(
         "스터디 목록 불러오는 중 문제가 발생했습니다. 다시 시도해주세요."
       );
