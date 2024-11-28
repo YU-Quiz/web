@@ -36,12 +36,12 @@ const PostListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const extendedCategories = [
-    { id: null, categoryName: "모두" },
+    { id: 0, categoryName: "모두" },
     ...categories,
   ];
 
   const handleSelectCategory = (selectedCategory) => {
-    const categoryId = selectedCategory.id !== null ? selectedCategory.id : 0;
+    const categoryId = selectedCategory.value !== 0 ? selectedCategory.value : 0;
     updateSearchParams({ categoryId, page: 0 });
   };
 
@@ -81,10 +81,10 @@ const PostListPage = () => {
           <Dropdown
             options={extendedCategories.map((cat) => ({
               label: cat.categoryName,
-              id: cat.id,
+              value: String(cat.id), // 여기서 value를 id로 매핑
             }))}
             onSelect={handleSelectCategory}
-            defaultOption={{ label: "모두", id: null }}
+            defaultOption={{ label: "모두", value: 0 }}
           />
           <Dropdown
             options={Object.values(POST_SORT_OPTIONS)}
