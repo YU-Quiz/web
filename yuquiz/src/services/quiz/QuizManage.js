@@ -22,7 +22,10 @@ const getQuizList = async (keyword = "", sort = "DATE_DESC", page = 0) => {
 
     return response.data;
   } catch (error) {
-    if (error.response) {
+    if (error.status === HttpStatusCode.Forbidden) {
+      alert("로그인하고 이용해주세요.");
+      window.location.href = "http://localhost:3000/login";
+    } else if (error.response) {
       throw new Error("퀴즈 목록 불러오는 중 문제 발생. 다시 시도해주세요.");
     } else {
       throw new Error("서버와 연결할 수 없습니다.");
