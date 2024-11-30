@@ -9,7 +9,7 @@ import { getCategories } from "../../services/post/postMetaService";
 const PostCreator = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -27,7 +27,7 @@ const PostCreator = () => {
   }, []);
 
   const handleCategoryChange = (selectedOption) => {
-    setCategory(selectedOption.id);
+    setCategory(selectedOption.value);
   };
 
   const handleTitleChange = (e) => {
@@ -41,7 +41,7 @@ const PostCreator = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createPost(category, title, content);
+      await createPost(categoryId, title, content);
       alert("게시글 생성 성공!");
       navigate("/posts");
     } catch (error) {
@@ -57,7 +57,7 @@ const PostCreator = () => {
         <Dropdown
           options={categories.map((cat) => ({
             label: cat.categoryName,
-            id: cat.id,
+            value: String(cat.id),
           }))}
           onSelect={handleCategoryChange}
           initLabel="카테고리 선택"

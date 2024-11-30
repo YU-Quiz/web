@@ -9,7 +9,7 @@ import { getCategories } from '../../services/post/postMetaService';
 const PostFix = () => {
   const { postId } = useParams();
   const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
@@ -19,10 +19,27 @@ const PostFix = () => {
     const fetchPostData = async () => {
       try {
         const postData = await showPost(postId);
-        setCategory(postData.post.category || '');
+        const categoryName = postData.post.categoryName || '';
+        switch (categoryName) {
+          case '공지게시판':
+            setCategory('1');
+            break;
+          case '자유게시판':
+            setCategory('2');
+            break;
+          case '스터디':
+            setCategory('3');
+            break;
+          case '문의게시판':
+            setCategory('4');
+            break;
+          default:
+            setCategory('');
+        }
+        console.log(postData.post.categoryName);
         setTitle(postData.post.title || '');
         setContent(postData.post.content || '');
-
+        
         const categoriesData = await getCategories();
         setCategories(categoriesData);
         setLoading(false);
@@ -36,7 +53,7 @@ const PostFix = () => {
   }, [postId]);
 
   const handleCategoryChange = (selectedOption) => {
-    setCategory(selectedOption.id);
+    setCategory(selectedOption.value);
   };
 
   const handleTitleChange = (e) => {
@@ -50,7 +67,7 @@ const PostFix = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await editPost(postId, category, title, content);
+      await editPost(postId, categoryId, title, content);
       alert("게시글 수정 성공!");
       navigate(`/posts/${postId}`);
     } catch (error) {
@@ -67,13 +84,13 @@ const PostFix = () => {
       <Form onSubmit={handleSubmit}>
         <FormTitle>게시글 수정</FormTitle>
 
-        <Label>카테고리</Label>
+        {/* <Label>카테고리</Label>
         <Dropdown
-          options={categories.map((cat) => ({ label: cat.categoryName, id: cat.id }))}
+          options={categories.map((cat) => ({ label: cat.categoryName, value: String(cat.id) }))}
           onSelect={handleCategoryChange}
           initLabel="카테고리 선택"
-          defaultOption={categories.find((cat) => cat.id === category)}
-        />
+          defaultOption={categories.find((cat) => cat.id === categoryId)}
+        /> */}
 
         <Label>제목</Label>
         <Input
