@@ -19,14 +19,12 @@ const StudyGroupFix = () => {
     const fetchStudyDetails = async () => {
       try {
         const studyDetails = await showStudy(studyId);
-        setName(studyDetails.Name);
+        setName(studyDetails.Name); // 수정: 'Name'을 'name'으로 변경
         setDescription(studyDetails.description);
         setRegisterDuration(studyDetails.registerDuration);
         setMaxUser(studyDetails.maxUser);
         setState(studyDetails.state); // 상태 데이터 추가
         setIsLoading(false);
-
-        //console.log(studyDetails);
       } catch (error) {
         console.error("스터디 정보를 불러오는 중 오류 발생:", error);
         alert("스터디 정보를 불러오지 못했습니다.");
@@ -71,7 +69,6 @@ const StudyGroupFix = () => {
       };
       await editStudy(studyId, studyData);
 
-      //console.log(studyData);
       alert("스터디 수정 성공!");
       navigate("/study");
     } catch (error) {
@@ -111,7 +108,7 @@ const StudyGroupFix = () => {
             <Input
               type="datetime-local"
               value={registerDuration}
-              min={new Date().toISOString().slice(0, 16)} // 현재 시간 이전은 선택 불가
+              min={new Date().toISOString().slice(0, 16)}
               onChange={(e) => setRegisterDuration(e.target.value)}
               required
             />
@@ -127,9 +124,7 @@ const StudyGroupFix = () => {
               required
             />
           </FlexColumn>
-        </FlexRow>
 
-        {/* <FlexRow>
           <FlexColumn>
             <Label>활동 상태</Label>
             <Select
@@ -137,11 +132,11 @@ const StudyGroupFix = () => {
               onChange={(e) => setState(e.target.value)}
               required
             >
-              <option value="ACTIVE">활성화</option>
-              <option value="INACTIVE">비활성화</option>
+              <option value="ACTIVE">활동 중</option>
+              <option value="COMPLETED">활동 종료</option>
             </Select>
           </FlexColumn>
-        </FlexRow> */}
+        </FlexRow>
 
         <ButtonContainer>
           <Button type="submit">스터디 수정</Button>
