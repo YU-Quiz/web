@@ -56,112 +56,149 @@ export default PostContent;
 // Styled Components
 const PostHeader = styled.div`
   width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 20px;
 `;
 
 const HeaderTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const Title = styled.h2`
   font-size: 24px;
+  font-weight: 600;
+  color: #343a40;
   margin: 0;
 `;
 
 const RightActions = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
 `;
 
 const LikeButton = styled.button`
-  font-size: 18px;
+  font-size: 16px;
   background: none;
   border: none;
   cursor: pointer;
+  color: #495057;
+
+  &:hover {
+    color: #007bff;
+  }
 `;
 
 const DropdownContainer = styled.div`
   position: relative;
-  margin-left: 10px;
 `;
 
 const DropdownIcon = styled(FaEllipsisV)`
   cursor: pointer;
+  font-size: 18px;
+  color: #495057;
+
+  &:hover {
+    color: #343a40;
+  }
 `;
 
 const DropdownMenu = styled.div`
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
   border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: 120px;
   z-index: 10;
 `;
 
 const StyledLink = styled(Link)`
   display: block;
-  padding: 10px;
+  padding: 10px 15px;
   text-decoration: none;
-  color: black;
+  color: #495057;
+  font-size: 14px;
 
   &:hover {
-    background-color: #f1f1f1;
+    background-color: #f8f9fa;
+    color: #007bff;
   }
 `;
 
 const DropdownItemButton = styled.button`
   display: block;
   width: 100%;
-  padding: 10px;
+  padding: 10px 15px;
   background: none;
   border: none;
   text-align: left;
   cursor: pointer;
-  color: black;
+  font-size: 14px;
+  color: #495057;
 
   &:hover {
-    background-color: #f1f1f1;
+    background-color: #f8f9fa;
+    color: #e63946;
   }
 `;
 
 const Category = styled.p`
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 500;
+  color: #868e96;
+  margin-bottom: 5px;
 `;
 
 const Nickname = styled.p`
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 500;
+  color: #868e96;
+  margin-bottom: 5px;
 `;
 
 const DateContent = styled.p`
-  color: #666;
-  font-size: 0.875rem;
+  font-size: 13px;
+  color: #adb5bd;
+  margin-bottom: 15px;
 `;
 
 const Content = styled.div`
-  margin-top: 15px;
-  font-size: 1rem;
+  min-height: 50vh;
+  font-size: 16px;
   line-height: 1.5;
+  color: #495057;
+  margin-top: 10px;
 `;
 
 const Info = styled.div`
   display: flex;
   gap: 15px;
+  font-size: 14px;
+  color: #868e96;
   margin-top: 20px;
 `;
 
 const Likes = styled.p`
-  font-weight: bold;
+  font-weight: 500;
+  color: #495057;
 `;
 
 const Views = styled.p`
-  font-weight: bold;
+  font-weight: 500;
+  color: #495057;
 `;
 
 const Modified = styled.p`
+  font-size: 13px;
   font-style: italic;
-  color: #888;
+  color: #adb5bd;
 `;

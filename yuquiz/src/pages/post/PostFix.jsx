@@ -36,7 +36,6 @@ const PostFix = () => {
           default:
             setCategory('');
         }
-        console.log(postData.post.categoryName);
         setTitle(postData.post.title || '');
         setContent(postData.post.content || '');
         
