@@ -11,7 +11,7 @@ const useWebSocket = (roomId, onMessageReceived) => {
   useEffect(() => {
     // STOMP 클라이언트 초기화
     const stompClient = new Client({
-      webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+      webSocketFactory: () => new SockJS("http://43.203.200.130:8080/ws"),
       reconnectDelay: 5000,
       // debug: (msg) => console.log('STOMP: ', msg), // 디버깅 로그
       connectHeaders: {

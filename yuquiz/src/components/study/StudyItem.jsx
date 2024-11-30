@@ -5,6 +5,18 @@ import { Link } from 'react-router-dom';
 const StudyItem = ({ study }) => {
   const { id, name, curUser, leaderName, maxUser, state, registerDuration } = study;
 
+  // 상태에 따라 텍스트를 변환하는 함수
+  const getStateText = (state) => {
+    switch (state) {
+      case "ACTIVE":
+        return "활동 중";
+      case "COMPLETED":
+        return "활동 종료";
+      default:
+        return "알 수 없음"; // 추가적인 상태 처리
+    }
+  };
+
   return (
     <TableRow>
       <TableCell>
@@ -12,7 +24,7 @@ const StudyItem = ({ study }) => {
       </TableCell>
       <TableCell>{leaderName}</TableCell>
       <TableCell>{curUser} / {maxUser}</TableCell>
-      <TableCell>{state}</TableCell>
+      <TableCell>{getStateText(state)}</TableCell> {/* 상태 텍스트 렌더링 */}
       <TableCell>{new Date(registerDuration).toLocaleString()}</TableCell>
     </TableRow>
   );

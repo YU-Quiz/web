@@ -17,11 +17,11 @@ export const USER_SORT_OPTIONS = {
   },
   BAN_DESC: {
     value: "BAN_DESC",
-    label: "정지횟수 내림차순",
+    label: "정지횟수 많은 순",
   },
   BAN_ASC: {
     value: "BAN_ASC",
-    label: "정지횟수 오름차순",
+    label: "정지횟수 적은 순",
   },
   ROLE_DESC: {
     value: "ROLE_DESC",
@@ -33,10 +33,10 @@ export const USER_SORT_OPTIONS = {
   },
   DATE_DESC: {
     value: "DATE_DESC",
-    label: "가입일 내림차순",
+    label: "가입일 최신 순",
   },
   DATE_ASC: {
     value: "DATE_ASC",
-    label: "가입일 오름차순",
+    label: "가입일 오래된 순",
   },
 };
