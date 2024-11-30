@@ -9,10 +9,10 @@ export const REPORT_SORT_OPTIONS = {
     },
     DATE_DESC: {
       value: "DATE_DESC",
-      label: "날짜 내림차순",
+      label: "날짜 최신 순",
     },
     DATE_ASC: {
       value: "DATE_ASC",
-      label: "날짜 오름차순",
+      label: "날짜 오래된 순",
     },
 };

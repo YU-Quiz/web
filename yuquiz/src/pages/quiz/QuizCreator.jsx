@@ -99,7 +99,7 @@ export const QuizCreator = () => {
 
   return (
     <div>
-      <Link to="/quiz/list" className="back-button">
+      <Link to="/quiz" className="back-button">
         <IoMdArrowBack />
       </Link>
       <div className="container">
