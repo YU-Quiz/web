@@ -25,7 +25,7 @@ const ProfileCard = () => {
           <Nickname>{userInfo.nickname}</Nickname>
           <UserId>{`ID: ${displayUsername}`}</UserId>
           <IconsContainer>
-            <MessageIcon to={"/my/edit"}>💬</MessageIcon>
+            <MessageIcon to={"/my/notification"}>💬</MessageIcon>
             <SettingsIcon to={"/my/edit"}>⚙️</SettingsIcon>
           </IconsContainer>
           {isAuthenticated && userInfo.role === "ADMIN" ? (

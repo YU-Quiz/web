@@ -10,7 +10,7 @@ const NotificationList = ({ notifications, onMarkAsRead }) => {
         <NotificationItem
           key={notification.id}
           notification={notification}
-          onMarkAsRead={onMarkAsRead}
+          onMarkAsRead={onMarkAsRead} // 읽음 처리 함수 전달
         />
       ))}
     </ListContainer>

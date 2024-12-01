@@ -47,6 +47,26 @@ const NotificationPage = () => {
     }
   };
 
+  // 모든 알림 읽음 처리
+  const handleMarkAllAsRead = async () => {
+    const unreadNotificationIds = notifications
+      .filter((notification) => !notification.isChecked)
+      .map((notification) => notification.id);
+
+    if (unreadNotificationIds.length === 0) {
+      alert("읽지 않은 알림이 없습니다.");
+      return;
+    }
+
+    try {
+      await markNotificationAsRead(unreadNotificationIds);
+      window.location.reload(); // 페이지 새로고침
+    } catch (err) {
+      console.error("Failed to mark all notifications as read:", err);
+      alert("모든 알림 읽음 처리 중 문제가 발생했습니다.");
+    }
+  };
+
   const updateSearchParams = (newParams) => {
     const params = new URLSearchParams(searchParams);
 
@@ -81,7 +101,10 @@ const NotificationPage = () => {
             defaultOption={NOTIFICATION_VIEW_OPTIONS.find((option) => option.value === view)}
           />
         </DropdownContainer>
-        <BackLink to="/my">돌아가기</BackLink>
+        <Actions>
+          <MarkAllButton onClick={handleMarkAllAsRead}>모두 읽음 처리</MarkAllButton>
+          <BackLink to="/my">돌아가기</BackLink>
+        </Actions>
       </Header>
 
       <NotificationList notifications={notifications} onMarkAsRead={handleMarkAsRead} />
@@ -114,34 +137,52 @@ const NotificationContainer = styled.div`
 const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 양쪽 끝 정렬 */
-  gap: 50px; /* 요소 간격 추가 */
+  justify-content: space-between;
+  gap: 20px;
   margin-bottom: 10px;
 `;
 
 const Title = styled.h1`
-  flex-shrink: 0; /* 제목이 크기 조정되지 않도록 고정 */
+  flex-shrink: 0;
   margin: 0;
 `;
 
 const DropdownContainer = styled.div`
   display: flex;
-  gap: 10px; /* 드롭다운 사이 간격 */
-  flex-grow: 1; /* 드롭다운이 남은 공간을 차지하도록 설정 */
-  justify-content: flex-start; /* 드롭다운을 왼쪽 정렬 */
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: flex-start;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const MarkAllButton = styled.button`
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: #0056b3;
+  }
 `;
 
 const BackLink = styled(Link)`
   text-decoration: none;
   color: #007bff;
   font-weight: bold;
-  margin-left: auto; /* 돌아가기 버튼을 오른쪽 끝으로 밀기 */
 
   &:hover {
     text-decoration: underline;
   }
 `;
-
 
 const Pagination = styled.div`
   display: flex;
