@@ -54,6 +54,11 @@ api.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+    // 403 에러 처리 (로그인 페이지로 리다이렉트)
+    if (error.response && error.response.status === HttpStatusCode.Forbidden) {
+      alert("로그인 후 이용해주세요.");
+      window.location.href = "http://yuquiz.kro.kr/login"; // 403 에러 발생 시 로그인 페이지로 리다이렉트
+    }
 
     return Promise.reject(error);
   }
