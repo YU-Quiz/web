@@ -7,7 +7,7 @@ import MyPage, { MyPageLoader } from "../pages/mypage/MyPage";
 import EditProfile from "../pages/mypage/EditProfile";
 import { Login } from "../pages/login/Login";
 import { Register } from "../pages/register/Register";
-import PostListPage, { postListLoader } from "../pages/post/PostListPage";
+import PostListPage, { notificationLoader, postListLoader } from "../pages/post/PostListPage";
 import PostCreator from "../pages/post/PostCreator";
 import PostFix from "../pages/post/PostFix";
 import PostView, { postViewLoader } from "../pages/post/PostView";
@@ -43,6 +43,7 @@ import StudyPostsListPage, {
 import StudyPostCreator from "../pages/study/StudyPostCreator";
 import StudySeries from "../pages/study/StudySeries";
 import PrivateRoute from "./PrivateRoute";
+import Notification, { mynotificationLoader } from "../pages/mypage/Notification";
 
 const router = createBrowserRouter([
   {
@@ -166,6 +167,11 @@ const router = createBrowserRouter([
           {
             path: "edit",
             element: <EditProfile />,
+          },
+          {
+            path: "notification",
+            element: <Notification />,
+            loader: mynotificationLoader,
           },
         ],
       },
