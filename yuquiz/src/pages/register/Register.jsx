@@ -10,6 +10,8 @@ import {
   handlerSubmit,
 } from "../../services/auth/register/Register";
 import useAuthStore from "../../stores/auth/authStore"; // Zustand 상태 사용
+import styled from "styled-components";
+import ForAddMajorList from "../../components/register/ForAddMajorList";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -22,12 +24,13 @@ export const Register = () => {
   const [InputNickname, setNickname] = useState("");
   const [InputEmail, setEmail] = useState("");
   const [InputConfirm, setConfirm] = useState("");
-  const [InputMajor, setMajor] = useState(null);
+  const [InputMajor, setMajor] = useState("");
   const [emailAgree, setAgree] = useState(false);
   const [checkID, setCheckID] = useState("");
   const [checkNick, setCheckNick] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // 로그인된 상태면 홈 페이지로 리다이렉트
   useEffect(() => {
     if (isAuthenticated) {
@@ -73,7 +76,10 @@ export const Register = () => {
     );
     if (result) setEmailVerified(true);
   };
-
+  const handleAddMajor = (major) => {
+    setMajor(major);
+    setIsModalOpen(false);
+  };
   // 회원가입 처리
   const handleSubmit = async () => {
     const registerData = {
@@ -217,19 +223,33 @@ export const Register = () => {
                 확인
               </button>
             </div>
-
+            <div>
+              <input
+                type="text"
+                id="major-input"
+                className="form"
+                placeholder="전공"
+                value={InputMajor}
+                title="전공 검색을 통해 본인의 전공을 선택해주세요."
+              />
+              <button className="button" onClick={() => setIsModalOpen(true)}>
+                전공 검색
+              </button>
+            </div>
             {/* 전공 선택 */}
-            <select
-              id="department"
-              className="form"
-              value={InputMajor}
-              onChange={(e) => setMajor(e.target.value)}
-            >
-              <option value="">학과선택</option>
-              <option value="computer-science">컴퓨터공학과</option>
-              <option value="business-administration">경영학과</option>
-              <option value="economics">경제학과</option>
-            </select>
+            {isModalOpen && (
+              <Modal>
+                <ModalContent>
+                  <ModalCloseButton
+                    className="close-button"
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    닫기
+                  </ModalCloseButton>
+                  <ForAddMajorList onAddQuiz={handleAddMajor}></ForAddMajorList>
+                </ModalContent>
+              </Modal>
+            )}
 
             {/* 이메일 알림 동의 */}
             <div>
@@ -258,3 +278,79 @@ export const Register = () => {
     </div>
   );
 };
+
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  width: 80%;
+  max-width: 600px;
+  height: 80%;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+      color: red;
+    }
+  }
+`;
+
+const ContextMenu = styled.div`
+  position: absolute;
+  top: ${(props) => props.y}px;
+  left: ${(props) => props.x}px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  padding: 10px;
+
+  button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+`;
+const ModalCloseButton = styled.button`
+  font-size: 23px;
+  padding: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: gray;
+  &:hover {
+    color: black;
+  }
+`;
