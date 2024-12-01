@@ -1,12 +1,68 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { EventSourcePolyfill } from "event-source-polyfill";
 import useAuthStore from "../../stores/auth/authStore";
 import { CgProfile } from "react-icons/cg";
+import { getNotifications } from "../../services/notification/notificationService";
 
 const ProfileCard = () => {
   const userInfo = useAuthStore((state) => state.userInfo);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const { accessToken } = useAuthStore();
+
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
+
+  // SSE 구독
+  useEffect(() => {
+    const eventSource = new EventSourcePolyfill("http://localhost:8080/api/v1/subscribe", {
+      headers: {
+        Authorization: `${accessToken}`, // JWT 토큰 포함
+      },
+    });
+
+    eventSource.onmessage = (event) => {
+      try {
+        // const isJson = event.data.startsWith("{") && event.data.endsWith("}");
+        // if (isJson) {
+        //   // const parsedData = JSON.parse(event.data);
+        //   // console.log("New notification received:", parsedData);
+
+        //   // 새로운 알림이 오면 카운트를 증가시킴
+          
+        // } else {
+        //   // console.warn("Non-JSON message received:", event.data);
+        // }
+        setUnreadNotificationCount((prevCount) => prevCount + 1);
+      } catch (error) {
+        // console.error("Failed to parse notification:", error);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      // console.error("SSE connection error:", error);
+    };
+
+    return () => {
+      eventSource.close(); // 컴포넌트 언마운트 시 연결 닫기
+    };
+  }, [accessToken]);
+
+  // 초기 알림 데이터 가져오기
+  useEffect(() => {
+    const fetchUnreadNotifications = async () => {
+      try {
+        const data = await getNotifications(0, "DATE_DESC", "UNCHECKED");
+        setUnreadNotificationCount(data.totalElements);
+      } catch (err) {
+        // console.error("Failed to fetch unread notifications:", err);
+      }
+    };
+
+    if (accessToken) {
+      fetchUnreadNotifications();
+    }
+  }, [accessToken]);
 
   if (!isAuthenticated || !userInfo || !userInfo.nickname) {
     return <Loading>Loading...</Loading>;
@@ -25,13 +81,16 @@ const ProfileCard = () => {
           <Nickname>{userInfo.nickname}</Nickname>
           <UserId>{`ID: ${displayUsername}`}</UserId>
           <IconsContainer>
-            <MessageIcon to={"/my/notification"}>💬</MessageIcon>
+            <MessageIcon to={"/my/notification"} unread={unreadNotificationCount > 0}>
+              💬
+              {unreadNotificationCount > 0 && (
+                <NotificationBadge>{unreadNotificationCount}</NotificationBadge>
+              )}
+            </MessageIcon>
             <SettingsIcon to={"/my/edit"}>⚙️</SettingsIcon>
           </IconsContainer>
-          {isAuthenticated && userInfo.role === "ADMIN" ? (
+          {isAuthenticated && userInfo.role === "ADMIN" && (
             <AdminIcon to={"/admin"}>관리자페이지</AdminIcon>
-          ) : (
-            <></>
           )}
         </UserInfo>
       </UserInfoContainer>
@@ -97,7 +156,24 @@ const IconsContainer = styled.div`
 `;
 
 const MessageIcon = styled(Link)`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  color: ${({ unread }) => (unread ? "#ff4500" : "#000")};
+`;
+
+const NotificationBadge = styled.span`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4500;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
 `;
 
 const SettingsIcon = styled(Link)`
