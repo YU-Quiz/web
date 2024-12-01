@@ -136,9 +136,9 @@ const handlerCheckEmailVerify = async (
 };
 const getMajorList = async () => {
   try {
-    const response = await axios.get(`${SERVER_API}/major`, {});
+    const response = await axios.get(`${SERVER_API}/majors`, {});
     console.log(response);
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }
