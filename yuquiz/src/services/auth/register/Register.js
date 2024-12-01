@@ -134,7 +134,15 @@ const handlerCheckEmailVerify = async (
   }
   return false;
 };
-
+const getMajorList = async () => {
+  try {
+    const response = await axios.get(`${SERVER_API}/major`, {});
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
 // 회원가입 제출
 const handlerSubmit = async (registerData, validations) => {
   const {
@@ -210,7 +218,7 @@ const registerOauth = async (registerData) => {
 
   // 전공 이름 확인
   if (!majorName || typeof majorName !== "string" || majorName.trim() === "") {
-    alert("전공 이름을 입력하세요.");
+    alert("전공을 선택하세요.");
     return false;
   }
 
@@ -253,4 +261,5 @@ export {
   handlerCheckEmailVerify,
   handlerSubmit,
   registerOauth,
+  getMajorList,
 };
