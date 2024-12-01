@@ -25,6 +25,7 @@ export const Register = () => {
   const [InputEmail, setEmail] = useState("");
   const [InputConfirm, setConfirm] = useState("");
   const [InputMajor, setMajor] = useState("");
+  const [InputMajorName, setMajorName] = useState("");
   const [emailAgree, setAgree] = useState(false);
   const [checkID, setCheckID] = useState("");
   const [checkNick, setCheckNick] = useState("");
@@ -76,8 +77,9 @@ export const Register = () => {
     );
     if (result) setEmailVerified(true);
   };
-  const handleAddMajor = (major) => {
-    setMajor(major);
+  const handleAddMajor = (majorID, majorName) => {
+    setMajor(majorID);
+    setMajorName(majorName);
     setIsModalOpen(false);
   };
   // 회원가입 처리
@@ -229,7 +231,7 @@ export const Register = () => {
                 id="major-input"
                 className="form"
                 placeholder="전공"
-                value={InputMajor}
+                value={InputMajorName}
                 title="전공 검색을 통해 본인의 전공을 선택해주세요."
               />
               <button className="button" onClick={() => setIsModalOpen(true)}>
@@ -246,7 +248,9 @@ export const Register = () => {
                   >
                     닫기
                   </ModalCloseButton>
-                  <ForAddMajorList onAddQuiz={handleAddMajor}></ForAddMajorList>
+                  <ForAddMajorList
+                    onAddMajor={handleAddMajor}
+                  ></ForAddMajorList>
                 </ModalContent>
               </Modal>
             )}
@@ -314,32 +318,6 @@ const ModalContent = styled.div`
 
     &:hover {
       color: red;
-    }
-  }
-`;
-
-const ContextMenu = styled.div`
-  position: absolute;
-  top: ${(props) => props.y}px;
-  left: ${(props) => props.x}px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-  padding: 10px;
-
-  button {
-    display: block;
-    width: 100%;
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 5px 10px;
-    cursor: pointer;
-
-    &:hover {
-      background: #f5f5f5;
     }
   }
 `;
