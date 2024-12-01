@@ -18,6 +18,7 @@ const ProfileCard = () => {
     const eventSource = new EventSourcePolyfill("http://localhost:8080/api/v1/subscribe", {
       headers: {
         Authorization: `${accessToken}`, // JWT 토큰 포함
+        Accept: "text/event-stream",
       },
     });
 
