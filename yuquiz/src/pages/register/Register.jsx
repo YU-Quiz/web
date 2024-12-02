@@ -113,171 +113,163 @@ export const Register = () => {
   };
 
   return (
-    <div className="register-body">
-      <div className="register-container">
-        <Link to="/login" className="back-button">
-          <IoMdArrowBack />
-        </Link>
-        <div>
-          <div className="title-container">
-            <p className="logo">YU Quiz</p>
-          </div>
+    <div className="register-container">
+      <Link to="/login" className="back-button">
+        <IoMdArrowBack />
+      </Link>
+      <div>
+        <div className="title-container">
+          <p className="logo">YU Quiz</p>
+        </div>
+        <div className="register-form-container">
+          <p className="register-font">회원가입</p>
+
+          {/* ID 입력 */}
           <div>
-            <p className="register-font">회원가입</p>
-
-            {/* ID 입력 */}
-            <div>
-              <RegexForm
-                type="text"
-                id="username"
-                placeholder="아이디"
-                value={InputID}
-                onChange={(e) => setInputID(e.target.value)}
-              />
-              <RegexButton type="button" onClick={handleCheckDupID}>
-                중복 확인
-              </RegexButton>
-              <RegexHint>
-                ※ 아이디는 6~20자의 영문 대소문자와 숫자를 포함해야 하며, 최소
-                하나 이상의 영문자와 숫자가 있어야 합니다.
-              </RegexHint>
-            </div>
-
-            {/* 비밀번호 입력 */}
-            <div>
-              <RegexForm
-                type="password"
-                id="password"
-                placeholder="비밀번호"
-                value={InputPW}
-                onChange={(e) => setInputPW(e.target.value)}
-              />
-            </div>
+            <RegexForm
+              type="text"
+              id="username"
+              placeholder="아이디"
+              value={InputID}
+              onChange={(e) => setInputID(e.target.value)}
+            />
+            <RegexButton type="button" onClick={handleCheckDupID}>
+              중복 확인
+            </RegexButton>
             <RegexHint>
-              ※ 비밀번호는 8~16자의 영문 소문자, 숫자, 특수문자(!@#$%^&*)를
-              포함해야 합니다.
+              ※ 아이디는 6~20자의 영문 대소문자와 숫자를 포함해야 하며, 최소
+              하나 이상의 영문자와 숫자가 있어야 합니다.
             </RegexHint>
-            {/* 비밀번호 재입력 */}
-            <div>
-              <input
-                type="password"
-                id="password-confirm"
-                className="form"
-                placeholder="비밀번호 재입력"
-                value={InputRePW}
-                onChange={(e) => setInputRePW(e.target.value)}
-              />
-            </div>
+          </div>
 
-            {/* 닉네임 입력 */}
-            <div>
-              <input
-                type="text"
-                id="nickname"
-                className="form"
-                placeholder="닉네임"
-                value={InputNickname}
-                onChange={handleNicknameChange} // 닉네임 변경 시 중복 확인 초기화
-              />
-              <button
-                type="button"
-                className="button"
-                onClick={handleCheckDupNickname}
-              >
-                중복 확인
-              </button>
-            </div>
+          {/* 비밀번호 입력 */}
+          <div>
+            <RegexForm
+              type="password"
+              id="password"
+              placeholder="비밀번호"
+              value={InputPW}
+              onChange={(e) => setInputPW(e.target.value)}
+            />
+          </div>
+          <RegexHint>
+            ※ 비밀번호는 8~16자의 영문 소문자, 숫자, 특수문자(!@#$%^&*)를
+            포함해야 합니다.
+          </RegexHint>
+          {/* 비밀번호 재입력 */}
+          <div>
+            <input
+              type="password"
+              id="password-confirm"
+              className="form"
+              placeholder="비밀번호 재입력"
+              value={InputRePW}
+              onChange={(e) => setInputRePW(e.target.value)}
+            />
+          </div>
 
-            {/* 이메일 입력 */}
-            <div>
-              <input
-                type="email"
-                id="email"
-                className="form"
-                placeholder="이메일"
-                value={InputEmail}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={emailVerified}
-              />
-              <button
-                type="button"
-                className="button"
-                onClick={handleCheckEmail}
-              >
-                인증번호 요청
-              </button>
-            </div>
-
-            {/* 인증번호 입력 */}
-            <div>
-              <input
-                type="text"
-                id="verification-code"
-                className="form"
-                placeholder="인증번호"
-                value={InputConfirm}
-                onChange={(e) => setConfirm(e.target.value)}
-              />
-              <button
-                type="button"
-                className="button"
-                onClick={handleCheckEmailVerify}
-              >
-                확인
-              </button>
-            </div>
-            <div>
-              <input
-                type="text"
-                id="major-input"
-                className="form"
-                placeholder="전공"
-                value={InputMajorName}
-                title="전공 검색을 통해 본인의 전공을 선택해주세요."
-              />
-              <button className="button" onClick={() => setIsModalOpen(true)}>
-                전공 검색
-              </button>
-            </div>
-            {/* 전공 선택 */}
-            {isModalOpen && (
-              <Modal>
-                <ModalContent>
-                  <ModalCloseButton
-                    className="close-button"
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    닫기
-                  </ModalCloseButton>
-                  <ForAddMajorList
-                    onAddMajor={handleAddMajor}
-                  ></ForAddMajorList>
-                </ModalContent>
-              </Modal>
-            )}
-
-            {/* 이메일 알림 동의 */}
-            <div>
-              <input
-                type="checkbox"
-                id="newsletter-consent"
-                checked={emailAgree}
-                onChange={(e) => setAgree(e.target.checked)}
-              />
-              <label htmlFor="newsletter-consent" className="checkbox-label">
-                알림 메일 수신 동의(선택)
-              </label>
-            </div>
-
-            {/* 회원가입 버튼 */}
+          {/* 닉네임 입력 */}
+          <div>
+            <input
+              type="text"
+              id="nickname"
+              className="form"
+              placeholder="닉네임"
+              value={InputNickname}
+              onChange={handleNicknameChange} // 닉네임 변경 시 중복 확인 초기화
+            />
             <button
-              type="submit"
-              className="button-register-done"
-              onClick={handleSubmit}
+              type="button"
+              className="button"
+              onClick={handleCheckDupNickname}
             >
-              회원 가입 하기
+              중복 확인
             </button>
           </div>
+
+          {/* 이메일 입력 */}
+          <div>
+            <input
+              type="email"
+              id="email"
+              className="form"
+              placeholder="이메일"
+              value={InputEmail}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={emailVerified}
+            />
+            <button type="button" className="button" onClick={handleCheckEmail}>
+              인증번호 요청
+            </button>
+          </div>
+
+          {/* 인증번호 입력 */}
+          <div>
+            <input
+              type="text"
+              id="verification-code"
+              className="form"
+              placeholder="인증번호"
+              value={InputConfirm}
+              onChange={(e) => setConfirm(e.target.value)}
+            />
+            <button
+              type="button"
+              className="button"
+              onClick={handleCheckEmailVerify}
+            >
+              확인
+            </button>
+          </div>
+          <div>
+            <input
+              type="text"
+              id="major-input"
+              className="form"
+              placeholder="전공"
+              value={InputMajorName}
+              title="전공 검색을 통해 본인의 전공을 선택해주세요."
+            />
+            <button className="button" onClick={() => setIsModalOpen(true)}>
+              전공 검색
+            </button>
+          </div>
+          {/* 전공 선택 */}
+          {isModalOpen && (
+            <Modal>
+              <ModalContent>
+                <ModalCloseButton
+                  className="close-button"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  닫기
+                </ModalCloseButton>
+                <ForAddMajorList onAddMajor={handleAddMajor}></ForAddMajorList>
+              </ModalContent>
+            </Modal>
+          )}
+
+          {/* 이메일 알림 동의 */}
+          <div>
+            <input
+              type="checkbox"
+              id="newsletter-consent"
+              checked={emailAgree}
+              onChange={(e) => setAgree(e.target.checked)}
+            />
+            <label htmlFor="newsletter-consent" className="checkbox-label">
+              알림 메일 수신 동의(선택)
+            </label>
+          </div>
+
+          {/* 회원가입 버튼 */}
+          <button
+            type="submit"
+            className="button-register-done"
+            onClick={handleSubmit}
+          >
+            회원 가입 하기
+          </button>
         </div>
       </div>
     </div>
