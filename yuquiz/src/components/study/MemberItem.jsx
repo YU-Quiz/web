@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const MemberItem = ({ member, isLeader, onRemove }) => {
-  console.log(member);
   return (
     <ItemContainer role={member.role}>
       <PropertyContainer>
