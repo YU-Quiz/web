@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { EventSourcePolyfill } from "event-source-polyfill";
 import useAuthStore from "../../stores/auth/authStore";
 import { CgProfile } from "react-icons/cg";
 import { getNotifications } from "../../services/notification/notificationService";
@@ -30,7 +29,7 @@ const ProfileCard = () => {
   //       //   // console.log("New notification received:", parsedData);
 
   //       //   // 새로운 알림이 오면 카운트를 증가시킴
-          
+
   //       // } else {
   //       //   // console.warn("Non-JSON message received:", event.data);
   //       // }
@@ -82,7 +81,10 @@ const ProfileCard = () => {
           <Nickname>{userInfo.nickname}</Nickname>
           <UserId>{`ID: ${displayUsername}`}</UserId>
           <IconsContainer>
-            <MessageIcon to={"/my/notification"} unread={unreadNotificationCount > 0}>
+            <MessageIcon
+              to={"/my/notification"}
+              unread={unreadNotificationCount > 0}
+            >
               💬
               {unreadNotificationCount > 0 && (
                 <NotificationBadge>{unreadNotificationCount}</NotificationBadge>

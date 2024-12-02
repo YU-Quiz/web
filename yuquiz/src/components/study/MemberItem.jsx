@@ -1,21 +1,28 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const MemberItem = ({ member, isLeader, onRemove }) => {
+  console.log(member);
   return (
     <ItemContainer role={member.role}>
       <PropertyContainer>
-        <Nickname>{member.nickname}</Nickname>
+        <Nickname>
+          {member.nickname}({member.username})
+        </Nickname>
       </PropertyContainer>
       <PropertyContainer>
         <JoinDate>{new Date(member.joinedAt).toLocaleDateString()}</JoinDate>
       </PropertyContainer>
       <PropertyContainer>
-        <RoleBadge role={member.role}>{member.role === 'LEADER' ? '리더' : '회원'}</RoleBadge>
+        <RoleBadge role={member.role}>
+          {member.role === "LEADER" ? "리더" : "회원"}
+        </RoleBadge>
       </PropertyContainer>
       <PropertyContainer>
-        {isLeader && member.role !== 'LEADER' && (
-          <RemoveButton onClick={() => onRemove(member.userId)}>추방</RemoveButton>
+        {isLeader && member.role !== "LEADER" && (
+          <RemoveButton onClick={() => onRemove(member.userId)}>
+            추방
+          </RemoveButton>
         )}
       </PropertyContainer>
     </ItemContainer>
@@ -31,7 +38,9 @@ const ItemContainer = styled.div`
   justify-content: space-between;
   padding: 10px 15px;
   background-color: ${(props) =>
-    props.role === 'LEADER' ? '#c5d3ff' : '#b4f0ff'}; /* 리더: 노랑, 회원: 회색 */
+    props.role === "LEADER"
+      ? "#c5d3ff"
+      : "#b4f0ff"}; /* 리더: 노랑, 회원: 회색 */
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
@@ -58,7 +67,8 @@ const RoleBadge = styled.span`
   font-size: 12px;
   font-weight: bold;
   color: white;
-  background-color: ${(props) => (props.role === 'LEADER' ? '#d6af00' : '#1abc9c')};
+  background-color: ${(props) =>
+    props.role === "LEADER" ? "#d6af00" : "#1abc9c"};
   border-radius: 12px;
 `;
 

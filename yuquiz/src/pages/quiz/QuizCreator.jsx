@@ -93,7 +93,7 @@ export const QuizCreator = () => {
     //console.log(data);
     if (handlerSubmitQuiz(data)) {
       alert("퀴즈 생성 성공!");
-      navigate("/");
+      navigate(-1);
     }
   };
 
