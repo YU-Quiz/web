@@ -13,41 +13,41 @@ const ProfileCard = () => {
 
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
-  // SSE 구독
-  useEffect(() => {
-    const eventSource = new EventSourcePolyfill("http://localhost:8080/api/v1/subscribe", {
-      headers: {
-        Authorization: `${accessToken}`, // JWT 토큰 포함
-        Accept: "text/event-stream",
-      },
-    });
+  // // SSE 구독
+  // useEffect(() => {
+  //   const eventSource = new EventSourcePolyfill("http://localhost:8080/api/v1/subscribe", {
+  //     headers: {
+  //       Authorization: `${accessToken}`, // JWT 토큰 포함
+  //       Accept: "text/event-stream",
+  //     },
+  //   });
 
-    eventSource.onmessage = (event) => {
-      try {
-        // const isJson = event.data.startsWith("{") && event.data.endsWith("}");
-        // if (isJson) {
-        //   // const parsedData = JSON.parse(event.data);
-        //   // console.log("New notification received:", parsedData);
+  //   eventSource.onmessage = (event) => {
+  //     try {
+  //       // const isJson = event.data.startsWith("{") && event.data.endsWith("}");
+  //       // if (isJson) {
+  //       //   // const parsedData = JSON.parse(event.data);
+  //       //   // console.log("New notification received:", parsedData);
 
-        //   // 새로운 알림이 오면 카운트를 증가시킴
+  //       //   // 새로운 알림이 오면 카운트를 증가시킴
           
-        // } else {
-        //   // console.warn("Non-JSON message received:", event.data);
-        // }
-        setUnreadNotificationCount((prevCount) => prevCount + 1);
-      } catch (error) {
-        // console.error("Failed to parse notification:", error);
-      }
-    };
+  //       // } else {
+  //       //   // console.warn("Non-JSON message received:", event.data);
+  //       // }
+  //       setUnreadNotificationCount((prevCount) => prevCount + 1);
+  //     } catch (error) {
+  //       // console.error("Failed to parse notification:", error);
+  //     }
+  //   };
 
-    eventSource.onerror = (error) => {
-      // console.error("SSE connection error:", error);
-    };
+  //   eventSource.onerror = (error) => {
+  //     // console.error("SSE connection error:", error);
+  //   };
 
-    return () => {
-      eventSource.close(); // 컴포넌트 언마운트 시 연결 닫기
-    };
-  }, [accessToken]);
+  //   return () => {
+  //     eventSource.close(); // 컴포넌트 언마운트 시 연결 닫기
+  //   };
+  // }, [accessToken]);
 
   // 초기 알림 데이터 가져오기
   useEffect(() => {
