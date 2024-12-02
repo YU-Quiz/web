@@ -9,6 +9,8 @@ import {
 import { IoMdArrowBack } from "react-icons/io";
 import useAuthStore from "../../stores/auth/authStore";
 import "../../styles/register/Register.scss"; // 스타일 파일 유지
+import styled from "styled-components";
+import ForAddMajorList from "../../components/register/ForAddMajorList";
 
 const RegisterOauth = () => {
   const [formData, setFormData] = useState({
@@ -21,9 +23,12 @@ const RegisterOauth = () => {
   const [nicknameChecked, setNicknameChecked] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
+  const [InputMajor, setMajor] = useState("");
+  const [InputMajorName, setMajorName] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { setUserInfo } = useAuthStore(); // 사용자 정보 저장 함수
 
   // 입력값 변경 핸들러
@@ -59,7 +64,11 @@ const RegisterOauth = () => {
     );
     setEmailVerified(result);
   };
-
+  const handleAddMajor = (majorID, majorName) => {
+    setMajor(majorID);
+    setMajorName(majorName);
+    setIsModalOpen(false);
+  };
   // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,7 +89,7 @@ const RegisterOauth = () => {
         setUserInfo({
           nickname: formData.nickname,
           email: formData.email,
-          majorName: formData.majorName,
+          majorName: InputMajor,
           agreeEmail: formData.agreeEmail,
         });
         navigate("/"); // 홈으로 이동
@@ -155,14 +164,29 @@ const RegisterOauth = () => {
           <div>
             <input
               type="text"
-              name="majorName"
+              id="major-input"
               className="form"
-              placeholder="전공 이름"
-              value={formData.majorName}
-              onChange={handleChange}
-              required
+              placeholder="전공"
+              value={InputMajorName}
+              title="전공 검색을 통해 본인의 전공을 선택해주세요."
             />
+            <button className="button" onClick={() => setIsModalOpen(true)}>
+              전공 검색
+            </button>
           </div>
+          {isModalOpen && (
+            <Modal>
+              <ModalContent>
+                <ModalCloseButton
+                  className="close-button"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  닫기
+                </ModalCloseButton>
+                <ForAddMajorList onAddMajor={handleAddMajor}></ForAddMajorList>
+              </ModalContent>
+            </Modal>
+          )}
           <div className="checkbox-container">
             <input
               type="checkbox"
@@ -186,3 +210,53 @@ const RegisterOauth = () => {
 };
 
 export default RegisterOauth;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  width: 80%;
+  max-width: 600px;
+  height: 80%;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+      color: red;
+    }
+  }
+`;
+const ModalCloseButton = styled.button`
+  font-size: 23px;
+  padding: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: gray;
+  &:hover {
+    color: black;
+  }
+`;
