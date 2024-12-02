@@ -81,7 +81,10 @@ const ForAddMajorList = ({ onAddMajor }) => {
       <MajorListContainer>
         {filteredMajors.length > 0 ? (
           filteredMajors.map((major) => (
-            <MajorItem key={major.id} onClick={() => onAddMajor(major)}>
+            <MajorItem
+              key={major.id}
+              onClick={() => onAddMajor(major.id, major.name)}
+            >
               {major.name}
             </MajorItem>
           ))
