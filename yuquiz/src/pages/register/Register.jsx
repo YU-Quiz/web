@@ -127,35 +127,36 @@ export const Register = () => {
 
             {/* ID 입력 */}
             <div>
-              <input
+              <RegexForm
                 type="text"
                 id="username"
-                className="form"
                 placeholder="아이디"
                 value={InputID}
                 onChange={(e) => setInputID(e.target.value)}
               />
-              <button
-                type="button"
-                className="button"
-                onClick={handleCheckDupID}
-              >
+              <RegexButton type="button" onClick={handleCheckDupID}>
                 중복 확인
-              </button>
+              </RegexButton>
+              <RegexHint>
+                ※ 아이디는 6~20자의 영문 대소문자와 숫자를 포함해야 하며, 최소
+                하나 이상의 영문자와 숫자가 있어야 합니다.
+              </RegexHint>
             </div>
 
             {/* 비밀번호 입력 */}
             <div>
-              <input
+              <RegexForm
                 type="password"
                 id="password"
-                className="form"
                 placeholder="비밀번호"
                 value={InputPW}
                 onChange={(e) => setInputPW(e.target.value)}
               />
             </div>
-
+            <RegexHint>
+              ※ 비밀번호는 8~16자의 영문 소문자, 숫자, 특수문자(!@#$%^&*)를
+              포함해야 합니다.
+            </RegexHint>
             {/* 비밀번호 재입력 */}
             <div>
               <input
@@ -330,5 +331,38 @@ const ModalCloseButton = styled.button`
   color: gray;
   &:hover {
     color: black;
+  }
+`;
+const RegexForm = styled.input`
+  width: 350px;
+  height: 50px;
+  border-radius: 8px;
+  border: 1px solid silver;
+  padding-left: 15px;
+
+  margin-bottom: 2px;
+  &::placeholder {
+    opacity: 0.7;
+  }
+`;
+const RegexHint = styled.p`
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 4px;
+`;
+
+const RegexButton = styled.button`
+  width: 100px;
+  height: 50px;
+  margin-left: 10px;
+  margin-top: 7px;
+  border-radius: 8px;
+  border: 1px solid silver;
+  background-color: #00cbf7;
+  font-size: 12px;
+  font-weight: 750;
+  margin-bottom: 2px;
+  &:hover {
+    background-color: $hover-color;
   }
 `;
