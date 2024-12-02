@@ -13,7 +13,7 @@ const getAdminPosts = async (sort = POST_SORT_OPTIONS.DATE_DESC, page = 0) => {
     return response.data;
   } catch (error) {
     if (error.response) {
-      console.log(error.response);
+      //console.log(error.response);
       throw new Error("게시글 목록 불러오는 중 문제 발생. 다시 시도해주세요.");
     } else {
       throw new Error("서버와 연결할 수 없습니다.");

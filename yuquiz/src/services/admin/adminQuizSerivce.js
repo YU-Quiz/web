@@ -22,10 +22,10 @@ const getAdminQuizzes = async (sort, page) => {
     return response.data;
   } catch (error) {
     if (error.response) {
-      console.log(error.response);
+      //console.log(error.response);
       throw new Error("퀴즈 목록 불러오는 중 문제 발생. 다시 시도해주세요.");
     } else {
-      console.log(error);
+      //console.log(error);
       throw new Error("서버와 연결할 수 없습니다.");
     }
   }

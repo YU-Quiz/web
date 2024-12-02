@@ -44,7 +44,7 @@ const createPost = async (categoryId, title, content) => {
       if (error.response.status === HttpStatusCode.BadRequest) {
         throw new Error(`${error.response.data}`);
       } else {
-        console.log("에러");
+        //console.log("에러");
         throw new Error("게시글 생성 중 문제 발생. 다시 시도해주세요.");
       }
     } else {
