@@ -1,5 +1,4 @@
 import axios, { HttpStatusCode } from "axios";
-import api from "../apiService";
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 const confirmResetPW = async (username, email) => {
   try {
