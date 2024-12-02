@@ -128,12 +128,11 @@ const CreateButton = styled.button`
   }
 `;
 const ControlsContainer = styled.div`
+  gap: 5px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  margin-top: 10px;
   margin-bottom: 10px;
 `;
 

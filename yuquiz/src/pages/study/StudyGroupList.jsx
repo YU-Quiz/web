@@ -129,7 +129,8 @@ const FilterContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 `;
 
 const DropdownContainer = styled.div`
