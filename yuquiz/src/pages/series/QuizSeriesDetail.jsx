@@ -11,8 +11,16 @@ import ForAddQuizList from "../../components/quizSeries/ForAddQuizList";
 import { QuizCard } from "../../components/quizlist/QuizCard";
 import useAuthStore from "../../stores/auth/authStore";
 import { IoMdArrowBack } from "react-icons/io";
+import { FaRegMeh } from "react-icons/fa";
 
 const Container = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+`;
+const QuizContainer = styled.div`
   display: grid;
   grid-gap: 2rem;
   grid-template-columns: repeat(auto-fit, 200px);
@@ -21,7 +29,17 @@ const Container = styled.div`
   margin: 0 auto;
   font-family: Arial, sans-serif;
   justify-content: center;
+
+  align-items: center;
   position: relative;
+`;
+const SeriesHeader = styled.div`
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: row;
 `;
 
 const BackButton = styled.button`
@@ -30,19 +48,22 @@ const BackButton = styled.button`
   color: black;
   font-size: 30px;
   cursor: pointer;
-  margin-bottom: 20px;
-
+  margin-right: auto;
   &:hover {
-    text-decoration: underline;
+    background: silver;
+    border-radius: 10px;
   }
 `;
 
 const TitleSection = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
-
+  flex-direction: column;
+  margin-bottom: auto;
+  width: 100%; /* 부모의 전체 너비 사용 */
+  text-align: center; /* 텍스트도 중앙 정렬 */
   h2 {
     font-size: 24px;
     margin: 0;
@@ -67,14 +88,18 @@ const InfoText = styled.p`
   margin: 5px 0;
   font-size: 16px;
   color: #333;
+  white-space: nowrap;
 `;
 
 const QuizAddButton = styled.button`
+  min-height: 150px;
+  width: 220px;
+  cursor: pointer;
   border-radius: 8px;
   background: white;
   font-weight: bold;
   font-size: 30px;
-  color: gray;
+  color: black;
   border: 1px solid gray;
 
   &:hover {
@@ -222,50 +247,65 @@ const QuizSeriesDetail = () => {
   if (!seriesDetail) return <p>문제집 정보를 찾을 수 없습니다.</p>;
 
   return (
-    <Container onClick={handleCloseContextMenu}>
-      <BackButton onClick={() => navigate(-1)}>
-        <IoMdArrowBack />
-      </BackButton>
-      <TitleSection>
-        <h2>{seriesDetail.name}</h2>
-      </TitleSection>
-      <InfoText>작성자: {seriesDetail.creator}</InfoText>
-      <InfoText>
-        {seriesDetail.studyName ? `스터디 이름:${seriesDetail.studyName}` : ""}
-      </InfoText>
-      <QuizAddButton onClick={() => setIsModalOpen(true)}>
-        + 문제 추가
-      </QuizAddButton>
-      {quizList.length > 0 ? (
-        quizList.map((quiz) => (
-          <div
-            key={quiz.quizId}
-            onContextMenu={(e) => handleContextMenu(e, quiz)}
-          >
-            <QuizCard quiz={quiz} />
-          </div>
-        ))
-      ) : (
-        <p>등록된 문제가 없습니다.</p>
-      )}
-      {isModalOpen && (
-        <Modal>
-          <ModalContent>
-            <ModalCloseButton
-              className="close-button"
-              onClick={() => setIsModalOpen(false)}
+    <Container>
+      <SeriesHeader>
+        <BackButton onClick={() => navigate(-1)}>
+          <IoMdArrowBack />
+        </BackButton>
+        <TitleSection>
+          <h2>{seriesDetail.name}</h2>
+        </TitleSection>
+        <InfoText>작성자: {seriesDetail.creator}</InfoText>
+        <InfoText>
+          {seriesDetail.studyName
+            ? `스터디 이름:${seriesDetail.studyName}`
+            : ""}
+        </InfoText>
+      </SeriesHeader>
+      <QuizContainer onClick={handleCloseContextMenu}>
+        {userInfo.nickname !== seriesDetail.creator ? (
+          ""
+        ) : (
+          <QuizAddButton onClick={() => setIsModalOpen(true)}>
+            + 문제 추가
+          </QuizAddButton>
+        )}
+        {quizList.length > 0 ? (
+          quizList.map((quiz) => (
+            <div
+              key={quiz.quizId}
+              onContextMenu={(e) => handleContextMenu(e, quiz)}
             >
-              닫기
-            </ModalCloseButton>
-            <ForAddQuizList onAddQuiz={handleAddQuizToSeries}></ForAddQuizList>
-          </ModalContent>
-        </Modal>
-      )}
-      {contextMenu && seriesDetail.creator === userInfo.nickname && (
-        <ContextMenu x={contextMenu.x} y={contextMenu.y}>
-          <button onClick={handleDeleteQuiz}>삭제</button>
-        </ContextMenu>
-      )}
+              <QuizCard quiz={quiz} />
+            </div>
+          ))
+        ) : (
+          <p>
+            <FaRegMeh />
+            등록된 문제가 없습니다.
+          </p>
+        )}
+        {isModalOpen && (
+          <Modal>
+            <ModalContent>
+              <ModalCloseButton
+                className="close-button"
+                onClick={() => setIsModalOpen(false)}
+              >
+                닫기
+              </ModalCloseButton>
+              <ForAddQuizList
+                onAddQuiz={handleAddQuizToSeries}
+              ></ForAddQuizList>
+            </ModalContent>
+          </Modal>
+        )}
+        {contextMenu && seriesDetail.creator === userInfo.nickname && (
+          <ContextMenu x={contextMenu.x} y={contextMenu.y}>
+            <button onClick={handleDeleteQuiz}>삭제</button>
+          </ContextMenu>
+        )}
+      </QuizContainer>
     </Container>
   );
 };

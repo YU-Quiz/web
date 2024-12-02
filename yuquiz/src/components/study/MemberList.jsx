@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import MemberItem from './MemberItem';
+import React from "react";
+import styled from "styled-components";
+import MemberItem from "./MemberItem";
 
 const MemberList = ({ members, role, onRemoveMember }) => {
-  const isLeader = role === 'LEADER'; // 리더 여부 확인
+  const isLeader = role === "LEADER"; // 리더 여부 확인
 
   return (
     <ListContainer>
