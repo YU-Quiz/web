@@ -127,14 +127,30 @@
   top: 50%;
   transform: translateY(-50%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  .report-options{
+    display: flex;
+    flex-direction: column;
+    gap:3px;
+  }
   .report-title-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom:15px;
     .report-quit-button{
       border: none;
       background-color: transparent;
       size: 10px;
+    } 
+  }
+  .report-submit-button{
+    border-radius: 8px;
+    padding:5px;
+    margin-top: 10px;
+    
+    border: 2px solid silver;
+    &:hover{
+      background-color: gray;
     }
   }
 }
