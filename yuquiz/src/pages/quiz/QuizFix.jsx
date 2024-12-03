@@ -72,13 +72,19 @@ export const QuizFix = () => {
             ? answers.map((answer) => answer.text)
             : [],
         answer:
-          questionType === "MULTIPLE_CHOICE" || questionType === "TRUE_FALSE"
-            ? answers.find((answer) => answer.correct)?.text || ""
+          questionType === "MULTIPLE_CHOICE"
+            ? answers
+                .filter((answer) => answer.correct)
+                .map((answer) => answer.num)
+                .join("") // 정답 번호를 문자열로 합침
+            : questionType === "TRUE_FALSE"
+            ? answers.find((answer) => answer.correct)?.num.toString() || "0" // True는 "1", False는 "0"
             : answers[0].text,
+
         quizImg: image,
         subjectId: 2,
       };
-
+      console.log(updatedQuiz);
       // fixQuiz API 호출로 데이터 전송
       const wellDone = await fixQuiz(updatedQuiz);
       if (wellDone) {

@@ -69,7 +69,7 @@ export const QuizCreator = () => {
 
     if (questionType === "TRUE_FALSE") {
       const correctAnswer = answers.find((answer) => answer.correct);
-      answer = correctAnswer && correctAnswer.text === "True" ? "1" : "0";
+      answer = correctAnswer && correctAnswer.text === "True" ? "1" : "2";
     }
 
     if (questionType === "SHORT_ANSWER") {
@@ -90,7 +90,6 @@ export const QuizCreator = () => {
       choices: choices,
       subjectId: 2,
     };
-    //console.log(data);
     if (handlerSubmitQuiz(data)) {
       alert("퀴즈 생성 성공!");
       navigate(-1);

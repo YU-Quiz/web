@@ -119,7 +119,7 @@ export const OXQuiz = ({ quizID }) => {
       return;
     }
 
-    const answer = selectedAnswer === quizData.choices[0] ? "1" : "0";
+    const answer = selectedAnswer === quizData.choices[0] ? "1" : "2";
     try {
       const result = await getGrade(quizID, { answer });
       setIsCorrect(result ? "맞았습니다! 🙆‍♂️" : "틀렸습니다. 🙅‍♂️");
