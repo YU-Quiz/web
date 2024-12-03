@@ -106,9 +106,7 @@ export const QuizFix = () => {
 
   return (
     <div>
-      <Link to="/quiz/list" className="back-button">
-        <IoMdArrowBack />
-      </Link>
+      <IoMdArrowBack className="back-button" onClick={() => navigate(-1)} />
       <div className="container">
         <div className="quiz-creator">
           <h2 className="title">Quiz 수정</h2>

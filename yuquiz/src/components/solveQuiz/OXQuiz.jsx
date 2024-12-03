@@ -135,7 +135,9 @@ export const OXQuiz = ({ quizID }) => {
     return (
       <QuizContainer>
         <QuizHeader>{isCorrect}</QuizHeader>
-        <GoToListButton onClick={() => navigate(-1)}>목록으로</GoToListButton>
+        <GoToListButton onClick={() => navigate("/quiz")}>
+          목록으로
+        </GoToListButton>
       </QuizContainer>
     );
   }
