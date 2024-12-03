@@ -84,7 +84,6 @@ export const QuizFix = () => {
         quizImg: image,
         subjectId: 2,
       };
-      console.log(updatedQuiz);
       // fixQuiz API 호출로 데이터 전송
       const wellDone = await fixQuiz(updatedQuiz);
       if (wellDone) {
