@@ -119,8 +119,7 @@ export const ShortAnswer = ({ quizID }) => {
   if (hasSubmitted) {
     return (
       <QuizContainer>
-        <QuizHeader>{quizData.question}</QuizHeader>
-        <p>{isCorrect}</p>
+        <QuizHeader>{isCorrect}</QuizHeader>
         <GoToListButton onClick={() => navigate(-1)}>목록으로</GoToListButton>
       </QuizContainer>
     );
