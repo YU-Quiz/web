@@ -125,7 +125,6 @@ export const ShortAnswer = ({ quizID }) => {
     const answer = writtenAnswer.toString();
     try {
       const isAnswerCorrect = await getGrade(quizID, { answer });
-      console.log(isAnswerCorrect);
       setshowAnswer(isAnswerCorrect ? false : true);
       setIsCorrect(isAnswerCorrect ? "맞았습니다! 🙆‍♂️" : "틀렸습니다. 🙅‍♂️");
     } catch (error) {
