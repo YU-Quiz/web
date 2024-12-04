@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getQuiz } from "../../services/quiz/QuizManage";
-import { getGrade } from "../../services/quiz/QuizSolve";
+import { getAnswer, getGrade } from "../../services/quiz/QuizSolve";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -89,12 +89,22 @@ const GoToListButton = styled.button`
     background-color: #0056b3;
   }
 `;
-
+const ShowAnswerButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: transparent;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+`;
 export const OXQuiz = ({ quizID }) => {
   const [quizData, setQuizData] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState("");
+  const [showAnswer, setshowAnswer] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -112,7 +122,15 @@ export const OXQuiz = ({ quizID }) => {
   const handleAnswerClick = (answer) => {
     setSelectedAnswer(answer);
   };
-
+  const handleGetAnswer = async () => {
+    try {
+      const result = await getAnswer(quizID);
+      const answer = result ? "⭕" : "❌";
+      alert("정답은 [" + answer + "] 입니다!");
+    } catch (error) {
+      setIsCorrect("서버 오류로 확인할 수 없습니다.");
+    }
+  };
   const handleSubmit = async () => {
     if (!selectedAnswer) {
       alert("정답을 선택하세요.");
@@ -123,6 +141,7 @@ export const OXQuiz = ({ quizID }) => {
     try {
       const result = await getGrade(quizID, { answer });
       setIsCorrect(result ? "맞았습니다! 🙆‍♂️" : "틀렸습니다. 🙅‍♂️");
+      setshowAnswer(result ? false : true);
     } catch (error) {
       console.error("채점 중 오류 발생:", error);
       setIsCorrect("서버 오류로 채점할 수 없습니다.");
@@ -138,6 +157,17 @@ export const OXQuiz = ({ quizID }) => {
         <GoToListButton onClick={() => navigate("/quiz")}>
           목록으로
         </GoToListButton>
+        {showAnswer === true ? (
+          <ShowAnswerButton
+            onClick={() => {
+              handleGetAnswer();
+            }}
+          >
+            정답보기
+          </ShowAnswerButton>
+        ) : (
+          ""
+        )}
       </QuizContainer>
     );
   }
