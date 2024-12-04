@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getQuiz } from "../../services/quiz/QuizManage";
 import { useNavigate } from "react-router-dom";
-import { getGrade } from "../../services/quiz/QuizSolve";
+import { getAnswer, getGrade } from "../../services/quiz/QuizSolve";
 import styled from "styled-components";
 
 const QuizContainer = styled.div`
@@ -60,7 +60,16 @@ const QuizSubmitButton = styled.button`
     cursor: not-allowed;
   }
 `;
-
+const ShowAnswerButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: transparent;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+`;
 const GoToListButton = styled.button`
   margin-top: 20px;
   padding: 10px 20px;
@@ -82,6 +91,7 @@ export const ShortAnswer = ({ quizID }) => {
   const [writtenAnswer, setWrittenAnswer] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
+  const [showAnswer, setshowAnswer] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -103,11 +113,19 @@ export const ShortAnswer = ({ quizID }) => {
   const handleInputAnswer = (e) => {
     setWrittenAnswer(e.target.value);
   };
-
+  const handleGetAnswer = async () => {
+    try {
+      const result = await getAnswer(quizID);
+      alert("정답은 [" + result + "] 입니다!");
+    } catch (error) {
+      setIsCorrect("서버 오류로 확인할 수 없습니다.");
+    }
+  };
   const handleSubmit = async () => {
     const answer = writtenAnswer.toString();
     try {
       const isAnswerCorrect = await getGrade(quizID, { answer });
+      setshowAnswer(isAnswerCorrect ? false : true);
       setIsCorrect(isAnswerCorrect ? "맞았습니다! 🙆‍♂️" : "틀렸습니다. 🙅‍♂️");
     } catch (error) {
       console.error("채점 중 오류 발생:", error);
@@ -119,9 +137,21 @@ export const ShortAnswer = ({ quizID }) => {
   if (hasSubmitted) {
     return (
       <QuizContainer>
-        <QuizHeader>{quizData.question}</QuizHeader>
-        <p>{isCorrect}</p>
-        <GoToListButton onClick={() => navigate(-1)}>목록으로</GoToListButton>
+        <QuizHeader>{isCorrect}</QuizHeader>
+        <GoToListButton onClick={() => navigate("/quiz")}>
+          목록으로
+        </GoToListButton>
+        {showAnswer === true ? (
+          <ShowAnswerButton
+            onClick={() => {
+              handleGetAnswer();
+            }}
+          >
+            정답보기
+          </ShowAnswerButton>
+        ) : (
+          ""
+        )}
       </QuizContainer>
     );
   }
