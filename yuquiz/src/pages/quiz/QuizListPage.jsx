@@ -2,7 +2,7 @@ import React from "react";
 import { useSearchParams, Link, useLoaderData } from "react-router-dom";
 import Dropdown from "../../components/UI/Dropdown";
 import SearchInput from "../../components/UI/SearchInput";
-import { getQuizList } from "../../services/quiz/QuizManage";
+import { getQuizList, getSubjectList } from "../../services/quiz/QuizManage";
 import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
 import styled from "styled-components";
 import { QuizGrid } from "../../components/quizlist/QuizGrid";
@@ -75,23 +75,38 @@ const SORT_OPTIONS = Object.values(SORT_QUIZ_POST).map((option) => ({
   label: option.label,
   value: option.value,
 }));
-
 export async function QuizListLoader({ request }) {
   const url = new URL(request.url);
   const currentPage = parseInt(url.searchParams.get("page") || "0", 10);
   const keyword = url.searchParams.get("keyword") || "";
   const sortOption = url.searchParams.get("sort") || "DATE_DESC";
-
-  const QuizListData = await getQuizList(keyword, sortOption, currentPage);
-
+  const subjectOption = url.searchParams.get("subject") || "";
+  const QuizListData = await getQuizList(
+    keyword,
+    subjectOption,
+    sortOption,
+    currentPage
+  );
+  const subjectListResponse = await getSubjectList();
+  const subjectList = Array.isArray(subjectListResponse)
+    ? subjectListResponse
+    : [];
   return {
     quizzList: QuizListData.content,
     totalPages: QuizListData.totalPages,
+    subjectList: subjectList,
   };
 }
 const QuizListPage = () => {
-  const { quizzList, totalPages } = useLoaderData();
+  const { quizzList, totalPages, subjectList } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
+  const SUBJECT_OPTIONS = [
+    { label: "전체 과목", value: "" }, // 디폴트 옵션 추가
+    ...subjectList.map((option) => ({
+      label: option.subjectName + "(" + option.subjectCode + ")", // 표시할 이름
+      value: option.id, // 전달할 id
+    })),
+  ];
 
   const handleSearch = (query) => {
     updateSearchParams({ keyword: query, page: 0 });
@@ -99,6 +114,9 @@ const QuizListPage = () => {
 
   const handleSelectSort = (selectedOption) => {
     updateSearchParams({ sort: selectedOption.value, page: 0 });
+  };
+  const handleSelectSubject = (selectedSubject) => {
+    updateSearchParams({ subject: selectedSubject.value, page: 0 });
   };
 
   const updateSearchParams = (newParams) => {
@@ -113,8 +131,12 @@ const QuizListPage = () => {
     if (newParams.keyword !== undefined) {
       params.set("keyword", newParams.keyword);
     }
+    if (newParams.subject !== undefined) {
+      params.set("subject", newParams.subject);
+    }
     setSearchParams(params);
   };
+
   const currentPage = parseInt(searchParams.get("page") || "0", 10);
   return (
     <QuizListPageContainer>
@@ -125,6 +147,15 @@ const QuizListPage = () => {
           onSelect={handleSelectSort}
           initLabel="정렬 기준 선택"
           defaultOption={{ value: "DATE_DESC", label: "날짜 내림차순" }}
+        />
+        <Dropdown
+          options={SUBJECT_OPTIONS}
+          onSelect={handleSelectSubject}
+          initLabel="과목 선택"
+          defaultOption={{
+            value: "",
+            label: "전체",
+          }}
         />
         <CreateQuizButton to="/quiz/create">+ 퀴즈 생성</CreateQuizButton>
       </ControlsContainer>

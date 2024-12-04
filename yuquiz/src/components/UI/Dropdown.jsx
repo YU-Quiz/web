@@ -28,7 +28,7 @@ const Dropdown = ({ options, onSelect, initLabel, defaultOption }) => {
   const handleSelect = (event) => {
     const selectedValue = event.target.value;
     const selectedOption = options.find(
-      (option) => option.value === selectedValue
+      (option) => option.value.toString() === selectedValue
     );
     setSelectedOption(selectedOption);
     onSelect(selectedOption);
