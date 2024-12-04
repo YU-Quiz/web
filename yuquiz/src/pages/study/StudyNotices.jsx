@@ -8,10 +8,13 @@ import Dropdown from '../../components/UI/Dropdown';
 import { getStudyNoticesList } from '../../services/study/studyNoticeService';
 import NoticeList from '../../components/study/notices/NoticeList';
 import { STUDY_NOTICE_SORT_OPTIONS } from '../../constants/study/studyNoticeSortOption';
+import { showStudy } from '../../services/study/studyService';
 
 export async function studyNoticesListLoader({ request, params }) {
     const {studyId} = params;
   const url = new URL(request.url);
+  const studyDetails = await showStudy(studyId);
+  // console.log(studyDetails);
   const currentPage = parseInt(url.searchParams.get("page") || "0", 10);
   const keyword = url.searchParams.get("keyword") || "";
   const sortOption = url.searchParams.get("sort") || "DATE_DESC";
@@ -21,10 +24,11 @@ export async function studyNoticesListLoader({ request, params }) {
   return {
     noticesList: noticesListData.content,
     totalPages: noticesListData.totalPages,
+    role: studyDetails.role,
   };
 }
 const StudyNoticesListPage = () => {
-    const { noticesList, totalPages } = useLoaderData();
+    const { noticesList, totalPages, role } = useLoaderData();
     const [searchParams, setSearchParams] = useSearchParams();
   
     const handleSelectSort = (selectedSort) => {
@@ -56,9 +60,11 @@ const StudyNoticesListPage = () => {
       <TableWrapper>
         <Header>
           <Title>Study Notices</Title>
-          <CreateNoticeButton to={`new`}>
-            <Button>Create Notice</Button>
-          </CreateNoticeButton>
+          {role === 'LEADER' && (
+            <CreateNoticeButton to={`new`}>
+              <Button>Create Notice</Button>
+            </CreateNoticeButton>
+          )}
         </Header>
   
         <Filters>
