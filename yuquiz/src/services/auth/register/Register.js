@@ -102,8 +102,11 @@ const handlerCheckEmail = async (InputEmail) => {
       alert(response.data.message || "조금 있다 다시 시도해 주세요.");
     }
   } catch (error) {
-    console.error("Error in handleCheckEmail:", error);
-    alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+    if (error.response.status === HttpStatusCode.Conflict) {
+      alert("이미 가입된 이메일 입니다. 다른 이메일로 시도하세요.");
+    } else {
+      alert("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+    }
   }
 };
 
