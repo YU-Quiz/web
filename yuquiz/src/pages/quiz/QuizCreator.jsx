@@ -3,6 +3,8 @@ import { IoMdArrowBack } from "react-icons/io";
 import "../../styles/quiz/QuizCreator.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { handlerSubmitQuiz } from "../../services/quiz/quizCreator";
+import Dropdown from "../../components/UI/Dropdown";
+import { getSubjectList } from "../../services/quiz/QuizManage";
 
 export const QuizCreator = () => {
   const [questionTitle, setQuestionTitle] = useState("");
@@ -16,6 +18,8 @@ export const QuizCreator = () => {
   ]);
   const [image, setImage] = useState(null);
 
+  const [subjects, setSubjects] = useState([]); // 과목 리스트 상태
+  const [selectedSubject, setSelectedSubject] = useState(null); // 선택된 과목 상태
   const textAreaRef = useRef(null);
   const navigate = useNavigate();
 
@@ -45,7 +49,25 @@ export const QuizCreator = () => {
       ]);
     }
   }, [questionType]);
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const subjectList = await getSubjectList();
+        const SUBJECT_OPTIONS = [
+          // 디폴트 옵션 추가
+          ...subjectList.map((option) => ({
+            label: option.subjectName + "(" + option.subjectCode + ")", // 표시할 이름
+            value: option.id, // 전달할 id
+          })),
+        ];
+        setSubjects(SUBJECT_OPTIONS);
+      } catch (error) {
+        console.error("과목 데이터를 가져오는 중 오류가 발생했습니다.", error);
+      }
+    };
 
+    fetchSubjects();
+  }, []);
   const handleAnswerChange = (index, field, value) => {
     const newAnswers = [...answers];
     if (questionType === "SHORT_ANSWER") {
@@ -55,10 +77,48 @@ export const QuizCreator = () => {
     }
     setAnswers(newAnswers);
   };
+  const validateForm = () => {
+    const errors = [];
+
+    if (!questionTitle.trim()) errors.push("퀴즈 제목을 입력하세요.");
+    if (!questionContent.trim()) errors.push("퀴즈 내용을 입력하세요.");
+    if (!selectedSubject) errors.push("과목을 선택하세요.");
+    // 중복 정답(MULTIPLE_CHOICE)의 경우 적어도 하나의 정답이 선택되어야 함
+    if (questionType === "MULTIPLE_CHOICE") {
+      // 적어도 하나의 정답이 선택되어야 함
+      if (answers.every((ans) => !ans.correct)) {
+        errors.push("중복 정답 유형에서는 적어도 하나의 정답을 선택하세요.");
+      }
+      // 모든 선택지에 값이 없어서는 안 됨
+      if (answers.every((ans) => !ans.text.trim())) {
+        errors.push("객관식의 선택지는 적어도 하나 이상 작성해야 합니다.");
+      }
+      if (answers.some((ans) => ans.correct && !ans.text.trim())) {
+        errors.push("체크된 정답의 선택지 텍스트를 입력하세요.");
+      }
+    }
+
+    // 단답형(SHORT_ANSWER)의 경우 정답 텍스트가 있어야 함
+    if (questionType === "SHORT_ANSWER" && !answers[0].text.trim()) {
+      errors.push("단답형의 정답을 입력하세요.");
+    }
+
+    // OX(참/거짓, TRUE_FALSE)의 경우 반드시 하나의 정답이 선택되어야 함
+    if (questionType === "TRUE_FALSE" && answers.every((ans) => !ans.correct)) {
+      errors.push("OX 유형에서는 정답을 선택하세요.");
+    }
+
+    return errors;
+  };
 
   const handleSubmitQuiz = () => {
-    let answer = "";
+    const errors = validateForm();
 
+    if (errors.length > 0) {
+      alert(errors.join("\n"));
+      return; // 에러가 있을 경우 제출 중단
+    }
+    let answer = "";
     if (questionType === "MULTIPLE_CHOICE") {
       const correctAnswers = answers
         .filter((answer) => answer.correct)
@@ -88,10 +148,9 @@ export const QuizCreator = () => {
       answer: answer,
       quizType: questionType,
       choices: choices,
-      subjectId: 2,
+      subjectId: selectedSubject.value,
     };
     if (handlerSubmitQuiz(data)) {
-      alert("퀴즈 생성 성공!");
       navigate(-1);
     }
   };
@@ -132,7 +191,14 @@ export const QuizCreator = () => {
               <option value="SHORT_ANSWER">단답식</option>
             </select>
           </div>
-
+          <div className="form-group">
+            <label>과목 선택</label>
+            <Dropdown
+              options={subjects}
+              onSelect={(option) => setSelectedSubject(option)}
+              initLabel="과목을 선택하세요"
+            />
+          </div>
           <div className="answers-container">
             {questionType === "MULTIPLE_CHOICE" &&
               answers.map((answer, index) => (

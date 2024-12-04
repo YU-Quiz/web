@@ -5,20 +5,23 @@ const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
 const SORT_OPTIONS = SORT_QUIZ_POST;
 
-const getQuizList = async (keyword = "", sort = "DATE_DESC", page = 0) => {
+const getQuizList = async (
+  keyword = "",
+  subject = "",
+  sort = "DATE_DESC",
+  page = 0
+) => {
   try {
     const params = {
       keyword: keyword || "",
+      subject: subject || "",
       sort: sort || "DATE_DESC",
       page: Number(page) >= 0 ? Number(page) : 0, // 기본값 설정
     };
-    //console.log("getQuizList 호출 직전 page 값:", page);
 
     const response = await api.get(`${SERVER_API}/quizzes`, {
       params: params,
     });
-    //console.log("params 객체:", params);
-    //console.log(response.data);
 
     return response.data;
   } catch (error) {
@@ -131,7 +134,12 @@ const sendReport = async (data, quizID) => {
     }
   }
 };
-
+const getSubjectList = async () => {
+  try {
+    const response = await api.get(`${SERVER_API}/subject`);
+    return response.data;
+  } catch (error) {}
+};
 export {
   getQuizList,
   SORT_OPTIONS,
@@ -141,4 +149,5 @@ export {
   pinQuiz,
   likeQuiz,
   sendReport,
+  getSubjectList,
 };
