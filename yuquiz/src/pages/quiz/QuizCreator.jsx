@@ -144,13 +144,21 @@ export const QuizCreator = () => {
     const data = {
       title: questionTitle,
       question: questionContent,
-      quizImg: image,
       answer: answer,
       quizType: questionType,
       choices: choices,
       subjectId: selectedSubject.value,
     };
-    if (handlerSubmitQuiz(data)) {
+    const formData = new FormData();
+    formData.append(
+      "image",
+      image || new Blob([], { type: "application/json" })
+    );
+    formData.append(
+      "quizReq",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+    if (handlerSubmitQuiz(formData)) {
       navigate(-1);
     }
   };
