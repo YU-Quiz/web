@@ -35,6 +35,13 @@ const StudyDetailsPage = () => {
   const [members, setMembers] = useState([]);
   const [loadingMembers, setLoadingMembers] = useState(false);
   const [membersError, setMembersError] = useState(null);
+  const currentTime = new Date();
+
+  // 스터디 등록 시간을 구합니다
+  const registerTime = new Date(study.registerDuration);
+
+  // 현재 시간이 등록 시간보다 이후인지 확인합니다
+  const isStudyStarted = currentTime > registerTime;
 
   useEffect(() => {
     if (study.isMember) {
@@ -159,8 +166,10 @@ const StudyDetailsPage = () => {
       <Header>
         <Title>{study.Name}</Title>
         <ButtonGroup>
-          {!study.isMember && (
+          {!study.isMember && !isStudyStarted ? (
             <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>
+          ) : (
+            "신청 마감"
           )}
           {study.role === "LEADER" && (
             <>
@@ -183,7 +192,7 @@ const StudyDetailsPage = () => {
 
       <InfoSection>
         <InfoItem>
-          <InfoLabel>등록 기간:</InfoLabel>
+          <InfoLabel>등록 마감:</InfoLabel>
           <InfoValue>
             {new Date(study.registerDuration).toLocaleString()}
           </InfoValue>

@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import StudyItem from './StudyItem';
+import React from "react";
+import styled from "styled-components";
+import StudyItem from "./StudyItem";
 
 const StudyList = ({ studies }) => {
   return (
@@ -12,7 +12,7 @@ const StudyList = ({ studies }) => {
             <TableHeader>스터디장</TableHeader>
             <TableHeader>현재 인원</TableHeader>
             <TableHeader>상태</TableHeader>
-            <TableHeader>등록 기간</TableHeader>
+            <TableHeader>등록 마감</TableHeader>
           </tr>
         </thead>
         <tbody>
