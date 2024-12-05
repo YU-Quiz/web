@@ -3,8 +3,15 @@ import { useLoaderData, useSearchParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import NotificationList from "../../components/mypage/NotificationList";
 import Dropdown from "../../components/UI/Dropdown";
-import { getNotifications, markNotificationAsRead } from "../../services/notification/notificationService";
-import { NOTIFICATION_SORT_OPTIONS, NOTIFICATION_VIEW_OPTIONS } from "../../constants/mypage/notificationOption";
+import {
+  getNotifications,
+  markNotificationAsRead,
+} from "../../services/notification/notificationService";
+import {
+  NOTIFICATION_SORT_OPTIONS,
+  NOTIFICATION_VIEW_OPTIONS,
+} from "../../constants/mypage/notificationOption";
+import { toast } from "react-toastify";
 
 // Loader 함수
 export async function mynotificationLoader({ request }) {
@@ -26,7 +33,8 @@ export async function mynotificationLoader({ request }) {
 
 // 알림 페이지 컴포넌트
 const NotificationPage = () => {
-  const { notifications, totalPages, currentPage, sort, view } = useLoaderData();
+  const { notifications, totalPages, currentPage, sort, view } =
+    useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSortChange = (selectedSort) => {
@@ -42,8 +50,7 @@ const NotificationPage = () => {
       await markNotificationAsRead([notificationId]);
       window.location.reload(); // 페이지 새로고침으로 상태 업데이트
     } catch (err) {
-      console.error("Failed to mark notification as read:", err);
-      alert("알림 읽음 처리 중 문제가 발생했습니다.");
+      toast.error("알림 읽음 처리 중 문제가 발생했습니다.");
     }
   };
 
@@ -54,7 +61,7 @@ const NotificationPage = () => {
       .map((notification) => notification.id);
 
     if (unreadNotificationIds.length === 0) {
-      alert("읽지 않은 알림이 없습니다.");
+      toast.info("읽지 않은 알림이 없습니다.");
       return;
     }
 
@@ -62,8 +69,7 @@ const NotificationPage = () => {
       await markNotificationAsRead(unreadNotificationIds);
       window.location.reload(); // 페이지 새로고침
     } catch (err) {
-      console.error("Failed to mark all notifications as read:", err);
-      alert("모든 알림 읽음 처리 중 문제가 발생했습니다.");
+      toast.error("모든 알림 읽음 처리 중 문제가 발생했습니다.");
     }
   };
 
@@ -93,21 +99,30 @@ const NotificationPage = () => {
           <Dropdown
             options={NOTIFICATION_SORT_OPTIONS}
             onSelect={handleSortChange}
-            defaultOption={NOTIFICATION_SORT_OPTIONS.find((option) => option.value === sort)}
+            defaultOption={NOTIFICATION_SORT_OPTIONS.find(
+              (option) => option.value === sort
+            )}
           />
           <Dropdown
             options={NOTIFICATION_VIEW_OPTIONS}
             onSelect={handleViewChange}
-            defaultOption={NOTIFICATION_VIEW_OPTIONS.find((option) => option.value === view)}
+            defaultOption={NOTIFICATION_VIEW_OPTIONS.find(
+              (option) => option.value === view
+            )}
           />
         </DropdownContainer>
         <Actions>
-          <MarkAllButton onClick={handleMarkAllAsRead}>모두 읽음 처리</MarkAllButton>
+          <MarkAllButton onClick={handleMarkAllAsRead}>
+            모두 읽음 처리
+          </MarkAllButton>
           <BackLink to="/my">돌아가기</BackLink>
         </Actions>
       </Header>
 
-      <NotificationList notifications={notifications} onMarkAsRead={handleMarkAsRead} />
+      <NotificationList
+        notifications={notifications}
+        onMarkAsRead={handleMarkAsRead}
+      />
 
       <Pagination>
         {Array.from({ length: totalPages }, (_, index) => (

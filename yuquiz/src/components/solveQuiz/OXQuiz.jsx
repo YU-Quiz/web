@@ -3,6 +3,7 @@ import { getQuiz } from "../../services/quiz/QuizManage";
 import { getAnswer, getGrade } from "../../services/quiz/QuizSolve";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 const QuizContainer = styled.div`
   max-width: 600px;
@@ -126,14 +127,14 @@ export const OXQuiz = ({ quizID }) => {
     try {
       const result = await getAnswer(quizID);
       const answer = result ? "⭕" : "❌";
-      alert("정답은 [" + answer + "] 입니다!");
+      toast.info("정답은 [" + answer + "] 입니다!");
     } catch (error) {
       setIsCorrect("서버 오류로 확인할 수 없습니다.");
     }
   };
   const handleSubmit = async () => {
     if (!selectedAnswer) {
-      alert("정답을 선택하세요.");
+      toast.warn("정답을 선택하세요.");
       return;
     }
 

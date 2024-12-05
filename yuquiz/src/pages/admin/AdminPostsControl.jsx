@@ -1,82 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { forceDeletePost, getAdminPosts } from '../../services/admin/adminPostService';
-import PostsList from '../../components/admin/posts/PostsList';
-import Dropdown from '../../components/UI/Dropdown'; // Assuming this is a reusable dropdown component
-import { POST_SORT_OPTIONS } from '../../constants/admin/postSortOption'; // Assumes you have a constant file for sorting options
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import {
+  forceDeletePost,
+  getAdminPosts,
+} from "../../services/admin/adminPostService";
+import PostsList from "../../components/admin/posts/PostsList";
+import Dropdown from "../../components/UI/Dropdown"; // Assuming this is a reusable dropdown component
+import { POST_SORT_OPTIONS } from "../../constants/admin/postSortOption"; // Assumes you have a constant file for sorting options
+import { toast } from "react-toastify";
 
 const AdminPostsControl = () => {
-    const [sortOption, setSortOption] = useState("DATE_DESC");
-    const [postList, setPostList] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(1);
+  const [sortOption, setSortOption] = useState("DATE_DESC");
+  const [postList, setPostList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const postList = await getAdminPosts(sortOption, currentPage);
-                setPostList(postList.content);
-                setTotalPages(postList.totalPages);
-            } catch (error) {
-                console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
-            }
-        };
-        fetchData();
-    }, [currentPage, sortOption]);
-
-    const handleSelectSort = (sortOption) => {
-        setSortOption(sortOption.value);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const postList = await getAdminPosts(sortOption, currentPage);
+        setPostList(postList.content);
+        setTotalPages(postList.totalPages);
+      } catch (error) {
+        console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
+      }
     };
+    fetchData();
+  }, [currentPage, sortOption]);
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+  const handleSelectSort = (sortOption) => {
+    setSortOption(sortOption.value);
+  };
 
-    const handleDeletePost = async (postId) => {
-        const isConfirmed = window.confirm("정말로 이 퀴즈를 삭제하시겠습니까?");
-    
-        if (!isConfirmed) {
-            return; // If the user cancels, do nothing
-        }
-        try {
-            await forceDeletePost(postId);
-            alert("게시글이 삭제되었습니다.");
-            window.location.reload();
-        } catch (error) {
-            console.error("게시글 삭제 중 오류 발생:", error);
-            alert("게시글 삭제에 실패했습니다.");
-        }
-    };
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-    return (
-        <Container>
-            <Header>
-                <Title>게시글 관리</Title>
-                <Dropdown
-                    options={Object.values(POST_SORT_OPTIONS)}
-                    onSelect={handleSelectSort}
-                    defaultOption={POST_SORT_OPTIONS.DATE_DESC}
-                />
-            </Header>
+  const handleDeletePost = async (postId) => {
+    const isConfirmed = window.confirm("정말로 이 퀴즈를 삭제하시겠습니까?");
 
-            <TableContainer>
-                <PostsList posts={postList} onDelete={handleDeletePost} />
-            </TableContainer>
+    if (!isConfirmed) {
+      return; // If the user cancels, do nothing
+    }
+    try {
+      await forceDeletePost(postId);
+      toast.success("게시글이 삭제되었습니다.");
+      window.location.reload();
+    } catch (error) {
+      console.error("게시글 삭제 중 오류 발생:", error);
+      toast.error("게시글 삭제에 실패했습니다.");
+    }
+  };
 
-            <Pagination>
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <PageButton
-                        key={index}
-                        className={index === currentPage ? 'active' : ''}
-                        onClick={() => handlePageChange(index)}
-                        disabled={index === currentPage}
-                    >
-                        {index + 1}
-                    </PageButton>
-                ))}
-            </Pagination>
-        </Container>
-    );
+  return (
+    <Container>
+      <Header>
+        <Title>게시글 관리</Title>
+        <Dropdown
+          options={Object.values(POST_SORT_OPTIONS)}
+          onSelect={handleSelectSort}
+          defaultOption={POST_SORT_OPTIONS.DATE_DESC}
+        />
+      </Header>
+
+      <TableContainer>
+        <PostsList posts={postList} onDelete={handleDeletePost} />
+      </TableContainer>
+
+      <Pagination>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <PageButton
+            key={index}
+            className={index === currentPage ? "active" : ""}
+            onClick={() => handlePageChange(index)}
+            disabled={index === currentPage}
+          >
+            {index + 1}
+          </PageButton>
+        ))}
+      </Pagination>
+    </Container>
+  );
 };
 
 export default AdminPostsControl;

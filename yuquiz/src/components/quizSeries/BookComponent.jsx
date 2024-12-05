@@ -3,6 +3,7 @@ import styled from "styled-components";
 import useAuthStore from "../../stores/auth/authStore";
 import { Link } from "react-router-dom";
 import { FaPencilAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 const BookWrapper = styled.div`
   width: 200px;
   height: 300px;
@@ -148,7 +149,7 @@ const BookComponent = ({ quizSeries, handleEdit, handleDeleteSeries }) => {
                 onClick={() => {
                   const newName = prompt("새 이름을 입력하세요:");
                   if (!newName || !newName.trim()) {
-                    alert("유효한 이름을 입력하세요.");
+                    toast.warn("유효한 이름을 입력하세요.");
                     return;
                   }
                   handleEdit(newName.trim());

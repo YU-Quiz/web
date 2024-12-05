@@ -1,5 +1,6 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
+import { toast } from "react-toastify";
 
 const API_BASE_URL = "/series";
 
@@ -39,12 +40,10 @@ export const createSeries = async (seriesData) => {
 export const updateSeries = async (seriesId, seriesData) => {
   try {
     const response = await api.put(`${API_BASE_URL}/${seriesId}`, seriesData);
-    //console.log(response);
-    alert(response.data.response);
+    toast.success(response.data.response);
     return response.data;
   } catch (error) {
-    console.error("문제집 수정 실패:", error);
-    throw error;
+    toast.error("문제집 수정 실패");
   }
 };
 

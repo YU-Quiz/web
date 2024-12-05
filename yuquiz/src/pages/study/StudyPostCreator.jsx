@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Link, useNavigate, useParams } from "react-router-dom";
 // import { createStudyNotice } from '../../services/study/studyNoticeService';
-import Button from '../../components/UI/Button';
-import { createStudyPost } from '../../services/study/studyPostService';
+import Button from "../../components/UI/Button";
+import { createStudyPost } from "../../services/study/studyPostService";
+import { toast } from "react-toastify";
 
 const StudyPostCreator = () => {
   const { studyId } = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -26,12 +27,11 @@ const StudyPostCreator = () => {
         categoryId: 3,
         title: title,
         content: content,
-      }
+      };
       await createStudyPost(studyId, request);
       navigate(`/study/${studyId}/posts`);
     } catch (error) {
-      console.error('게시글 작성 중 오류 발생:', error);
-      alert('게시글 작성에 실패했습니다. 다시 시도해주세요.');
+      toast.error("게시글 작성에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -69,7 +69,7 @@ const PageContainer = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
-  font-family: 'Euclid Circular A', 'Poppins', sans-serif;
+  font-family: "Euclid Circular A", "Poppins", sans-serif;
   color: #333;
 `;
 

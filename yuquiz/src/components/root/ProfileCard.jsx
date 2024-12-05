@@ -3,6 +3,7 @@ import "../../styles/root/ProfileCard.scss";
 import { Link } from "react-router-dom";
 import useAuthStore from "../../stores/auth/authStore";
 import { logout } from "../../services/auth/login/authService";
+import { toast } from "react-toastify";
 
 const ProfileCard = () => {
   const { isAuthenticated } = useAuthStore(); // 상태와 Zustand의 로그아웃 함수 가져오기
@@ -12,7 +13,7 @@ const ProfileCard = () => {
     try {
       await logout(); // API 로그아웃 호출
     } catch (error) {
-      alert(error.message); // 에러 처리 (필요에 따라 수정 가능)
+      toast.error(error.message); // 에러 처리 (필요에 따라 수정 가능)
     }
   };
 
@@ -71,9 +72,9 @@ const ProfileCard = () => {
           )}
         </div>
       </div>
-      {isAuthenticated&&userInfo.role==="ADMIN" ? (
-        <Link to='/admin/users-control'>관리자 페이지</Link>
-      ):(
+      {isAuthenticated && userInfo.role === "ADMIN" ? (
+        <Link to="/admin/users-control">관리자 페이지</Link>
+      ) : (
         <></>
       )}
     </div>

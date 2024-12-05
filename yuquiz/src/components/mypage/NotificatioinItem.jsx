@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 
 const NotificationItem = ({ notification, onMarkAsRead }) => {
@@ -8,7 +9,7 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
       window.location.href = notification.redirectUrl; // URL로 이동
     } catch (err) {
       console.error("Failed to mark notification as read:", err);
-      alert("알림 읽음 처리 중 문제가 발생했습니다.");
+      toast.error("알림 읽음 처리 중 문제가 발생했습니다.");
     }
   };
 
@@ -16,11 +17,15 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
     <ItemContainer>
       <Header>
         <Title>{notification.title}</Title>
-        <Timestamp>{new Date(notification.createdAt).toLocaleString()}</Timestamp>
+        <Timestamp>
+          {new Date(notification.createdAt).toLocaleString()}
+        </Timestamp>
       </Header>
       <Message>{notification.message}</Message>
       <Footer>
-        <DetailButton onClick={handleMarkAsReadAndRedirect}>자세히 보기</DetailButton>
+        <DetailButton onClick={handleMarkAsReadAndRedirect}>
+          자세히 보기
+        </DetailButton>
       </Footer>
     </ItemContainer>
   );

@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IoMdArrowBack } from "react-icons/io";
 import "../../../styles/register/Register.scss"; // 스타일 파일 유지
 import { doResetPW } from "../../../services/user/resetPW";
+import { toast } from "react-toastify";
 
 const ResResetPW = () => {
   const location = useLocation(); // 현재 URL 가져오기
@@ -31,17 +32,17 @@ const ResResetPW = () => {
 
     // 비밀번호와 비밀번호 재확인 일치 여부 확인
     if (formData.password !== formData.confirmPassword) {
-      alert("비밀번호가 일치하지 않습니다.");
+      toast.error("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     // 비밀번호 재설정 API 호출
     const result = await doResetPW(formData.username, formData.password, code);
     if (result.success) {
-      alert(result.message);
+      toast.success(result.message);
       navigate("/");
     } else {
-      alert(result.message);
+      toast.error(result.message);
     }
   };
 

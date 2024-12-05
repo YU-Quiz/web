@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { findUsername } from "../../../services/user/userService";
+import { toast } from "react-toastify";
 
 export const FindID = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ export const FindID = () => {
     if (result.response) {
       alert("회원님의 ID: " + result.response);
     } else {
-      alert(result.message);
+      toast.error(result.message);
     }
   };
 

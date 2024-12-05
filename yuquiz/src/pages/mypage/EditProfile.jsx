@@ -5,6 +5,7 @@ import useAuthStore from "../../stores/auth/authStore";
 import { submitEditMyInfo } from "../../services/mypage/mypage";
 import Button from "../../components/UI/Button";
 import { withdrawUser } from "../../services/user/userService";
+import { toast } from "react-toastify";
 
 const EditProfile = () => {
   const { userInfo, setUserInfo } = useAuthStore((state) => ({
@@ -41,10 +42,10 @@ const EditProfile = () => {
         ...userInfo,
         ...updatedData,
       });
-      alert("회원 정보가 수정되었습니다.");
+      toast.success("회원 정보가 수정되었습니다.");
       navigate("/my");
     } else {
-      console.error("Failed to update user info");
+      toast.error("회원 정보 수정 실패");
     }
   };
 
@@ -58,14 +59,13 @@ const EditProfile = () => {
         const response = await withdrawUser();
         if (response.success) {
           // Adjust based on the actual response structure
-          alert("회원 탈퇴가 완료되었습니다.");
+          toast.info("회원 탈퇴가 완료되었습니다.");
           navigate("/"); // Redirect to the home page or another appropriate page
         } else {
-          alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
+          toast.error("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
         }
       } catch (error) {
-        console.error("Error during account deletion:", error);
-        alert("오류가 발생했습니다. 다시 시도해주세요.");
+        toast.error("오류가 발생했습니다. 다시 시도해주세요.");
       }
     }
   };

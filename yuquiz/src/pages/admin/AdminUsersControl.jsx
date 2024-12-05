@@ -8,6 +8,7 @@ import {
 import UsersInfoList from "../../components/admin/users/UsersInfoList";
 import Dropdown from "../../components/UI/Dropdown";
 import { USER_SORT_OPTIONS } from "../../constants/admin/userSortOption";
+import { toast } from "react-toastify";
 
 const AdminUsersControl = () => {
   const [sortOption, setSortOption] = useState("DATE_DESC");
@@ -41,26 +42,24 @@ const AdminUsersControl = () => {
     try {
       if (isSuspended) {
         await suspendUser("UNSUSPEND", userId);
-        alert("회원 정지를 해제하였습니다.");
+        toast.success("회원 정지를 해제하였습니다.");
       } else {
         await suspendUser("SUSPEND", userId);
-        alert("회원이 정지되었습니다.");
+        toast.success("회원이 정지되었습니다.");
       }
       window.location.reload();
     } catch (error) {
-      console.error("정지 중 오류 발생:", error);
-      alert("회원 정지에 실패했습니다.");
+      toast.error("회원 정지에 실패했습니다.");
     }
   };
 
   const handleBan = async (userId) => {
     try {
       await forceDeleteUser(userId);
-      alert("회원이 추방되었습니다.");
+      toast.success("회원이 추방되었습니다.");
       window.location.reload();
     } catch (error) {
-      console.error("추방 중 오류 발생:", error);
-      alert("회원 추방에 실패했습니다.");
+      toast.error("회원 추방에 실패했습니다.");
     }
   };
 
