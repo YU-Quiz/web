@@ -91,13 +91,13 @@ const Header = () => {
             title="누르시면 홈화면으로 돌아갑니다."
           />
         </NavButton>
-        <NavButton to="/quiz">Quizzes</NavButton>
-        <NavButton to="/posts">Community</NavButton>
+        <NavButton to="/quiz">퀴즈</NavButton>
+        <NavButton to="/posts">게시판</NavButton>
 
         {/*
         {//<NavButton to="/leaderboard">LeaderBoard</NavButton>}*/}
-        <NavButton to="/quizseries/list">Quiz Series</NavButton>
-        <NavButton to="/study">Study</NavButton>
+        <NavButton to="/quizseries/list">문제집</NavButton>
+        <NavButton to="/study">스터디</NavButton>
 
         <div
           style={{ display: "flex", alignItems: "center", marginLeft: "auto" }}
