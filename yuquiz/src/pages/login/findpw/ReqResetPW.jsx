@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { confirmResetPW } from "../../../services/user/resetPW";
 import { IoMdArrowBack } from "react-icons/io";
 import "../../../styles/register/Register.scss"; // 스타일 파일 유지
+import { toast } from "react-toastify";
 
 const ReqResetPW = () => {
   const [formData, setFormData] = useState({
@@ -24,10 +25,10 @@ const ReqResetPW = () => {
     e.preventDefault();
     const result = await confirmResetPW(formData.username, formData.email);
     if (result.success) {
-      alert(result.message);
+      toast.success(result.message);
       navigate(-1);
     } else {
-      alert(result.message);
+      toast.error(result.message);
     }
   };
 

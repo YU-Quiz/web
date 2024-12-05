@@ -12,6 +12,7 @@ import {
 import useAuthStore from "../../stores/auth/authStore"; // Zustand 상태 사용
 import styled from "styled-components";
 import ForAddMajorList from "../../components/register/ForAddMajorList";
+import { toast } from "react-toastify";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -94,7 +95,7 @@ export const Register = () => {
     };
 
     if (!checkNick || InputNickname !== checkNick) {
-      alert("닉네임 중복 확인을 완료해주세요.");
+      toast.warn("닉네임 중복 확인을 완료해주세요.");
       return;
     }
 

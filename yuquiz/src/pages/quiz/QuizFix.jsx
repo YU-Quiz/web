@@ -4,6 +4,7 @@ import "../../styles/quiz/QuizFix.scss";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { getQuiz } from "../../services/quiz/QuizManage";
 import { fixQuiz } from "../../services/quiz/QuizManage";
+import { toast } from "react-toastify";
 
 export const QuizFix = () => {
   const { quizId } = useParams(); // URL에서 quizId 가져옴
@@ -88,14 +89,14 @@ export const QuizFix = () => {
       const wellDone = await fixQuiz(updatedQuiz);
       if (wellDone) {
         //console.log("Updated Quiz:", updatedQuiz);
-        alert("수정 성공");
+        toast.success("수정 성공");
         // 퀴즈 목록 페이지로 이동
         navigate(`/quiz/play/${updatedQuiz.quizId}`);
       } else {
-        alert("다시 시도해주세요. ");
+        toast.error("다시 시도해주세요. ");
       }
     } catch (error) {
-      console.error("퀴즈 수정 중 오류 발생:", error);
+      toast.error("퀴즈 수정 중 오류 발생:", error);
     }
   };
 

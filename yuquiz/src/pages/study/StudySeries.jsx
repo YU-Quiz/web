@@ -12,6 +12,7 @@ import Dropdown from "../../components/UI/Dropdown";
 import SearchInput from "../../components/UI/SearchInput";
 import { SORT_OPTIONS } from "../../services/quiz/QuizManage";
 import { getStudySeriesList } from "../../services/study/studyQuizSeriesService";
+import { toast } from "react-toastify";
 
 const StudySeries = () => {
   const { studyId } = useParams();
@@ -71,7 +72,7 @@ const StudySeries = () => {
   };
   const handleCreateSeries = async () => {
     if (!newSeriesName.trim()) {
-      alert("문제집 이름을 입력해주세요.");
+      toast.warn("문제집 이름을 입력해주세요.");
       return;
     }
     try {
@@ -86,8 +87,7 @@ const StudySeries = () => {
       setIsModalOpen(false);
       setNewSeriesName(""); // 입력 값 초기화
     } catch (error) {
-      console.error("문제집 생성에 실패했습니다.");
-      alert("문제집 생성에 실패했습니다.");
+      toast.error("문제집 생성에 실패했습니다.");
     }
   };
 
@@ -102,8 +102,7 @@ const StudySeries = () => {
       );
       setEditSeriesId(null); // 수정 모드 종료
     } catch (error) {
-      console.error("문제집 수정에 실패했습니다.");
-      alert("문제집 수정에 실패했습니다.");
+      toast.error("문제집 수정에 실패했습니다.");
     }
   };
 
@@ -113,8 +112,7 @@ const StudySeries = () => {
       await deleteSeries(seriesId);
       setSeriesList((prev) => prev.filter((series) => series.id !== seriesId));
     } catch (error) {
-      console.error("문제집 삭제에 실패했습니다.");
-      alert("문제집 삭제에 실패했습니다.");
+      toast.error("문제집 삭제에 실패했습니다.");
     }
   };
 

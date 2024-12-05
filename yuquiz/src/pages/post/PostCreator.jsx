@@ -5,6 +5,7 @@ import Button from "../../components/UI/Button";
 import Dropdown from "../../components/UI/Dropdown";
 import { createPost } from "../../services/post/postService";
 import { getCategories } from "../../services/post/postMetaService";
+import { toast } from "react-toastify";
 
 const PostCreator = () => {
   const navigate = useNavigate();
@@ -42,10 +43,10 @@ const PostCreator = () => {
     e.preventDefault();
     try {
       await createPost(categoryId, title, content);
-      alert("게시글 생성 성공!");
+      toast.success("게시글 생성 성공!");
       navigate("/posts");
     } catch (error) {
-      console.log("에러 발생!");
+      toast.error("게시물 생성 실패");
     }
   };
 

@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLoaderData, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { removeStudy, showStudy } from '../../services/study/studyService';
-import { getStudyMembers, removeMember } from '../../services/study/studyGroupService';
-import { requestStudy, getStudyRequests, acceptStudyRequest } from '../../services/study/studyRequestService';
-import MemberList from '../../components/study/MemberList';
-import JoinRequestModal from '../../components/study/JoinRequestModal'; // Import the modal
+import React, { useEffect, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { removeStudy, showStudy } from "../../services/study/studyService";
+import {
+  getStudyMembers,
+  removeMember,
+} from "../../services/study/studyGroupService";
+import {
+  requestStudy,
+  getStudyRequests,
+  acceptStudyRequest,
+} from "../../services/study/studyRequestService";
+import MemberList from "../../components/study/MemberList";
+import JoinRequestModal from "../../components/study/JoinRequestModal"; // Import the modal
+import { toast } from "react-toastify";
 
 // Loader Function
 export async function studyDetailsLoader({ params }) {
@@ -37,8 +45,10 @@ const StudyDetailsPage = () => {
           const membersList = await getStudyMembers(study.id);
           setMembers(membersList);
         } catch (error) {
-          console.error('스터디 멤버 조회 중 오류 발생:', error);
-          setMembersError(error.message || '스터디 멤버를 불러오지 못했습니다.');
+          console.error("스터디 멤버 조회 중 오류 발생:", error);
+          setMembersError(
+            error.message || "스터디 멤버를 불러오지 못했습니다."
+          );
         } finally {
           setLoadingMembers(false);
         }
@@ -50,10 +60,9 @@ const StudyDetailsPage = () => {
   const handleJoinStudy = async () => {
     try {
       await requestStudy(study.id);
-      alert('신청되었습니다!');
+      toast.success("신청되었습니다!");
     } catch (error) {
-      console.error('스터디 신청 중 오류 발생:', error);
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -65,40 +74,38 @@ const StudyDetailsPage = () => {
       setJoinRequests(requests);
       setIsLoadingRequests(false);
     } catch (error) {
-      console.error('가입 신청 목록을 불러오는 중 오류 발생:', error);
+      console.error("가입 신청 목록을 불러오는 중 오류 발생:", error);
       setRequestError(error.message);
       setIsLoadingRequests(false);
     }
   };
 
   const handleEditStudy = () => {
-    navigate('edit');
+    navigate("edit");
   };
 
   const handleDeleteStudy = async () => {
-    const confirmDelete = window.confirm('스터디를 삭제하시겠습니까?');
+    const confirmDelete = window.confirm("스터디를 삭제하시겠습니까?");
     if (confirmDelete) {
       try {
         const response = await removeStudy(study.id);
-        alert(response.message);
-        navigate('/study');
+        toast.success(response.message);
+        navigate("/study");
       } catch (error) {
-        console.error('스터디 삭제 중 오류 발생:', error);
-        alert(error.message);
+        toast.error(error.message);
       }
     }
   };
 
   const handleRemoveMember = async (userId) => {
-    const confirmDelete = window.confirm('멤버를 추방하시겠습니까?');
+    const confirmDelete = window.confirm("멤버를 추방하시겠습니까?");
     if (confirmDelete) {
       try {
         await removeMember(study.id, userId);
-        alert('스터디원이 삭제되었습니다.');
+        toast.success("스터디원이 삭제되었습니다.");
         setMembers((prev) => prev.filter((member) => member.id !== userId));
       } catch (error) {
-        console.error('스터디원 삭제 중 오류 발생:', error);
-        alert(error.message || '스터디원 삭제에 실패했습니다.');
+        toast.error("스터디원 삭제 중 오류 발생:", error);
       }
       window.location.reload();
     }
@@ -117,42 +124,46 @@ const StudyDetailsPage = () => {
     try {
       // 가입 요청 승인 API 호출
       await acceptStudyRequest(study.id, userId);
-      alert('가입 요청이 승인되었습니다.');
-  
+      toast.success("가입 요청이 승인되었습니다.");
+
       // 가입 요청 목록에서 해당 사용자를 찾음
-      const newMemberRequest = joinRequests.find((request) => request.userId === userId);
-  
+      const newMemberRequest = joinRequests.find(
+        (request) => request.userId === userId
+      );
+
       if (!newMemberRequest) {
-        throw new Error('가입 요청 정보를 찾을 수 없습니다.');
+        throw new Error("가입 요청 정보를 찾을 수 없습니다.");
       }
-  
+
       // 새로운 멤버 정보로 추가
       const newMember = {
         id: newMemberRequest.userId,
         nickname: newMemberRequest.name,
         joinedAt: new Date().toISOString(), // 현재 시간 추가 (예시)
       };
-  
+
       // 멤버 목록 업데이트
       setMembers((prevMembers) => [...prevMembers, newMember]);
-  
+
       // 가입 요청 목록 업데이트
-      setJoinRequests((prev) => prev.filter((request) => request.userId !== userId));
+      setJoinRequests((prev) =>
+        prev.filter((request) => request.userId !== userId)
+      );
     } catch (error) {
-      console.error('가입 요청 승인 중 오류 발생:', error);
-      alert(error.message || '가입 요청 승인에 실패했습니다.');
+      toast.error("가입 요청 승인 중 오류 발생", error);
     }
   };
-  
 
   return (
     <DetailsContainer>
       <Header>
         <Title>{study.Name}</Title>
         <ButtonGroup>
-          {!study.isMember && <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>}
-          {study.role === 'LEADER' && (
-              <>
+          {!study.isMember && (
+            <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>
+          )}
+          {study.role === "LEADER" && (
+            <>
               <Button onClick={handleEditStudy}>스터디 수정</Button>
               <Button onClick={handleDeleteStudy} $danger>
                 스터디 삭제
@@ -165,13 +176,17 @@ const StudyDetailsPage = () => {
 
       <DescriptionSection>
         <DescriptionTitle>스터디 소개</DescriptionTitle>
-        <DescriptionText>{study.description || '스터디 설명이 없습니다.'}</DescriptionText>
+        <DescriptionText>
+          {study.description || "스터디 설명이 없습니다."}
+        </DescriptionText>
       </DescriptionSection>
 
       <InfoSection>
         <InfoItem>
           <InfoLabel>등록 기간:</InfoLabel>
-          <InfoValue>{new Date(study.registerDuration).toLocaleString()}</InfoValue>
+          <InfoValue>
+            {new Date(study.registerDuration).toLocaleString()}
+          </InfoValue>
         </InfoItem>
         <InfoItem>
           <InfoLabel>최대 인원:</InfoLabel>
@@ -183,7 +198,9 @@ const StudyDetailsPage = () => {
         </InfoItem>
         <InfoItem>
           <InfoLabel>상태:</InfoLabel>
-          <InfoValue>{study.state === 'ACTIVE' ? '활성화' : '비활성화'}</InfoValue>
+          <InfoValue>
+            {study.state === "ACTIVE" ? "활성화" : "비활성화"}
+          </InfoValue>
         </InfoItem>
         {study.isMember && (
           <InfoItem>
@@ -216,7 +233,11 @@ const StudyDetailsPage = () => {
             ) : membersError ? (
               <ErrorMessage>{membersError}</ErrorMessage>
             ) : (
-              <MemberList members={members} role={study.role} onRemoveMember={handleRemoveMember} />
+              <MemberList
+                members={members}
+                role={study.role}
+                onRemoveMember={handleRemoveMember}
+              />
             )}
           </MemberSection>
         </>
@@ -243,7 +264,7 @@ const DetailsContainer = styled.div`
   background-color: #f5f8fa;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 `;
 
 const Header = styled.div`
@@ -272,13 +293,13 @@ const Button = styled.button`
   font-weight: bold;
   border: none;
   border-radius: 8px;
-  background-color: ${(props) => (props.$danger ? '#e74c3c' : '#3498db')};
+  background-color: ${(props) => (props.$danger ? "#e74c3c" : "#3498db")};
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${(props) => (props.$danger ? '#c0392b' : '#2980b9')};
+    background-color: ${(props) => (props.$danger ? "#c0392b" : "#2980b9")};
   }
 `;
 
@@ -342,7 +363,7 @@ const BlurredContent = styled.div`
   background: #ffffff;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
