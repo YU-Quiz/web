@@ -86,13 +86,28 @@ const GoToListButton = styled.button`
     background-color: #0056b3;
   }
 `;
-
+const QuizImgContainer = styled.div`
+  display: flex;
+  align-item: center;
+  justify-content: center;
+  width: 100%;
+  max-height: auto;
+`;
+const QuizImg = styled.img`
+  width: ${(props) => (props.isWide ? "300px" : "auto")};
+  height: ${(props) => (props.isWide ? "auto" : "250px")};
+  transition: transform 0.3s ease;
+  transform: ${(props) => (props.isZoomed ? "scale(3)" : "scale(1)")};
+  cursor: zoom-in; /* 돋보기 모양 */
+`;
 export const ShortAnswer = ({ quizID }) => {
   const [quizData, setQuizData] = useState(null);
   const [writtenAnswer, setWrittenAnswer] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
   const [showAnswer, setshowAnswer] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [isWide, setIsWide] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -110,7 +125,13 @@ export const ShortAnswer = ({ quizID }) => {
   if (!quizData) {
     return <div>로딩 중...</div>;
   }
-
+  const handleImgClick = () => {
+    setIsZoomed((prev) => !prev); // 상태 값 토글
+  };
+  const handleImageLoad = (e) => {
+    const { naturalWidth, naturalHeight } = e.target;
+    setIsWide(naturalWidth > naturalHeight); // 가로가 더 길면 true
+  };
   const handleInputAnswer = (e) => {
     setWrittenAnswer(e.target.value);
   };
@@ -159,6 +180,18 @@ export const ShortAnswer = ({ quizID }) => {
 
   return (
     <QuizContainer>
+      {quizData.quizImg?.length > 0 && (
+        <QuizImgContainer>
+          <QuizImg
+            src={quizData.quizImg[0]}
+            alt="퀴즈 이미지"
+            onClick={handleImgClick}
+            isZoomed={isZoomed}
+            onLoad={handleImageLoad}
+            isWide={isWide}
+          />
+        </QuizImgContainer>
+      )}
       <QuizQuestion>{quizData.question}</QuizQuestion>
       <InputBox
         type="text"
