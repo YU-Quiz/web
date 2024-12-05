@@ -14,7 +14,11 @@
   width: 100%;
   min-height: 100vh; /* 전체 화면 높이 */
   position: relative;
-  overflow: hidden; /* 내부 스크롤바 제거 */
+  overflow: auto; /* 내부 스크롤바 제거 */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 }
 
 .back-button {
