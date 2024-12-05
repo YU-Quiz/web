@@ -1,6 +1,7 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
 import { SORT_QUIZ_POST } from "../../constants/sort/sortType";
+import { toast } from "react-toastify";
 const SERVER_API = process.env.REACT_APP_YUQUIZ;
 
 const SORT_OPTIONS = SORT_QUIZ_POST;
@@ -67,14 +68,14 @@ const deleteQuiz = async (quizId) => {
   try {
     const response = await api.delete(`${SERVER_API}/quizzes/${quizId}`);
     if (response.status === HttpStatusCode.NoContent) {
-      alert("삭제 성공");
+      toast.success("삭제 성공");
     }
     return response;
   } catch (error) {
     if (error.response) {
-      throw new Error("퀴즈 삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
+      toast.error("퀴즈 삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
     } else {
-      throw new Error("서버와 연결할 수 없습니다.");
+      toast.error("서버와 연결할 수 없습니다.");
     }
   }
 };
@@ -123,14 +124,14 @@ const sendReport = async (data, quizID) => {
       data
     );
     if (response) {
-      alert("신고 성공!");
+      toast.success("신고 성공!");
     }
     return response;
   } catch (error) {
     if (error.response.status === HttpStatusCode.Conflict) {
-      alert(error.response.message || "이미 신고한 퀴즈입니다.");
+      toast.warn(error.response.message || "이미 신고한 퀴즈입니다.");
     } else {
-      alert("존재하지 않는 퀴즈거나 서버와 연결할 수 없습니다.");
+      toast.error("존재하지 않는 퀴즈거나 서버와 연결할 수 없습니다.");
     }
   }
 };

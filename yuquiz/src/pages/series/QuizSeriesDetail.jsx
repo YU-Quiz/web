@@ -12,6 +12,7 @@ import { QuizCard } from "../../components/quizlist/QuizCard";
 import useAuthStore from "../../stores/auth/authStore";
 import { IoMdArrowBack } from "react-icons/io";
 import { FaRegMeh } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   display: flex;
@@ -214,9 +215,9 @@ const QuizSeriesDetail = () => {
     try {
       await addQuizToSeries(seriesId, quiz.quizId);
       setQuizList((prev) => [...prev, quiz]);
-      alert("문제가 성공적으로 추가되었습니다!");
+      toast.success("문제가 성공적으로 추가되었습니다!");
     } catch (error) {
-      alert(error.message || "문제 추가에 실패했습니다.");
+      toast.error(error.message || "문제 추가에 실패했습니다.");
     }
   };
 
@@ -234,9 +235,9 @@ const QuizSeriesDetail = () => {
         prev.filter((quiz) => quiz.quizId !== selectedQuiz.quizId)
       );
       setContextMenu(null); // 메뉴 닫기
-      alert("퀴즈가 삭제되었습니다.");
+      toast.success("퀴즈가 삭제되었습니다.");
     } catch (error) {
-      alert("퀴즈 삭제에 실패했습니다.");
+      toast.error("퀴즈 삭제에 실패했습니다.");
     }
   };
 

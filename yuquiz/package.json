@@ -18,6 +18,7 @@
     "react-naver-login": "^0.1.4",
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.6",
     "sass": "^1.77.8",
     "scss": "^0.2.4",
     "sockjs-client": "^1.6.1",

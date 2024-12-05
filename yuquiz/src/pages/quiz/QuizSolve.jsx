@@ -15,6 +15,7 @@ import { IoMdArrowBack } from "react-icons/io";
 import { IoEllipsisVertical } from "react-icons/io5";
 import Modal from "react-modal";
 import { REPORT_TYPES } from "../../constants/report/reportType";
+import { toast } from "react-toastify";
 
 // 신고 유형 상수 분리 및 표시 문자열 포함
 const reportType = REPORT_TYPES;
@@ -95,10 +96,10 @@ export const QuizSolve = () => {
 
   const handleReportSubmit = async () => {
     if (reportReason === reportType.OTHER.value && !customReason) {
-      alert("기타는 사유를 작성해주세요.");
+      toast.warn("기타는 사유를 작성해주세요.");
       return;
     } else if (!reportReason) {
-      alert("신고 유형은 필수 입력입니다.");
+      toast.warn("신고 유형은 필수 입력입니다.");
       return;
     }
     await sendReport(

@@ -3,6 +3,7 @@ import { getQuiz } from "../../services/quiz/QuizManage";
 import { getAnswer, getGrade } from "../../services/quiz/QuizSolve";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 const QuizContainer = styled.div`
   max-width: 600px;
@@ -171,7 +172,7 @@ export const MultipleChoose = ({ quizID }) => {
       const result = await getAnswer(quizID); //1번 4번이면 14로 전달받음
       const answerArr = result.toString().split("").map(Number);
       const answer = answerArr.map((index) => quizData.choices[index - 1]);
-      alert("정답은 [" + answer.join(", ") + "] 입니다!");
+      toast.info("정답은 [" + answer.join(", ") + "] 입니다!");
     } catch (error) {
       setIsCorrect("서버 오류로 확인할 수 없습니다.");
     }

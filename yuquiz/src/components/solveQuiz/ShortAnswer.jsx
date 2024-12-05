@@ -3,6 +3,7 @@ import { getQuiz } from "../../services/quiz/QuizManage";
 import { useNavigate } from "react-router-dom";
 import { getAnswer, getGrade } from "../../services/quiz/QuizSolve";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 const QuizContainer = styled.div`
   max-width: 600px;
@@ -137,7 +138,7 @@ export const ShortAnswer = ({ quizID }) => {
   const handleGetAnswer = async () => {
     try {
       const result = await getAnswer(quizID);
-      alert("정답은 [" + result + "] 입니다!");
+      toast.info("정답은 [" + result + "] 입니다!");
     } catch (error) {
       setIsCorrect("서버 오류로 확인할 수 없습니다.");
     }

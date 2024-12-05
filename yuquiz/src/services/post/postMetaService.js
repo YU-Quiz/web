@@ -1,5 +1,6 @@
 import { HttpStatusCode } from "axios";
 import api from "../apiService";
+import { toast } from "react-toastify";
 
 // 카테고리 받기
 const getCategories = async () => {
@@ -8,13 +9,10 @@ const getCategories = async () => {
 
     return response.data;
   } catch (error) {
-    if (error.status === HttpStatusCode.Forbidden) {
-      alert("로그인하고 이용해주세요.");
-      window.location.href = "http://localhost:3000/login";
-    } else if (error.response) {
-      throw new Error("카테고리 불러오는 중 문제 발생. 다시 시도해주세요.");
+    if (error.response) {
+      toast.error("카테고리 불러오는 중 문제 발생. 다시 시도해주세요.");
     } else {
-      throw new Error("서버와 연결할 수 없습니다.");
+      toast.error("서버와 연결할 수 없습니다.");
     }
   }
 };

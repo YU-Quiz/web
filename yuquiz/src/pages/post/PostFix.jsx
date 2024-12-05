@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import Button from '../../components/UI/Button';
-import Dropdown from '../../components/UI/Dropdown';
-import { editPost, showPost } from '../../services/post/postService';
-import { getCategories } from '../../services/post/postMetaService';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Button from "../../components/UI/Button";
+import Dropdown from "../../components/UI/Dropdown";
+import { editPost, showPost } from "../../services/post/postService";
+import { getCategories } from "../../services/post/postMetaService";
+import { toast } from "react-toastify";
 
 const PostFix = () => {
   const { postId } = useParams();
   const [categories, setCategories] = useState([]);
-  const [categoryId, setCategory] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [categoryId, setCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -19,31 +20,31 @@ const PostFix = () => {
     const fetchPostData = async () => {
       try {
         const postData = await showPost(postId);
-        const categoryName = postData.post.categoryName || '';
+        const categoryName = postData.post.categoryName || "";
         switch (categoryName) {
-          case '공지게시판':
-            setCategory('1');
+          case "공지게시판":
+            setCategory("1");
             break;
-          case '자유게시판':
-            setCategory('2');
+          case "자유게시판":
+            setCategory("2");
             break;
-          case '스터디':
-            setCategory('3');
+          case "스터디":
+            setCategory("3");
             break;
-          case '문의게시판':
-            setCategory('4');
+          case "문의게시판":
+            setCategory("4");
             break;
           default:
-            setCategory('');
+            setCategory("");
         }
-        setTitle(postData.post.title || '');
-        setContent(postData.post.content || '');
-        
+        setTitle(postData.post.title || "");
+        setContent(postData.post.content || "");
+
         const categoriesData = await getCategories();
         setCategories(categoriesData);
         setLoading(false);
       } catch (error) {
-        console.error('게시글 데이터를 불러오는 중 오류 발생:', error);
+        console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
         setLoading(false);
       }
     };
@@ -67,10 +68,10 @@ const PostFix = () => {
     e.preventDefault();
     try {
       await editPost(postId, categoryId, title, content);
-      alert("게시글 수정 성공!");
+      toast.success("게시글 수정 성공!");
       navigate(`/posts/${postId}`);
     } catch (error) {
-      console.error('게시글 수정 중 오류 발생:', error);
+      toast.error("게시글 수정 중 오류 발생:");
     }
   };
 

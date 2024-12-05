@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { handlerSubmitQuiz } from "../../services/quiz/quizCreator";
 import Dropdown from "../../components/UI/Dropdown";
 import { getSubjectList } from "../../services/quiz/QuizManage";
+import { toast } from "react-toastify";
 
 export const QuizCreator = () => {
   const [questionTitle, setQuestionTitle] = useState("");
@@ -115,7 +116,9 @@ export const QuizCreator = () => {
     const errors = validateForm();
 
     if (errors.length > 0) {
-      alert(errors.join("\n"));
+      errors.forEach((error) => {
+        toast.warn(error); // 각각의 에러 메시지를 toast로 띄우기
+      });
       return; // 에러가 있을 경우 제출 중단
     }
     let answer = "";
