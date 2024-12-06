@@ -88,6 +88,10 @@ const handlerCheckDupNick = async (
 // 이메일 인증 요청
 const handlerCheckEmail = async (InputEmail) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (InputEmail.trim() === "") {
+    toast.error("이메일 주소를 입력하세요.");
+    return;
+  }
   if (!emailRegex.test(InputEmail)) {
     toast.warn("유효한 이메일 주소를 입력하세요.");
     return;
@@ -222,7 +226,7 @@ const registerOauth = async (registerData) => {
   }
 
   // 전공 이름 확인
-  if (!majorName || typeof majorName !== "string" || majorName.trim() === "") {
+  if (!majorName) {
     toast.warn("전공을 선택하세요.");
     return false;
   }
@@ -249,11 +253,10 @@ const registerOauth = async (registerData) => {
       return false;
     }
   } catch (error) {
-    //console.log(registerData);
     if (error.response && error.response.status === HttpStatusCode.Conflict) {
       toast.warn(error.response.data.message || "이미 등록된 사용자입니다.");
     } else {
-      toast.error("서버에 문제가 발생했습니다. 나중에 다시 시도하세요.");
+      toast.error("올바르지 못한 요청입니다. 나중에 다시 시도하세요.");
     }
     return false;
   }
