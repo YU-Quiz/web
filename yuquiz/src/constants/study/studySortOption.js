@@ -9,11 +9,11 @@ export const STUDY_LIST_SORT_OPTIONS = {
     },
     REGISTER_DATE_DESC: {
       value: "REGISTER_DATE_DESC",
-      label: "등록일 최신 순",
+      label: "신청 마감일 최신 순",
     },
     REGISTER_DATE_ASC: {
       value: "REGISTER_DATE_ASC",
-      label: "등록일 오래된 순",
+      label: "신청 마감일 오래된 순",
     },
   };
   
