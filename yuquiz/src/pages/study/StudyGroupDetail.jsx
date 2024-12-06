@@ -27,7 +27,7 @@ const StudyDetailsPage = () => {
   const [members, setMembers] = useState([]);
   const [loadingMembers, setLoadingMembers] = useState(false);
   const [membersError, setMembersError] = useState(null);
-
+console.log(study);
   useEffect(() => {
     if (study.isMember) {
       const fetchMembers = async () => {
@@ -50,10 +50,8 @@ const StudyDetailsPage = () => {
   const handleJoinStudy = async () => {
     try {
       await requestStudy(study.id);
-      alert('신청되었습니다!');
     } catch (error) {
       console.error('스터디 신청 중 오류 발생:', error);
-      alert(error.message);
     }
   };
 
@@ -80,11 +78,9 @@ const StudyDetailsPage = () => {
     if (confirmDelete) {
       try {
         const response = await removeStudy(study.id);
-        alert(response.message);
         navigate('/study');
       } catch (error) {
         console.error('스터디 삭제 중 오류 발생:', error);
-        alert(error.message);
       }
     }
   };
@@ -98,7 +94,6 @@ const StudyDetailsPage = () => {
         setMembers((prev) => prev.filter((member) => member.id !== userId));
       } catch (error) {
         console.error('스터디원 삭제 중 오류 발생:', error);
-        alert(error.message || '스터디원 삭제에 실패했습니다.');
       }
       window.location.reload();
     }
@@ -150,7 +145,14 @@ const StudyDetailsPage = () => {
       <Header>
         <Title>{study.Name}</Title>
         <ButtonGroup>
-          {!study.isMember && <Button onClick={handleJoinStudy}>스터디 참가 신청</Button>}
+          {!study.isMember && (
+            <Button
+              onClick={handleJoinStudy}
+              disabled={study.userState === 'PENDING'}
+            >
+              {study.userState === null ? '스터디 참가 신청' : '가입 대기 중'}
+            </Button>
+          )}
           {study.role === 'LEADER' && (
               <>
               <Button onClick={handleEditStudy}>스터디 수정</Button>

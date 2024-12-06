@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/auth/authStore";
@@ -6,6 +6,7 @@ import { submitEditMyInfo } from "../../services/mypage/mypage";
 import Button from "../../components/UI/Button";
 import { withdrawUser } from "../../services/user/userService";
 import { toast } from "react-toastify";
+import { getMajorList } from "../../services/auth/register/Register";
 
 const EditProfile = () => {
   const { userInfo, setUserInfo } = useAuthStore((state) => ({
@@ -16,10 +17,25 @@ const EditProfile = () => {
   const [nickname, setNickname] = useState(userInfo.nickname);
   const [email, setEmail] = useState(userInfo.email);
   const [major, setMajor] = useState(userInfo.majorName);
+  const [majorList, setMajorList] = useState([]);
   const [agreeEmail, setAgreeEmail] = useState(userInfo.agreeEmail);
   const [profilePicture, setProfilePicture] = useState(null);
   const [preview, setPreview] = useState(userInfo.profilePicture || "");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const majorListData = await getMajorList();
+        setMajorList(majorListData);
+      } catch (error) {
+        console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  console.log(majorList);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,10 +131,11 @@ const EditProfile = () => {
                   value={major}
                   onChange={(e) => setMajor(e.target.value)}
                 >
-                  <option value="컴퓨터공학과">컴퓨터공학과</option>
-                  <option value="경영학과">경영학과</option>
-                  <option value="기계공학과">기계공학과</option>
-                  <option value="예술학과">예술학과</option>
+                  {majorList.map((majorItem) => (
+                    <option key={majorItem.id} value={majorItem.name}>
+                      {majorItem.name}
+                    </option>
+                  ))}
                 </select>
               </td>
             </tr>
