@@ -11,12 +11,12 @@ import useAuthStore from "../../stores/auth/authStore";
 import "../../styles/register/Register.scss"; // 스타일 파일 유지
 import styled from "styled-components";
 import ForAddMajorList from "../../components/register/ForAddMajorList";
+import { toast } from "react-toastify";
 
 const RegisterOauth = () => {
   const [formData, setFormData] = useState({
     nickname: "",
     email: "",
-    majorName: "",
     agreeEmail: false,
   });
 
@@ -25,7 +25,6 @@ const RegisterOauth = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [InputMajor, setMajor] = useState("");
   const [InputMajorName, setMajorName] = useState("");
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +37,10 @@ const RegisterOauth = () => {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
-
+    // 전공 이름 업데이트
+    if (name === "majorName") {
+      setMajorName(value); // 전공 이름을 InputMajorName에 반영
+    }
     // 닉네임 변경 시 중복 체크 상태 초기화
     if (name === "nickname") {
       setNicknameChecked(false);
@@ -47,6 +49,11 @@ const RegisterOauth = () => {
 
   // 닉네임 중복 체크
   const handleCheckDupNickname = async () => {
+    // 닉네임이 비어있지 않은지 확인
+    if (formData.nickname.trim() === "") {
+      toast.error("닉네임을 입력해주세요.");
+      return;
+    }
     const result = await handlerCheckDupNick(formData.nickname);
     setNicknameChecked(result);
   };
@@ -58,6 +65,10 @@ const RegisterOauth = () => {
 
   // 이메일 인증번호 확인
   const handleCheckEmailVerify = async () => {
+    if (verificationCode.trim() === "") {
+      toast.error("인증번호를 입력해주세요.");
+      return;
+    }
     const result = await handlerCheckEmailVerify(
       formData.email,
       verificationCode
@@ -74,28 +85,27 @@ const RegisterOauth = () => {
     e.preventDefault();
 
     if (!nicknameChecked) {
-      setError("닉네임 중복 확인을 완료해주세요.");
+      toast.warn("닉네임 중복 확인을 완료해주세요.");
       return;
     }
     if (!emailVerified) {
-      setError("이메일 인증을 완료해주세요.");
+      toast.warn("이메일 인증을 완료해주세요.");
       return;
     }
-
-    try {
-      const response = await registerOauth(formData);
-      if (response === true) {
-        // 회원가입 성공 후 사용자 정보 저장
-        setUserInfo({
-          nickname: formData.nickname,
-          email: formData.email,
-          majorName: InputMajor,
-          agreeEmail: formData.agreeEmail,
-        });
-        navigate("/"); // 홈으로 이동
-      }
-    } catch (error) {
-      setError("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+    setFormData({
+      ...formData,
+      majorName: InputMajor, // 전공 ID 반영
+    });
+    const response = await registerOauth(formData);
+    if (response === true) {
+      // 회원가입 성공 후 사용자 정보 저장
+      setUserInfo({
+        nickname: formData.nickname,
+        email: formData.email,
+        majorName: InputMajorName,
+        agreeEmail: formData.agreeEmail,
+      });
+      navigate("/"); // 홈으로 이동
     }
   };
 
@@ -168,6 +178,7 @@ const RegisterOauth = () => {
               className="form"
               placeholder="전공"
               value={InputMajorName}
+              onChange={handleChange}
               title="전공 검색을 통해 본인의 전공을 선택해주세요."
             />
             <button className="button" onClick={() => setIsModalOpen(true)}>
@@ -199,7 +210,6 @@ const RegisterOauth = () => {
               이메일 수신 동의
             </label>
           </div>
-          {error && <p className="error-message">{error}</p>}
           <button type="submit" className="button-register-done">
             회원 가입 하기
           </button>
