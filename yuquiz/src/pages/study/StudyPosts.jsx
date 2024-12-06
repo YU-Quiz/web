@@ -54,9 +54,9 @@ const StudyPostsListPage = () => {
     return (
       <TableWrapper>
         <Header>
-          <Title>Study Posts</Title>
+          <Title>스터디 게시판</Title>
           <CreateNoticeButton to={`new`}>
-            <Button>Create Post</Button>
+            <Button>게시글 작성</Button>
           </CreateNoticeButton>
         </Header>
   

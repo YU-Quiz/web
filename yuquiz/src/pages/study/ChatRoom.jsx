@@ -140,7 +140,7 @@ const ChatRoom = () => {
       </StudyHeader>
 
       <ChatHeader>
-        <h2>Study Chat</h2>
+        <h2>스터디 채팅</h2>
         <MenuIcon onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           <FiMenu size={24} />
         </MenuIcon>
@@ -153,7 +153,7 @@ const ChatRoom = () => {
               onClick={fetchPreviousMessages}
               disabled={isLoading}
             >
-              {isLoading ? "Loading..." : "Load Previous Messages"}
+              {isLoading ? "로딩중..." : "이전 채팅 보기"}
             </LoadMoreButton>
           )}
 
@@ -173,7 +173,7 @@ const ChatRoom = () => {
         </ChatBody>
 
         <Sidebar isOpen={isSidebarOpen}>
-          <SidebarHeader>Members</SidebarHeader>
+          <SidebarHeader>멤버 목록</SidebarHeader>
           <MemberList>
             {members.map((member, index) => (
               <MemberItem key={index}>{member.nickname}</MemberItem>

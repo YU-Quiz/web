@@ -59,10 +59,10 @@ const StudyNoticesListPage = () => {
     return (
       <TableWrapper>
         <Header>
-          <Title>Study Notices</Title>
+          <Title>스터디 공지사항</Title>
           {role === 'LEADER' && (
             <CreateNoticeButton to={`new`}>
-              <Button>Create Notice</Button>
+              <Button>공지 작성</Button>
             </CreateNoticeButton>
           )}
         </Header>
