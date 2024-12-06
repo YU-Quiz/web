@@ -93,7 +93,7 @@ const PostListPage = () => {
           />
         </DropdownContainer>
         <StyledLink to="/posts/new">
-          <Button>Create Post</Button>
+          <Button>게시글 작성</Button>
         </StyledLink>
       </FilterContainer>
 

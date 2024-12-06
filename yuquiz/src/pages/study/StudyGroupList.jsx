@@ -82,7 +82,7 @@ const StudyListPage = () => {
           />
         </DropdownContainer>
         <StyledLink to="/study/new">
-          <CreateButton>Create Study</CreateButton>
+          <CreateButton>스터디 생성</CreateButton>
         </StyledLink>
       </FilterContainer>
 
