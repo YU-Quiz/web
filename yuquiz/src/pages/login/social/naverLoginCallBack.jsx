@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { naverLogin } from "../../../services/auth/login/authService";
+import { toast } from "react-toastify";
 
 const NaverLoginCallback = () => {
   const location = useLocation();
@@ -26,7 +27,7 @@ const NaverLoginCallback = () => {
           }
           navigate("/register/oauth");
         } catch (error) {
-          console.error("네이버 로그인 중 오류 발생:", error.message);
+          toast.error("네이버 로그인 중 오류 발생:", error.message);
           setError("네이버 로그인에 실패했습니다. 다시 시도해주세요.");
         }
       } else if (errorDescription) {
