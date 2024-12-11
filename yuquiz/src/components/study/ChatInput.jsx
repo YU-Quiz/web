@@ -24,9 +24,9 @@ const ChatInput = ({ onSendMessage }) => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyPress={handleKeyPress}
-        placeholder="Type your message..."
+        placeholder="채팅을 입력해주세요..."
       />
-      <SendButton onClick={handleSendMessage}>Send</SendButton>
+      <SendButton onClick={handleSendMessage}>전송</SendButton>
     </InputContainer>
   );
 };
