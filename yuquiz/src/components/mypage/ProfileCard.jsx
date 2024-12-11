@@ -47,7 +47,11 @@ const ProfileCard = () => {
   //     eventSource.close(); // 컴포넌트 언마운트 시 연결 닫기
   //   };
   // }, [accessToken]);
-
+  //   <ProfileStats>
+  //   <Stat>100 Quizzes</Stat>
+  //   <Stat>50 Badges</Stat>
+  //   <Stat>1000 Points</Stat>
+  // </ProfileStats>
   // 초기 알림 데이터 가져오기
   useEffect(() => {
     const fetchUnreadNotifications = async () => {
@@ -67,11 +71,11 @@ const ProfileCard = () => {
   if (!isAuthenticated || !userInfo || !userInfo.nickname) {
     return <Loading>Loading...</Loading>;
   }
-
-  const displayUsername =
-    userInfo.username.length > 10
+  const displayUsername = userInfo.username
+    ? userInfo.username.length > 10
       ? `${userInfo.username.slice(0, 10)}...`
-      : userInfo.username;
+      : userInfo.username
+    : "첫 방문을 환영합니다!! 🥳🎉";
 
   return (
     <ProfileContainer>
@@ -97,12 +101,6 @@ const ProfileCard = () => {
           )}
         </UserInfo>
       </UserInfoContainer>
-
-      <ProfileStats>
-        <Stat>100 Quizzes</Stat>
-        <Stat>50 Badges</Stat>
-        <Stat>1000 Points</Stat>
-      </ProfileStats>
     </ProfileContainer>
   );
 };

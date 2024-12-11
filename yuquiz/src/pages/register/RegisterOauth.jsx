@@ -32,11 +32,20 @@ const RegisterOauth = () => {
 
   // 입력값 변경 핸들러
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    const { name, value, checked } = e.target;
+    if (name === "agreeEmail") {
+      // 이메일 동의 체크박스만 업데이트
+      setFormData((prevData) => ({
+        ...prevData,
+        agreeEmail: checked, // 이메일 동의 값만 변경
+      }));
+    } else {
+      // 나머지 값들은 일반적인 폼 데이터 처리
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
     // 전공 이름 업데이트
     if (name === "majorName") {
       setMajorName(value); // 전공 이름을 InputMajorName에 반영
@@ -95,12 +104,14 @@ const RegisterOauth = () => {
     setFormData({
       ...formData,
       majorName: InputMajor, // 전공 ID 반영
+      agreeEmail: formData.agreeEmail,
     });
     const response = await registerOauth(formData);
     if (response === true) {
       // 회원가입 성공 후 사용자 정보 저장
       setUserInfo({
         nickname: formData.nickname,
+        username: "환영합니다!! 🥳🎉",
         email: formData.email,
         majorName: InputMajorName,
         agreeEmail: formData.agreeEmail,
