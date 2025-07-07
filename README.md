@@ -49,7 +49,7 @@
 
 ## 🛠 기술 스택
 
-- **Frontend**: React, JavaScript, HTML, CSS
+- **Frontend**: React, JavaScript, HTML, CSS, SCSS
 - **스타일링**: styled-components, CSS Animation
 - **상태 관리**: React Hooks, Context API
 - **네트워킹**: Axios + Interceptor, REST API
